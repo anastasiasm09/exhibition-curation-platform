@@ -6,11 +6,10 @@ import Navbar from './components/Navbar';
 import Search from './components/Search';
 import BannerImage from './components/BannerImage';
 import HomepageArtworks from './components/HomepageArtworks';
-import ErrorAlert from './components/ErrorAlert';
-import { Box, VStack, VisuallyHidden } from '@chakra-ui/react';
+import { Box, VisuallyHidden } from '@chakra-ui/react';
 import Loading from './components/Loading';
-
-
+import { Toaster, toaster } from "@/components/ui/toaster"
+import { useEffect } from 'react';
 
 function App() {
 
@@ -22,7 +21,6 @@ function App() {
 
   const messageAICError = "Unable to load data from Art Institute of Chicago API. Please try again later."
 
-
   const { data: hamDataArtworks, isLoading: isDataHAMArtworksLoading, isError: isDataHAMArtworksError } = useQuery({
     queryKey: ['hamData'],
     queryFn: () => getHAMArtworks(),
@@ -30,7 +28,23 @@ function App() {
 
   const messageHAMError = "Unable to load data from Harvard Art Museums API. Please try again later."
 
-  //if (isDataAICArtworksLoading || isDataHAMArtworksLoading) return <p>Loading...</p>;
+  useEffect(() => {
+    if (isDataAICArtworksError) {
+        toaster.create({
+          title: messageAICError,
+          type: "error",
+      })
+    }
+  }, [isDataAICArtworksError])
+
+  useEffect(() => {
+    if (isDataHAMArtworksError) {
+        toaster.create({
+          title: messageHAMError,
+          type: "error",
+      })
+    }
+  }, [isDataHAMArtworksError])
 
 
   const combinedArtworks = [
@@ -38,33 +52,14 @@ function App() {
     ...(hamDataArtworks ?? [])
   ];
 
-  /*   if (isDataAICArtworksLoading || isDataHAMArtworksLoading === false) {
-      combinedArtworks
-    } else {
-      <Loading />
-    } */
-
-  //<HomepageArtworks artworks={combinedArtworks} />
-
   return (
     <main role="main">
+      {/* Error Messages */}
+      <Toaster />
+
       <Navbar />
 
-      {/* Error Messages */}
-      {(isDataAICArtworksError || isDataHAMArtworksError) && (
-        <Box mt={8} px={4} aria-live="assertive" role="alert">
-          <VStack spacing={3} mx="auto" w="100%">
-            {isDataAICArtworksError && (
-              <ErrorAlert message={messageAICError} />
-            )}
-            {isDataHAMArtworksError && (
-              <ErrorAlert message={messageHAMError} />
-            )}
-          </VStack>
-        </Box>
-      )}
-
-      {!isDataAICArtworksError && !isDataHAMArtworksError && <BannerImage />}
+      <BannerImage />
 
       {/* Loading */}
       <Box aria-live="polite" role="status" mt={8}>

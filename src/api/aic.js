@@ -10,7 +10,6 @@ export async function getAICArtworks() {
     }
     const data = await res.json();
     const artworks = mapAICArtworks(data.data)
-    //console.log(data.data)
     return artworks;
     
 }
