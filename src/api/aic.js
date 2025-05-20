@@ -3,13 +3,16 @@ import { mapAICArtworks } from '../utils/mapAICArtworks';
 
 
 
-export async function getAICArtworks() {
-    const res = await fetch('https://api.artic.edu/api/v1/artworks?limit=6')
+export async function getAICArtworks(page = 1) {
+    const res = await fetch(`https://api.artic.edu/api/v1/artworks?page=${page}&limit=6`)
     if (!res.ok) {
         throw new Error('Network response was not ok');
     }
     const data = await res.json();
     const artworks = mapAICArtworks(data.data)
-    return artworks;
-    
+    return {
+        artworks,
+        currentPage: data.pagination.current_page,
+        totalPages: data.pagination.total_pages,
+    };
 }
