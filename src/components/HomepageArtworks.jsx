@@ -1,7 +1,7 @@
 import { Card, CardBody, CardTitle, Image, SimpleGrid, Text } from '@chakra-ui/react';
 
 
-export default function HomepageArtworks({artworks}) {
+export default function HomepageArtworks({ artworks }) {
 
 
     return (
@@ -11,7 +11,7 @@ export default function HomepageArtworks({artworks}) {
             p={4}
         >
             {artworks.map((artwork, index) => (
-                <Card.Root borderColor="#fafafa" maxW="sm" overflow="hidden">
+                <Card.Root borderColor="#fafafa" maxW="sm" overflow="hidden" key={artwork.id}>
                     <Image
                         src={artwork.image}
                         alt="artwork"
