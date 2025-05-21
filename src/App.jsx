@@ -30,6 +30,7 @@ function App() {
         : undefined;
     },
     initialPageParam: 1,
+    retry: 1
   })
 
   const messageAICError = "Unable to load data from Art Institute of Chicago API. Please try again later."
@@ -48,7 +49,10 @@ function App() {
         : undefined;
     },
     initialPageParam: 1,
+    retry: 1
   })
+
+  const isLoading = isDataAICArtworksLoading || isDataHAMArtworksLoading
 
   const messageHAMError = "Unable to load data from Harvard Art Museums API. Please try again later."
 
@@ -73,8 +77,10 @@ function App() {
   const [combinedArtworks, setCombinedArtworks] = useState([])
 
   useEffect(() => {
-    setCombinedArtworks((aicDataArtworks?.pages ?? []).concat(hamDataArtworks?.pages ?? []).flatMap(page => page.artworks))
-  }, [isDataAICArtworksLoading, isDataHAMArtworksLoading])
+    if (!isLoading) {
+      setCombinedArtworks((aicDataArtworks?.pages ?? []).concat(hamDataArtworks?.pages ?? []).flatMap(page => page.artworks))
+    }
+  }, [isLoading])
 
   const { ref, inView, entry } = useInView({
   });
@@ -82,22 +88,32 @@ function App() {
   useEffect(() => {
     if (inView === true) {
       Promise.all([fetchNextAICArtworksPage(), fetchNextHAMArtworksPage()]).then((result) => {
-        const aicPages = result[0].data.pages
-        const hamPages = result[1].data.pages
+        const aicResult = result[0]
+        const hamResult = result[1]
+
+        const aicPages = aicResult.data?.pages
+        const hamPages = hamResult.data?.pages
 
         let artworks = []
-        aicPages.forEach((aicData, i) => {
-          const hamData = hamPages[i]
-          artworks.push(aicData.artworks)
-          artworks.push(hamData.artworks)
-        })
-        artworks = artworks.flat()
+
+        if (aicPages && hamPages) {
+          aicPages.forEach((aicData, i) => {
+            const hamData = hamPages[i]
+            artworks.push(aicData.artworks)
+            artworks.push(hamData.artworks)
+          })
+          artworks = artworks.flat()
+        } else if (aicPages) {
+          artworks = aicPages
+        } else if (hamPages) {
+          artworks = hamPages
+        }
+
         setCombinedArtworks(artworks)
       })
     }
   }, [inView])
   
-  console.log(combinedArtworks)
 
   return (
     <main role="main">
@@ -110,14 +126,20 @@ function App() {
 
       {/* Loading */}
       <Box aria-live="polite" role="status" mt={8}>
-        {(isDataAICArtworksLoading || isDataHAMArtworksLoading) ? <Loading /> : <HomepageArtworks artworks={combinedArtworks} />}
-        <VisuallyHidden>
-          Loading artworks, please wait.
-        </VisuallyHidden>
+        {isLoading && (
+          <>
+            <Loading />
+            <VisuallyHidden>
+              Loading artworks, please wait.
+            </VisuallyHidden>
+          </>
+        )}
+
+        <HomepageArtworks artworks={combinedArtworks} />
       </Box>
 
       {/* Infinite scroll */}
-      {!isDataAICArtworksLoading && !isDataHAMArtworksLoading && (
+      {!isLoading && !!combinedArtworks.length && (
         <div ref={ref}>
         </div>
       )}
