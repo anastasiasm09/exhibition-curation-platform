@@ -1,4 +1,4 @@
-import bannerImage from '../assets/bannerImage.jpg'
+import bannerImage from '../assets/bannerImage.webp'
 import { Box, Image, Text } from '@chakra-ui/react';
 
 

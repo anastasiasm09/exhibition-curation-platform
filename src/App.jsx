@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 
-
 function App() {
   const [search, setSearch] = useState(null);
 
