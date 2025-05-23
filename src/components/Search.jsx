@@ -3,12 +3,33 @@ import {
     InputGroup,
     IconButton,
 } from '@chakra-ui/react';
+import { useState } from 'react';
 import { LuSearch } from "react-icons/lu"
 
-export default function Search() {
+
+export default function Search({ onSearch }) {
+     const [search, setSearch] = useState('');
+
+    const handleSearch = () => {
+        onSearch(search.trim())
+    };
+
+     const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch();
+        }
+    };
+
     return (
-        <InputGroup flex="1" endElement={<LuSearch />}>
-            <Input placeholder='Search by keywords, artist, or artwork'/>
-        </InputGroup>
+        <>
+            <Input flex="1" 
+                type="text"
+                placeholder='Search by artwork, artist or keywords'
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={handleKeyDown}
+            />
+        </>
+
     )
 }

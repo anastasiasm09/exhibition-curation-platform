@@ -15,6 +15,7 @@ import { useInView } from 'react-intersection-observer';
 
 
 function App() {
+  const [search, setSearch] = useState(null);
 
   const {
     data: aicDataArtworks,
@@ -22,8 +23,8 @@ function App() {
     isError: isDataAICArtworksError,
     fetchNextPage: fetchNextAICArtworksPage,
   } = useInfiniteQuery({
-    queryKey: ['aicData'],
-    queryFn: ({pageParam = 1}) => getAICArtworks(pageParam),
+    queryKey: ['aicData', search],
+    queryFn: ({ pageParam = 1 }) => getAICArtworks(pageParam, search),
     getNextPageParam: (lastPage) => {
       return lastPage.currentPage < lastPage.totalPages
         ? lastPage.currentPage + 1
@@ -41,8 +42,8 @@ function App() {
     isError: isDataHAMArtworksError,
     fetchNextPage: fetchNextHAMArtworksPage,
   } = useInfiniteQuery({
-    queryKey: ['hamData'],
-    queryFn: ({ pageParam = 1 }) => getHAMArtworks(pageParam),
+    queryKey: ['hamData', search],
+    queryFn: ({ pageParam = 1 }) => getHAMArtworks(pageParam, search),
     getNextPageParam: (lastPage) => {
       return lastPage.currentPage < lastPage.totalPages
         ? lastPage.currentPage + 1
@@ -99,10 +100,16 @@ function App() {
         if (aicPages && hamPages) {
           aicPages.forEach((aicData, i) => {
             const hamData = hamPages[i]
-            artworks.push(aicData.artworks)
-            artworks.push(hamData.artworks)
-          })
-          artworks = artworks.flat()
+            if (aicData?.artworks) {
+              artworks.push(aicData.artworks)
+            }
+            
+            if (hamData?.artworks)
+              artworks.push(hamData.artworks)
+          });
+
+          artworks = artworks.flat();
+
         } else if (aicPages) {
           artworks = aicPages
         } else if (hamPages) {
@@ -113,14 +120,14 @@ function App() {
       })
     }
   }, [inView])
-  
+
 
   return (
     <main role="main">
       {/* Error Messages */}
       <Toaster />
 
-      <Navbar />
+      <Navbar onSearch={setSearch} />
 
       <BannerImage />
 
