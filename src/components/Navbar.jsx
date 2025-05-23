@@ -6,7 +6,6 @@ import {
     Drawer,
     Portal,
     CloseButton,
-    DrawerTrigger,
 } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
@@ -14,7 +13,7 @@ import Search from './Search';
 
 const Links = ['Home', 'Artworks', 'Exhibitions', 'About'];
 
-export default function Navbar() {
+export default function Navbar({ onSearch }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -34,7 +33,7 @@ export default function Navbar() {
                         </Box>
                     ))}
                     <Box>
-                        <Search />
+                        <Search onSearch={onSearch} />
                     </Box>
                 </Flex>
 
@@ -88,7 +87,7 @@ export default function Navbar() {
                                 </Box>
 
                                 <Box>
-                                    <Search />
+                                    <Search onSearch={onSearch} />
                                 </Box>
                             </Drawer.Content>
                         </Drawer.Positioner>

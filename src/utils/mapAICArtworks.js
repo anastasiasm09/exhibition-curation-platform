@@ -7,9 +7,10 @@ export function mapAICArtworks(aicDataArtworks) {
       : null;
 
 
-    const classification = item.classification_title.charAt(0).toUpperCase() + item.classification_title.slice(1)
-    //const classification_titles = item.classification_titles.charAt(0).toUpperCase() + item.classification_titles.slice(1)
-
+    let classification
+    if (item.classification_title) {
+      classification = item.classification_title.charAt(0).toUpperCase() + item.classification_title.slice(1)
+    }
 
     return new Artwork(
       item.id,
