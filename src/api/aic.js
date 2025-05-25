@@ -2,8 +2,8 @@
 import { mapAICArtworks } from '../utils/mapAICArtworks';
 //`https://api.artic.edu/api/v1/artworks?page=${page}&limit=6`
 
-export async function getAICArtworks(page = 1, search = null) {
-    const endpoint = search
+export async function getAICArtworks(page = 1, search = null, classification = null) {
+    const endpoint = search || classification
         ? `https://api.artic.edu/api/v1/artworks/search`
         : `https://api.artic.edu/api/v1/artworks`;
 
@@ -17,10 +17,15 @@ export async function getAICArtworks(page = 1, search = null) {
         params.append('q', search)
     }
 
+    if (classification) {
+        params.append('query[term][classification_title]', classification);
+    }
+
     const url = `${endpoint}?${params.toString()}`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
     const data = await res.json();
+    //console.log(data)
     const artworks = mapAICArtworks(data.data);
     return {
         artworks,
@@ -28,5 +33,3 @@ export async function getAICArtworks(page = 1, search = null) {
         totalPages: data.pagination.total_pages,
     };
 }
-
-
