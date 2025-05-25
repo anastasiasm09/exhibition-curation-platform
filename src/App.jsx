@@ -3,7 +3,6 @@ import { getAICArtworks } from './api/aic';
 import { getHAMArtworks } from './api/ham';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import Navbar from './components/Navbar';
-import Search from './components/Search';
 import BannerImage from './components/BannerImage';
 import HomepageArtworks from './components/HomepageArtworks';
 import { Box, VisuallyHidden } from '@chakra-ui/react';
@@ -11,10 +10,14 @@ import Loading from './components/Loading';
 import { Toaster, toaster } from "@/components/ui/toaster"
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { useQueryClient } from '@tanstack/react-query';
+
 
 
 function App() {
   const [search, setSearch] = useState(null);
+  const [classification, setClassification] = useState(null);
+  const queryClient = useQueryClient();
 
   const {
     data: aicDataArtworks,
@@ -22,8 +25,8 @@ function App() {
     isError: isDataAICArtworksError,
     fetchNextPage: fetchNextAICArtworksPage,
   } = useInfiniteQuery({
-    queryKey: ['aicData', search],
-    queryFn: ({ pageParam = 1 }) => getAICArtworks(pageParam, search),
+    queryKey: ['aicData', search, classification],
+    queryFn: ({ pageParam = 1 }) => getAICArtworks(pageParam, search, classification),
     getNextPageParam: (lastPage) => {
       return lastPage.currentPage < lastPage.totalPages
         ? lastPage.currentPage + 1
@@ -41,8 +44,8 @@ function App() {
     isError: isDataHAMArtworksError,
     fetchNextPage: fetchNextHAMArtworksPage,
   } = useInfiniteQuery({
-    queryKey: ['hamData', search],
-    queryFn: ({ pageParam = 1 }) => getHAMArtworks(pageParam, search),
+    queryKey: ['hamData', search, classification],
+    queryFn: ({ pageParam = 1 }) => getHAMArtworks(pageParam, search, classification),
     getNextPageParam: (lastPage) => {
       return lastPage.currentPage < lastPage.totalPages
         ? lastPage.currentPage + 1
@@ -51,6 +54,7 @@ function App() {
     initialPageParam: 1,
     retry: 1
   })
+
 
   const isLoading = isDataAICArtworksLoading || isDataHAMArtworksLoading
 
@@ -102,11 +106,10 @@ function App() {
             if (aicData?.artworks) {
               artworks.push(aicData.artworks)
             }
-            
+
             if (hamData?.artworks)
               artworks.push(hamData.artworks)
           });
-
           artworks = artworks.flat();
 
         } else if (aicPages) {
@@ -120,6 +123,20 @@ function App() {
     }
   }, [inView])
 
+  useEffect(() => {
+    queryClient.removeQueries({
+      queryKey: ['aicData', search, ['artworks', classification]],
+      exact: false
+    });
+  
+    queryClient.removeQueries({
+      queryKey: ['hamData', search, classification],
+      exact: false
+    });
+  
+    setCombinedArtworks([]);
+  }, [search, classification]);
+  
 
   return (
     <main role="main">
@@ -141,7 +158,7 @@ function App() {
           </>
         )}
 
-        <HomepageArtworks artworks={combinedArtworks} />
+        <HomepageArtworks artworks={combinedArtworks} onFilter={setClassification} />
       </Box>
 
       {/* Infinite scroll */}

@@ -8,13 +8,13 @@ import { LuSearch } from "react-icons/lu"
 
 
 export default function Search({ onSearch }) {
-     const [search, setSearch] = useState('');
+    const [search, setSearch] = useState(''); 
 
     const handleSearch = () => {
         onSearch(search.trim())
     };
 
-     const handleKeyDown = (e) => {
+    const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             handleSearch();
         }
@@ -22,7 +22,7 @@ export default function Search({ onSearch }) {
 
     return (
         <>
-            <Input flex="1" 
+            <Input flex="1"
                 type="text"
                 placeholder='Search by artwork, artist or keywords'
                 value={search}
