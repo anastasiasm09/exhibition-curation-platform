@@ -37,13 +37,13 @@ export default function HomepageArtworks({ artworks, onFilter }) {
 
             >
                 <Select.HiddenSelect />
-                <Select.Label textAlign="left" px={4}>Filter artworks by type</Select.Label>
-                <Select.Control>
-                    <Select.Trigger>
+                <Select.Label textAlign="left" px={8}>Filter artworks by type</Select.Label>
+                <Select.Control px={4}>
+                    <Select.Trigger px={4}>
                         <Select.ValueText placeholder="Select" />
                     </Select.Trigger>
                     <Select.IndicatorGroup>
-                        <Select.Indicator />
+                        <Select.Indicator px={4} />
                     </Select.IndicatorGroup>
                 </Select.Control>
                 <Portal>

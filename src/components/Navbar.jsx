@@ -6,12 +6,14 @@ import {
     Drawer,
     Portal,
     CloseButton,
+    Image,
 } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 import Search from './Search';
+import logo from '../assets/logoArtworks.png'
 
-const Links = ['Home', 'Artworks', 'Exhibitions', 'About'];
+const Links = ['Home', 'Exhibitions', 'About'];
 
 export default function Navbar({ onSearch }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -19,9 +21,11 @@ export default function Navbar({ onSearch }) {
     return (
         <Box as="nav" bg="white" px={4} boxShadow="md" position="sticky" top={0} zIndex={10}>
             <Flex h={16} alignItems="center" justifyContent="space-between">
-                <Text fontWeight="bold" fontSize="xl" color="maroon">
-                    LOGO
-                </Text>
+                <Image
+                    src={logo}
+                    alt="Logo"
+                    height="50px"
+                />
 
                 {/* Desktop Links */}
                 <Flex as="ul" gap={6} align="center" display={{ base: 'none', md: 'flex' }}>
