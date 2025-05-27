@@ -1,38 +1,112 @@
-export function createExhibition(name, discription) {
+export function createExhibition(name, description) {
+    const exhibitionData = localStorage.getItem("exhibitionData")
 
+    const allArtworks = exhibitionData ? JSON.parse(exhibitionData) : {}
+    allArtworks[name] = { name, description, artworks: [] }
+
+    localStorage.setItem("exhibitionData", JSON.stringify(allArtworks))
 }
 
 export function deleteExhibition(name) {
 
+    const exhibitionData = localStorage.getItem("exhibitionData")
+    const allArtworks = JSON.parse(exhibitionData)
+
+    if (allArtworks[name]) {
+        delete allArtworks[name]
+
+        localStorage.setItem("exhibitionData", JSON.stringify(allArtworks))
+    }
 }
 
-export function addArtworkToExhibition(id, title, discription, image, classification) {
+export function addArtworkToExhibition(artwork) {
 
+    const exhibitionData = localStorage.getItem("exhibitionData")
+    const allArtworks = JSON.parse(exhibitionData)
+
+    if (allArtworks.exhibitionName) {
+        allArtworks.exhibitionName.artworks.push(artwork)
+
+        localStorage.setItem("exhibitionData", JSON.stringify(allArtworks))
+    }
 }
 
-export function deleteArtworkFromExhibition(title) {
+export function deleteArtworkFromExhibition(artworkId) {
 
+    const exhibitionData = localStorage.getItem("exhibitionData")
+    const allArtworks = JSON.parse(exhibitionData)
+
+    const exhibition = allArtworks[exhibitionName];
+
+    if (exhibition.artworks.length > 0) {
+        exhibition.artworks = exhibition.artworks.filter((item) => item.id !== artworkId);
+
+    }
+    localStorage.setItem("exhibitionData", JSON.stringify(allArtworks));
 }
 
-export function getNumberOfArworks(id) {
+export function getNumberOfArworks(exhibitionName) {
 
+    const exhibitionData = localStorage.getItem("exhibitionData")
+    const allArtworks = JSON.parse(exhibitionData)
+
+    for (const key in allArtworks) {
+        if (key === exhibitionName) {
+            const numberOfArtworks = allArtworks[key].artworks.length
+            return numberOfArtworks
+        } else {
+            return 0
+        }
+    }
 }
 
-export function getExhibitionImage(image) {
+export function getExhibitionImage(exhibitionName) {
 
+    const exhibitionData = localStorage.getItem("exhibitionData")
+    const allArtworks = JSON.parse(exhibitionData)
+
+    const exhibition = allArtworks[exhibitionName];
+
+    if (exhibition.artworks.length > 0) {
+        const firstArtwork = exhibition.artworks[0]
+        const imageFirstExhibition = firstArtwork.imageUrl
+        return imageFirstExhibition || null
+    }
 }
 
-export function renameExhibition(name) {
+export function renameExhibition(exhibitionName, newName) {
 
+    const exhibitionData = localStorage.getItem("exhibitionData")
+    const allArtworks = JSON.parse(exhibitionData)
+
+    if (allArtworks[exhibitionName]) {
+        allArtworks[exhibitionName] = { ...allArtworks[exhibitionName], name: newName }
+    }
+    delete allArtworks[exhibitionName];
+
+    localStorage.setItem("exhibitionData", JSON.stringify(allArtworks));
 }
 
-export function getAllExhibitions(name) {
+export function getAllExhibitions() {
 
+    const exhibitionData = localStorage.getItem("exhibitionData")
+    const allArtworks = JSON.parse(exhibitionData)
+
+    const allExhibitions = Object.values(allArtworks);
+
+    return allExhibitions;
 }
 
-export function isArtworkInExhibition(id, title, name) {
+export function isArtworkInExhibition(allExhibitions, artwork) {
 
+    const exhibitionData = localStorage.getItem("exhibitionData")
+    const allArtworks = JSON.parse(exhibitionData)
+
+    const exhibition = allExhibitions[exhibitionName]
+
+    if (!exhibition || exhibition.artworks.length === 0) {
+        return false
+    } else {
+        return exhibition.artworks.find((item) => item.id === artwork.id)
+    }
 }
-
-
-

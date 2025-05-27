@@ -12,14 +12,26 @@ import { useDisclosure } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 import Search from './Search';
 import logo from '../assets/logoArtworks.png'
+import { Link as RouterLink } from 'react-router-dom';
 
-const Links = ['Home', 'Exhibitions', 'About'];
+const Links = [
+    { label: 'Home', path: '/' },
+    { label: 'Exhibitions', path: '/exhibitions' },
+    { label: 'About', path: '/about' },
+];
 
 export default function Navbar({ onSearch }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
-        <Box as="nav" bg="white" px={4} boxShadow="md" position="sticky" top={0} zIndex={10}>
+        <Box 
+            as="nav" 
+            bg="white" 
+            px={4} 
+            boxShadow="md" 
+            position="sticky" 
+            top={0} 
+            zIndex={10}>
             <Flex h={16} alignItems="center" justifyContent="space-between">
                 <Image
                     src={logo}
@@ -29,10 +41,16 @@ export default function Navbar({ onSearch }) {
 
                 {/* Desktop Links */}
                 <Flex as="ul" gap={6} align="center" display={{ base: 'none', md: 'flex' }}>
-                    {Links.map((link) => (
-                        <Box as="li" key={link} listStyleType="none">
-                            <Text key={link} fontWeight="medium" fontSize="lg" cursor="pointer" _hover={{ textDecoration: 'underline' }}>
-                                {link}
+                    {Links.map(({ label, path }) => (
+                        <Box as="li" key={label} listStyleType="none">
+                            <Text
+                                as={RouterLink}
+                                to={path}
+                                fontWeight="medium"
+                                fontSize="lg"
+                                _hover={{ textDecoration: 'underline' }}
+                            >
+                                {label}
                             </Text>
                         </Box>
                     ))}
@@ -76,19 +94,21 @@ export default function Navbar({ onSearch }) {
                                 </Drawer.CloseTrigger>
 
                                 <Box as="ul" mt={12} display="flex" flexDirection="column" gap={6}>
-                                    {Links.map((link) => (
-                                        <Box as="li" key={link} listStyleType="none">
+                                    {Links.map(({ label, path }) => (
+                                        <Box as="li" key={label} listStyleType="none">
                                             <Text
-                                                key={link}
+                                                as={RouterLink}
+                                                to={path}
                                                 fontSize="xl"
                                                 fontWeight="semibold"
-                                                _hover={{ color: 'maroon', cursor: 'pointer' }}
+                                                _hover={{ color: 'maroon' }}
                                             >
-                                                {link}
+                                                {label}
                                             </Text>
                                         </Box>
                                     ))}
                                 </Box>
+
 
                                 <Box>
                                     <Search onSearch={onSearch} />
