@@ -1,10 +1,14 @@
 import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { getAICArtworks } from './api/aic';
 import { getHAMArtworks } from './api/ham';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
+
 import Navbar from './components/Navbar';
 import BannerImage from './components/BannerImage';
 import HomepageArtworks from './components/HomepageArtworks';
+import Exhibitions from './components/Exhibitions';
 import { Box, VisuallyHidden } from '@chakra-ui/react';
 import Loading from './components/Loading';
 import { Toaster, toaster } from "@/components/ui/toaster"
@@ -18,6 +22,10 @@ function App() {
   const [search, setSearch] = useState(null);
   const [classification, setClassification] = useState(null);
   const queryClient = useQueryClient();
+
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
+
 
   const {
     data: aicDataArtworks,
@@ -128,45 +136,52 @@ function App() {
       queryKey: ['aicData', search, ['artworks', classification]],
       exact: false
     });
-  
+
     queryClient.removeQueries({
       queryKey: ['hamData', search, classification],
       exact: false
     });
-  
+
     setCombinedArtworks([]);
   }, [search, classification]);
-  
+
 
   return (
-    <main role="main">
-      {/* Error Messages */}
-      <Toaster />
-
+    <>
       <Navbar onSearch={setSearch} />
 
-      <BannerImage />
+      {isHomePage && <BannerImage />}
 
-      {/* Loading */}
-      <Box aria-live="polite" role="status" mt={8}>
-        {isLoading && (
-          <>
-            <Loading />
-            <VisuallyHidden>
-              Loading artworks, please wait.
-            </VisuallyHidden>
-          </>
-        )}
+      <Routes>
+        {/* Loading */}
+        <Route
+          path="/"
+          element={
+            <Box aria-live="polite" role="status" mt={8}>
+              {isLoading && (
+                <>
+                  <Loading />
+                  <VisuallyHidden>
+                    Loading artworks, please wait.
+                  </VisuallyHidden>
+                </>
+              )}
 
-        <HomepageArtworks artworks={combinedArtworks} onFilter={setClassification} />
-      </Box>
+              <HomepageArtworks artworks={combinedArtworks} onFilter={setClassification} />
 
-      {/* Infinite scroll */}
-      {!isLoading && !!combinedArtworks.length && (
-        <div ref={ref}>
-        </div>
-      )}
-    </main>
+              {/* Infinite scroll */}
+              {!isLoading && !!combinedArtworks.length && (<div ref={ref}></div>)}
+            </Box>
+          }
+        />
+        <Route path="/exhibitions" element={<Exhibitions />} />
+        {/* <Route path="/about" element={<About />} /> */}
+      </Routes>
+
+      {/* Error Messages */}
+      <Toaster />
+    </>
+
   );
 }
 
