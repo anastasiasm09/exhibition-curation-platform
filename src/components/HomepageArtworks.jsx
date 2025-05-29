@@ -1,6 +1,9 @@
-import { Card, CardBody, CardTitle, Image, SimpleGrid, Text } from '@chakra-ui/react';
-import { Portal, Select, createListCollection } from "@chakra-ui/react"
+import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, Button, HStack, Box } from '@chakra-ui/react';
+import { Portal, Select, createListCollection, useSelectContext } from "@chakra-ui/react"
+import { addArtworkToExhibition, createExhibition, getAllExhibitions } from "@/utils/Exhibitions";
+import { Tooltip } from "@/components/ui/tooltip"
 import { useState } from "react";
+import { MdAdd } from "react-icons/md";
 
 
 export default function HomepageArtworks({ artworks, onFilter }) {
@@ -17,12 +20,55 @@ export default function HomepageArtworks({ artworks, onFilter }) {
     })
 
     const [value, setValue] = useState("");
+    //const [exhibitionList, setExhibitionList] = useState(getAllExhibitions());
 
     const handleFilter = (selected) => {
         const selectedValues = selected.value[0]
         setValue([selectedValues]);
         onFilter(selectedValues);
     };
+
+    const handleExhibitionSelect = (artwork, exhibitionName) => {
+        console.log("Selected:", exhibitionName, artwork);
+        if (!exhibitionName) return;
+
+        addArtworkToExhibition(exhibitionName, artwork);
+
+    };
+
+    console.log(getAllExhibitions());
+
+    const exhibitionItems = getAllExhibitions().map((exb) => ({
+        label: exb.name,
+        value: exb.name
+    }));
+
+
+    const exhibitionsCollection = createListCollection({
+        items: exhibitionItems
+    });
+
+    const ExhibitionTrigger = () => {
+        const select = useSelectContext()
+        return (
+            <Tooltip 
+                content="Add to my exhibition"
+                positioning={{ placement: "right-end" }}
+            >
+                <IconButton
+                    variant="outline"
+                    aria-label="Add to exhibition"
+                    mt="2"
+                    size="sm"
+                    color="maroon"
+                    bg="white"
+                    {...select.getTriggerProps()}
+                >
+                    <MdAdd />
+                </IconButton>
+            </Tooltip>
+        )
+    }
 
 
     return (
@@ -78,10 +124,38 @@ export default function HomepageArtworks({ artworks, onFilter }) {
                             <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">
                                 {artwork.classification}
                             </Text>
+                            <Box mt={2}>
+                                <Select.Root
+                                    positioning={{ sameWidth: false }}
+                                    collection={exhibitionsCollection}
+                                    size="sm"
+                                    width="100%"
+                                    onValueChange={(selected) =>
+                                        handleExhibitionSelect(artwork, selected?.value?.[0] || "")
+                                    }
+                                >
+                                    <Select.HiddenSelect />
+                                    <Select.Control>
+                                        <ExhibitionTrigger />
+                                    </Select.Control>
+                                    <Portal>
+                                        <Select.Positioner>
+                                            <Select.Content minW="32">
+                                                {exhibitionsCollection.items.map((exb) => (
+                                                    <Select.Item item={exb} key={exb.value}>
+                                                        <HStack>{exb.label}</HStack>
+                                                        <Select.ItemIndicator />
+                                                    </Select.Item>
+                                                ))}
+                                            </Select.Content>
+                                        </Select.Positioner>
+                                    </Portal>
+                                </Select.Root>
+
+                            </Box>
                         </CardBody>
                     </Card.Root>
-                )
-                )}
+                ))}
             </SimpleGrid>
         </>
     )

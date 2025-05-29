@@ -1,20 +1,13 @@
 import { useState } from "react"
 import { Button, CloseButton, Dialog, Portal, Input, Stack } from "@chakra-ui/react"
-
+import { addArtworkToExhibition, createExhibition, getAllExhibitions } from "@/utils/Exhibitions";
 
 export default function Exhibitions() {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
-
-    function createExhibition(name, description) {
-        const exhibitionData = localStorage.getItem("exhibitionData")
-
-        const allArtworks = exhibitionData ? JSON.parse(exhibitionData) : {}
-        allArtworks[name] = { name, description, artworks: [] }
-
-        localStorage.setItem("exhibitionData", JSON.stringify(allArtworks))
-    }
+    
+    
 
     function handleCreate() {
         if (!name.trim()) return;
@@ -22,6 +15,8 @@ export default function Exhibitions() {
         setName("");
         setDescription("");
     }
+
+    
 
     return (
         <Dialog.Root lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>

@@ -4,7 +4,6 @@ import { getAICArtworks } from './api/aic';
 import { getHAMArtworks } from './api/ham';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useLocation } from 'react-router-dom';
-
 import Navbar from './components/Navbar';
 import BannerImage from './components/BannerImage';
 import HomepageArtworks from './components/HomepageArtworks';
