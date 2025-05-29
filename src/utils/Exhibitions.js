@@ -19,17 +19,16 @@ export function deleteExhibition(name) {
     }
 }
 
-export function addArtworkToExhibition(artwork) {
-
+export function addArtworkToExhibition(exhibitionName, artwork) {
     const exhibitionData = localStorage.getItem("exhibitionData")
     const allArtworks = JSON.parse(exhibitionData)
 
-    if (allArtworks.exhibitionName) {
-        allArtworks.exhibitionName.artworks.push(artwork)
+    allArtworks[exhibitionName].artworks.push(artwork)
 
-        localStorage.setItem("exhibitionData", JSON.stringify(allArtworks))
-    }
+    localStorage.setItem("exhibitionData", JSON.stringify(allArtworks))
 }
+
+window.addArtworkToExhibition = addArtworkToExhibition
 
 export function deleteArtworkFromExhibition(artworkId) {
 
@@ -90,7 +89,8 @@ export function renameExhibition(exhibitionName, newName) {
 export function getAllExhibitions() {
 
     const exhibitionData = localStorage.getItem("exhibitionData")
-    const allArtworks = JSON.parse(exhibitionData)
+    const allArtworks = exhibitionData ? JSON.parse(exhibitionData) : {}
+
 
     const allExhibitions = Object.values(allArtworks);
 

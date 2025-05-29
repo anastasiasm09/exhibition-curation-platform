@@ -46,9 +46,12 @@ export default function Navbar({ onSearch }) {
                             <Text
                                 as={RouterLink}
                                 to={path}
+                                color="black"
                                 fontWeight="medium"
-                                fontSize="lg"
-                                _hover={{ textDecoration: 'underline' }}
+                                letterSpacing={0.5}
+                                fontSize="17px"
+                                fontFamily="Inter, sans-serif"
+                                _hover={{ textDecoration: 'underline', color: 'maroon' }}
                             >
                                 {label}
                             </Text>

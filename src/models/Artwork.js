@@ -25,4 +25,14 @@ export class Artwork {
     get classification() {
       return this._classification;
     }
+
+    toJSON() {
+      return {
+        id: this.id,
+        image: this.image,
+        title: this.title,
+        artist: this.artist,
+        classification: this.classification
+      }
+    }
   }
