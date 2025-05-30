@@ -20,7 +20,6 @@ export default function HomepageArtworks({ artworks, onFilter }) {
     })
 
     const [value, setValue] = useState("");
-    //const [exhibitionList, setExhibitionList] = useState(getAllExhibitions());
 
     const handleFilter = (selected) => {
         const selectedValues = selected.value[0]
@@ -29,20 +28,15 @@ export default function HomepageArtworks({ artworks, onFilter }) {
     };
 
     const handleExhibitionSelect = (artwork, exhibitionName) => {
-        console.log("Selected:", exhibitionName, artwork);
         if (!exhibitionName) return;
 
         addArtworkToExhibition(exhibitionName, artwork);
-
     };
-
-    console.log(getAllExhibitions());
 
     const exhibitionItems = getAllExhibitions().map((exb) => ({
         label: exb.name,
         value: exb.name
     }));
-
 
     const exhibitionsCollection = createListCollection({
         items: exhibitionItems
