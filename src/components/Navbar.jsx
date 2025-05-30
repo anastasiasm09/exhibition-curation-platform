@@ -25,13 +25,14 @@ export default function Navbar({ onSearch }) {
 
     return (
         <Box 
-            as="nav" 
+            as="nav"
+            position="sticky" 
             bg="white" 
             px={4} 
             boxShadow="md" 
-            position="sticky" 
             top={0} 
-            zIndex={10}>
+            zIndex="1000">
+           
             <Flex h={16} alignItems="center" justifyContent="space-between">
                 <Image
                     src={logo}

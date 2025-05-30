@@ -7,6 +7,7 @@ export function createExhibition(name, description) {
     localStorage.setItem("exhibitionData", JSON.stringify(allArtworks))
 }
 
+
 export function deleteExhibition(name) {
 
     const exhibitionData = localStorage.getItem("exhibitionData")
@@ -19,6 +20,7 @@ export function deleteExhibition(name) {
     }
 }
 
+
 export function addArtworkToExhibition(exhibitionName, artwork) {
     const exhibitionData = localStorage.getItem("exhibitionData")
     const allArtworks = JSON.parse(exhibitionData)
@@ -28,7 +30,6 @@ export function addArtworkToExhibition(exhibitionName, artwork) {
     localStorage.setItem("exhibitionData", JSON.stringify(allArtworks))
 }
 
-window.addArtworkToExhibition = addArtworkToExhibition
 
 export function deleteArtworkFromExhibition(artworkId) {
 
@@ -59,19 +60,24 @@ export function getNumberOfArworks(exhibitionName) {
     }
 }
 
-export function getExhibitionImage(exhibitionName) {
 
-    const exhibitionData = localStorage.getItem("exhibitionData")
-    const allArtworks = JSON.parse(exhibitionData)
+export function getExhibitionImage(name) {
+    const stored = localStorage.getItem("exhibitionData");
+    if (!stored) return null;
 
-    const exhibition = allArtworks[exhibitionName];
-
-    if (exhibition.artworks.length > 0) {
-        const firstArtwork = exhibition.artworks[0]
-        const imageFirstExhibition = firstArtwork.imageUrl
-        return imageFirstExhibition || null
+    try {
+        const parsed = JSON.parse(stored);
+        const exhibition = parsed[name];
+        if (!exhibition || !Array.isArray(exhibition.artworks) || exhibition.artworks.length === 0) {
+            return null;
+        }
+        return exhibition.artworks[0].image || null;
+    } catch (e) {
+        console.error("Failed to parse exhibition data:", e);
+        return null;
     }
 }
+
 
 export function renameExhibition(exhibitionName, newName) {
 
@@ -86,6 +92,7 @@ export function renameExhibition(exhibitionName, newName) {
     localStorage.setItem("exhibitionData", JSON.stringify(allArtworks));
 }
 
+
 export function getAllExhibitions() {
 
     const exhibitionData = localStorage.getItem("exhibitionData")
@@ -96,6 +103,7 @@ export function getAllExhibitions() {
 
     return allExhibitions;
 }
+
 
 export function isArtworkInExhibition(allExhibitions, artwork) {
 
