@@ -14,7 +14,7 @@ import { Toaster, toaster } from "@/components/ui/toaster"
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useQueryClient } from '@tanstack/react-query';
-
+import ExhibitionDetails from './components/ExhibitionDetails';
 
 
 function App() {
@@ -174,6 +174,7 @@ function App() {
           }
         />
         <Route path="/exhibitions" element={<Exhibitions />} />
+        <Route path="/exhibitions/:name" element={<ExhibitionDetails />} />
         {/* <Route path="/about" element={<About />} /> */}
       </Routes>
 

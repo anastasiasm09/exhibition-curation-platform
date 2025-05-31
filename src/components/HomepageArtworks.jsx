@@ -64,7 +64,6 @@ export default function HomepageArtworks({ artworks, onFilter }) {
         )
     }
 
-
     return (
         <>
             {/* Filter */}
@@ -145,7 +144,6 @@ export default function HomepageArtworks({ artworks, onFilter }) {
                                         </Select.Positioner>
                                     </Portal>
                                 </Select.Root>
-
                             </Box>
                         </CardBody>
                     </Card.Root>
