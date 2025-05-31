@@ -1,4 +1,4 @@
-import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, Button, HStack, Box } from '@chakra-ui/react';
+import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, Button, HStack, Box, Grid } from '@chakra-ui/react';
 import { Portal, Select, createListCollection, useSelectContext } from "@chakra-ui/react"
 import { addArtworkToExhibition, createExhibition, getAllExhibitions } from "@/utils/Exhibitions";
 import { Tooltip } from "@/components/ui/tooltip"
@@ -45,17 +45,18 @@ export default function HomepageArtworks({ artworks, onFilter }) {
     const ExhibitionTrigger = () => {
         const select = useSelectContext()
         return (
-            <Tooltip 
+            <Tooltip
                 content="Add to my exhibition"
                 positioning={{ placement: "right-end" }}
             >
                 <IconButton
-                    variant="outline"
                     aria-label="Add to exhibition"
-                    mt="2"
+                    variant="ghost"
                     size="sm"
                     color="maroon"
                     bg="white"
+                    overflow="hidden"
+                    
                     {...select.getTriggerProps()}
                 >
                     <MdAdd />
@@ -63,6 +64,7 @@ export default function HomepageArtworks({ artworks, onFilter }) {
             </Tooltip>
         )
     }
+
 
     return (
         <>
@@ -112,17 +114,12 @@ export default function HomepageArtworks({ artworks, onFilter }) {
                             alt="artwork"
                         />
                         <CardBody>
-                            <CardTitle>{artwork.title}</CardTitle>
-                            <Card.Description>{artwork.artist}</Card.Description>
-                            <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">
-                                {artwork.classification}
-                            </Text>
-                            <Box mt={2}>
+                            <Grid templateColumns="1fr auto" alignItems="start">
+                                <CardTitle>{artwork.title}</CardTitle>
                                 <Select.Root
                                     positioning={{ sameWidth: false }}
                                     collection={exhibitionsCollection}
                                     size="sm"
-                                    width="100%"
                                     onValueChange={(selected) =>
                                         handleExhibitionSelect(artwork, selected?.value?.[0] || "")
                                     }
@@ -144,8 +141,14 @@ export default function HomepageArtworks({ artworks, onFilter }) {
                                         </Select.Positioner>
                                     </Portal>
                                 </Select.Root>
-                            </Box>
+                            </Grid>
+
+                            <Card.Description>{artwork.artist}</Card.Description>
+                            <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">
+                                {artwork.classification}
+                            </Text>
                         </CardBody>
+
                     </Card.Root>
                 ))}
             </SimpleGrid>

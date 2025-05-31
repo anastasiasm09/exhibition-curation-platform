@@ -13,6 +13,7 @@ export default function Exhibitions() {
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [exhibitionToDelete, setExhibitionToDelete] = useState(null);
 
+    const exhibitions = getAllExhibitions().sort((a, b) => a.date - b.date);
 
 
     function handleCreate() {
@@ -38,8 +39,10 @@ export default function Exhibitions() {
         setExhibitionToDelete(null);
     }
 
+
     return (
         <>
+
             <Box
                 as="nav"
                 position="sticky"
@@ -96,79 +99,99 @@ export default function Exhibitions() {
                 </Dialog.Root>
             </Box>
 
-            <SimpleGrid
-                columns={{ base: 1, md: 2 }}
-                spacing={6}
-                px={4}
-                py={6}
-            >
-                {getAllExhibitions().sort((a, b) => (a.date - b.date)).map((exb) => {
-                    const imageUrl = getExhibitionImage(exb.name)
+            {exhibitions.length === 0 ? (
+                <Box px={4} py={6} display="flex" justifyContent="center" alignItems="center" minH="40vh">
+                    <Text
+                        fontSize="lg"
+                        color="gray.500"
+                        fontStyle="italic"
+                        fontWeight="bold"
+                        textAlign="center"
+                        wordBreak="break-word"
+                    >
+                        You have not created any exhibitions yet.
+                    </Text>
+                </Box>
+            ) : (
+                <SimpleGrid
+                    columns={{ base: 1, md: 2 }}
+                    spacing={6}
+                    mb={10}
+                    px={4}
+                    py={6}
+                >
+                    {getAllExhibitions().sort((a, b) => (a.date - b.date)).map((exb) => {
+                        const imageUrl = getExhibitionImage(exb.name)
 
-                    return (
-                        <Card.Root
-                            key={exb.name}
-                            display="flex"
-                            flexDirection="column"
-                            overflow="hidden"
-                            height="100%"
-                            maxW="xl"
-                            w="100%"
-                        >
-                            {imageUrl && (
-                                <Link to={`/exhibitions/${exb.name}`}>
-                                    <Image
-                                        objectFit="cover"
-                                        w="100%"
-                                        h="250px"
-                                        src={imageUrl}
-                                        alt={`${exb.name} cover`}
-                                    />
-                                </Link>
+                        return (
+                            <Stack>
+                                <Card.Root
+                                    key={exb.name}
+                                    display="flex"
+                                    flexDirection="column"
+                                    overflow="hidden"
+                                    height="100%"
+                                    maxW="xl"
+                                    w="100%"
+                                    marginBottom={4}
+                                >
+                                    {imageUrl && (
+                                        <Link to={`/exhibitions/${exb.name}`}>
+                                            <Image
+                                                objectFit="cover"
+                                                w="100%"
+                                                h="250px"
+                                                src={imageUrl}
+                                                alt={`${exb.name} cover`}
+                                            />
+                                        </Link>
 
-                            )}
+                                    )}
 
-                            <Box flex="1" display="flex" flexDirection="column" p={4}>
-                                <Card.Body flex="1">
-                                    <Link to={`/exhibitions/${exb.name}`}>
-                                        <Card.Title mt={2} fontWeight="bold" mb={2}>{exb.name}</Card.Title>
-                                    </Link>
-                                    <Card.Description>{exb.description}</Card.Description>
-                                    <HStack mt={4}>
-                                        <Badge fontSize="sm">{exb.artworks.length}</Badge>
-                                    </HStack>
-                                </Card.Body>
+                                    <Box flex="1" display="flex" flexDirection="column" p={4}>
+                                        <Card.Body flex="1">
+                                            <Link to={`/exhibitions/${exb.name}`}>
+                                                <Card.Title color="maroon" mt={2} fontWeight="bold" mb={2}>{exb.name}</Card.Title>
+                                            </Link>
+                                            <Card.Description>{exb.description}</Card.Description>
+                                            <HStack mt={4}>
+                                                <Badge fontSize="sm">{exb.artworks.length}</Badge>
+                                            </HStack>
+                                        </Card.Body>
 
-                                <Card.Footer mt="auto" display="flex" justifyContent="space-between">
-                                    <Button
-                                        bg="maroon"
-                                        fontSize="xs"
-                                        letterSpacing={0.5}
-                                        color="white"
-                                        onClick={() => {
-                                            setDeleteOpen(true);
-                                            setExhibitionToDelete(exb.name)
-                                        }}
-                                    >
-                                        DELETE
-                                    </Button>
-                                    <Button
-                                        fontSize="xs"
-                                        letterSpacing={0.5}
-                                        color="black"
-                                        onClick={() => {
-                                            setRenameOpen(true);
-                                            setExhibitionToRename(exb.name);
-                                        }}
-                                    >
-                                        RENAME
-                                    </Button>
-                                </Card.Footer>
-                            </Box>
-                        </Card.Root>
-                    )
-                })}
-            </SimpleGrid>
+                                        <Card.Footer mt="auto" display="flex" justifyContent="space-between">
+                                            <Button
+                                                bg="maroon"
+                                                fontSize="xs"
+                                                letterSpacing={0.5}
+                                                color="white"
+                                                onClick={() => {
+                                                    setDeleteOpen(true);
+                                                    setExhibitionToDelete(exb.name)
+                                                }}
+                                            >
+                                                DELETE
+                                            </Button>
+                                            <Button
+                                                fontSize="xs"
+                                                letterSpacing={0.5}
+                                                color="black"
+                                                bg="gray.100"
+                                                onClick={() => {
+                                                    setRenameOpen(true);
+                                                    setExhibitionToRename(exb.name);
+                                                }}
+                                            >
+                                                RENAME
+                                            </Button>
+                                        </Card.Footer>
+                                    </Box>
+                                </Card.Root>
+                            </Stack>
+                        )
+                    })}
+                </SimpleGrid>
+            )}
 
             {/* Dialog for rename */}
 
@@ -224,7 +247,7 @@ export default function Exhibitions() {
                                 </Button>
                             </Dialog.Footer>
                             <Dialog.CloseTrigger asChild>
-                                <CloseButton size="sm"/>
+                                <CloseButton size="sm" />
                             </Dialog.CloseTrigger>
                         </Dialog.Content>
                     </Dialog.Positioner>
