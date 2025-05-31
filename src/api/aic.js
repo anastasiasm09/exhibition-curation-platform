@@ -25,7 +25,6 @@ export async function getAICArtworks(page = 1, search = null, classification = n
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
     const data = await res.json();
-    //console.log(data)
     const artworks = mapAICArtworks(data.data);
     return {
         artworks,

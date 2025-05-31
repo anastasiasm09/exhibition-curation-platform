@@ -1,20 +1,42 @@
 import { useState } from "react"
+import { Link } from 'react-router-dom'
 import { SimpleGrid, Button, CloseButton, Dialog, Portal, Input, Stack, Box, Text, Badge, Card, HStack, Image, Flex } from "@chakra-ui/react"
-import { createExhibition, getAllExhibitions, getExhibitionImage } from "@/utils/Exhibitions";
+import { createExhibition, getAllExhibitions, getExhibitionImage, renameExhibition, deleteExhibition } from "@/utils/Exhibitions";
 
 export default function Exhibitions() {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
+    const [renameOpen, setRenameOpen] = useState(false);
+    const [newName, setNewName] = useState("");
+    const [exhibitionToRename, setExhibitionToRename] = useState(null);
+    const [deleteOpen, setDeleteOpen] = useState(false)
+    const [exhibitionToDelete, setExhibitionToDelete] = useState(null);
+
 
 
     function handleCreate() {
         if (!name.trim()) return;
         createExhibition(name, description);
+        setOpen(false)
         setName("");
         setDescription("");
     }
 
+    function handleRename() {
+        if (!newName.trim()) return;
+        renameExhibition(exhibitionToRename, newName);
+        setRenameOpen(false);
+        setNewName("");
+        setExhibitionToRename(null);
+    }
+
+    function handleDelete() {
+        if (!exhibitionToDelete.trim()) return;
+        deleteExhibition(exhibitionToDelete);
+        setDeleteOpen(false)
+        setExhibitionToDelete(null);
+    }
 
     return (
         <>
@@ -80,7 +102,7 @@ export default function Exhibitions() {
                 px={4}
                 py={6}
             >
-                {getAllExhibitions().map((exb) => {
+                {getAllExhibitions().sort((a, b) => (a.date - b.date)).map((exb) => {
                     const imageUrl = getExhibitionImage(exb.name)
 
                     return (
@@ -94,18 +116,23 @@ export default function Exhibitions() {
                             w="100%"
                         >
                             {imageUrl && (
-                                <Image
-                                    objectFit="cover"
-                                    w="100%"
-                                    h="250px"
-                                    src={imageUrl}
-                                    alt={`${exb.name} cover`}
-                                />
+                                <Link to={`/exhibitions/${exb.name}`}>
+                                    <Image
+                                        objectFit="cover"
+                                        w="100%"
+                                        h="250px"
+                                        src={imageUrl}
+                                        alt={`${exb.name} cover`}
+                                    />
+                                </Link>
+
                             )}
 
                             <Box flex="1" display="flex" flexDirection="column" p={4}>
                                 <Card.Body flex="1">
-                                    <Card.Title mt={2} fontWeight="bold" mb={2}>{exb.name}</Card.Title>
+                                    <Link to={`/exhibitions/${exb.name}`}>
+                                        <Card.Title mt={2} fontWeight="bold" mb={2}>{exb.name}</Card.Title>
+                                    </Link>
                                     <Card.Description>{exb.description}</Card.Description>
                                     <HStack mt={4}>
                                         <Badge fontSize="sm">{exb.artworks.length}</Badge>
@@ -113,10 +140,27 @@ export default function Exhibitions() {
                                 </Card.Body>
 
                                 <Card.Footer mt="auto" display="flex" justifyContent="space-between">
-                                    <Button bg="maroon" fontSize="xs" letterSpacing={0.5} color="white">
+                                    <Button
+                                        bg="maroon"
+                                        fontSize="xs"
+                                        letterSpacing={0.5}
+                                        color="white"
+                                        onClick={() => {
+                                            setDeleteOpen(true);
+                                            setExhibitionToDelete(exb.name)
+                                        }}
+                                    >
                                         DELETE
                                     </Button>
-                                    <Button fontSize="xs" letterSpacing={0.5} color="black">
+                                    <Button
+                                        fontSize="xs"
+                                        letterSpacing={0.5}
+                                        color="black"
+                                        onClick={() => {
+                                            setRenameOpen(true);
+                                            setExhibitionToRename(exb.name);
+                                        }}
+                                    >
                                         RENAME
                                     </Button>
                                 </Card.Footer>
@@ -125,6 +169,67 @@ export default function Exhibitions() {
                     )
                 })}
             </SimpleGrid>
+
+            {/* Dialog for rename */}
+
+            <Dialog.Root open={renameOpen} onOpenChange={(e) => setRenameOpen(e.open)}>
+                <Portal>
+                    <Dialog.Backdrop />
+                    <Dialog.Positioner>
+                        <Dialog.Content>
+                            <Dialog.Header>
+                                <Dialog.Title color="maroon">Rename Exhibition</Dialog.Title>
+                            </Dialog.Header>
+                            <Dialog.Body>
+                                <Input
+                                    placeholder="New name"
+                                    value={newName}
+                                    onChange={(e) => setNewName(e.target.value)}
+                                />
+                            </Dialog.Body>
+                            <Dialog.Footer>
+                                <Dialog.ActionTrigger asChild>
+                                    <Button variant="outline">Cancel</Button>
+                                </Dialog.ActionTrigger>
+                                <Button bg="maroon" onClick={handleRename}>
+                                    Save
+                                </Button>
+                            </Dialog.Footer>
+                            <Dialog.CloseTrigger asChild>
+                                <CloseButton size="sm" />
+                            </Dialog.CloseTrigger>
+                        </Dialog.Content>
+                    </Dialog.Positioner>
+                </Portal>
+            </Dialog.Root>
+
+            {/* Dialog for delete */}
+            <Dialog.Root open={deleteOpen} onOpenChange={(e) => setDeleteOpen(e.open)}>
+                <Portal>
+                    <Dialog.Backdrop />
+                    <Dialog.Positioner>
+                        <Dialog.Content>
+                            <Dialog.Header>
+                                <Dialog.Title color="maroon">Are you sure you want to delete the exhibition?</Dialog.Title>
+                            </Dialog.Header>
+                            <Dialog.Footer>
+                                <Dialog.ActionTrigger asChild>
+                                    <Button variant="outline">Cancel</Button>
+                                </Dialog.ActionTrigger>
+                                <Button
+                                    bg="maroon"
+                                    onClick={handleDelete}
+                                >
+                                    Yes
+                                </Button>
+                            </Dialog.Footer>
+                            <Dialog.CloseTrigger asChild>
+                                <CloseButton size="sm"/>
+                            </Dialog.CloseTrigger>
+                        </Dialog.Content>
+                    </Dialog.Positioner>
+                </Portal>
+            </Dialog.Root>
 
         </>
     )

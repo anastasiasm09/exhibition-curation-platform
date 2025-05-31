@@ -2,14 +2,13 @@ export function createExhibition(name, description) {
     const exhibitionData = localStorage.getItem("exhibitionData")
 
     const allArtworks = exhibitionData ? JSON.parse(exhibitionData) : {}
-    allArtworks[name] = { name, description, artworks: [] }
+    allArtworks[name] = { name, description, date: Date.now(), artworks: [] }
 
     localStorage.setItem("exhibitionData", JSON.stringify(allArtworks))
 }
 
 
 export function deleteExhibition(name) {
-
     const exhibitionData = localStorage.getItem("exhibitionData")
     const allArtworks = JSON.parse(exhibitionData)
 
@@ -32,7 +31,6 @@ export function addArtworkToExhibition(exhibitionName, artwork) {
 
 
 export function deleteArtworkFromExhibition(artworkId) {
-
     const exhibitionData = localStorage.getItem("exhibitionData")
     const allArtworks = JSON.parse(exhibitionData)
 
@@ -45,8 +43,8 @@ export function deleteArtworkFromExhibition(artworkId) {
     localStorage.setItem("exhibitionData", JSON.stringify(allArtworks));
 }
 
-export function getNumberOfArworks(exhibitionName) {
 
+export function getNumberOfArworks(exhibitionName) {
     const exhibitionData = localStorage.getItem("exhibitionData")
     const allArtworks = JSON.parse(exhibitionData)
 
@@ -79,22 +77,17 @@ export function getExhibitionImage(name) {
 }
 
 
-export function renameExhibition(exhibitionName, newName) {
+export function renameExhibition(oldName, newName) {
+    const data = JSON.parse(localStorage.getItem("exhibitionData"));
 
-    const exhibitionData = localStorage.getItem("exhibitionData")
-    const allArtworks = JSON.parse(exhibitionData)
+    data[newName] = { ...data[oldName], name: newName };
+    delete data[oldName];
 
-    if (allArtworks[exhibitionName]) {
-        allArtworks[exhibitionName] = { ...allArtworks[exhibitionName], name: newName }
-    }
-    delete allArtworks[exhibitionName];
-
-    localStorage.setItem("exhibitionData", JSON.stringify(allArtworks));
+    localStorage.setItem("exhibitionData", JSON.stringify(data));
 }
 
 
 export function getAllExhibitions() {
-
     const exhibitionData = localStorage.getItem("exhibitionData")
     const allArtworks = exhibitionData ? JSON.parse(exhibitionData) : {}
 
@@ -106,7 +99,6 @@ export function getAllExhibitions() {
 
 
 export function isArtworkInExhibition(allExhibitions, artwork) {
-
     const exhibitionData = localStorage.getItem("exhibitionData")
     const allArtworks = JSON.parse(exhibitionData)
 
