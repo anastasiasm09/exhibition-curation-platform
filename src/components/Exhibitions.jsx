@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link } from 'react-router-dom'
-import { SimpleGrid, Button, CloseButton, Dialog, Portal, Input, Stack, Box, Text, Badge, Card, HStack, Image, Flex } from "@chakra-ui/react"
+import { SimpleGrid, Button, CloseButton, Dialog, Portal, Input, Stack, Box, Text, Badge, Card, HStack, Image, Flex, Field } from "@chakra-ui/react"
 import { createExhibition, getAllExhibitions, getExhibitionImage, renameExhibition, deleteExhibition } from "@/utils/Exhibitions";
 
 export default function Exhibitions() {
@@ -12,16 +12,24 @@ export default function Exhibitions() {
     const [exhibitionToRename, setExhibitionToRename] = useState(null);
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [exhibitionToDelete, setExhibitionToDelete] = useState(null);
+    const [isNameError, setIsNameError] = useState(false);
+
 
     const exhibitions = getAllExhibitions().sort((a, b) => a.date - b.date);
 
 
     function handleCreate() {
-        if (!name.trim()) return;
-        createExhibition(name, description);
-        setOpen(false)
-        setName("");
-        setDescription("");
+        if (!name.trim()) {
+            setIsNameError(true);
+            return;
+        } else {
+            setIsNameError(false);
+
+            createExhibition(name, description);
+            setOpen(false);
+            setName("");
+            setDescription("");
+        }
     }
 
     function handleRename() {
@@ -39,11 +47,14 @@ export default function Exhibitions() {
         setExhibitionToDelete(null);
     }
 
-    
+    function handleErrorName(e) {
+        setOpen(e.open)
+        setIsNameError(false)
+    }
+
 
     return (
         <>
-
             <Box
                 as="nav"
                 position="sticky"
@@ -52,7 +63,9 @@ export default function Exhibitions() {
                 top={0}
                 zIndex="1000"
             >
-                <Dialog.Root lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>
+                <Dialog.Root 
+                lazyMount open={open} 
+                onOpenChange={handleErrorName}>
                     <Flex justify="space-between" align="center" mt={10}>
 
                         <Text fontSize="2xl" letterSpacing={2} fontWeight="bold">EXHIBITIONS</Text>
@@ -69,12 +82,19 @@ export default function Exhibitions() {
                                 </Dialog.Header>
                                 <Dialog.Body>
                                     <Stack gap="4">
-                                        <Input
-                                            px={4}
-                                            placeholder="Exhibition name"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                        />
+                                        <Field.Root invalid={isNameError}>
+                                            <Input
+                                                px={4}
+                                                placeholder="Exhibition name"
+                                                value={name}
+                                                onChange={(e) => {setName(e.target.value)
+                                                    if (e.target.value.trim()) {
+                                                        setIsNameError(false);
+                                                    }
+                                                }}
+                                            />
+                                            <Field.ErrorText>This field is required</Field.ErrorText>
+                                        </Field.Root>
                                         <Input
                                             p={12}
                                             px={4}
