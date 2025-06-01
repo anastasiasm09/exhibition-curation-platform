@@ -11,6 +11,8 @@ export default function ExhibitionDetails() {
         return <Text>Exhibition not found</Text>
     }
 
+    console.log(exhibition)
+
 
     return (
         <>
@@ -42,7 +44,6 @@ export default function ExhibitionDetails() {
                                 />
                                 <CardBody>
                                     <CardTitle>{artwork.title}</CardTitle>
-                                    <Text mt={2}>{artwork.title}</Text>
                                     <Card.Description>{artwork.artist}</Card.Description>
                                     <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">
                                         {artwork.classification}

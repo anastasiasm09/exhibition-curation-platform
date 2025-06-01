@@ -39,6 +39,7 @@ export default function Exhibitions() {
         setExhibitionToDelete(null);
     }
 
+    
 
     return (
         <>
@@ -54,9 +55,9 @@ export default function Exhibitions() {
                 <Dialog.Root lazyMount open={open} onOpenChange={(e) => setOpen(e.open)}>
                     <Flex justify="space-between" align="center" mt={10}>
 
-                        <Text fontSize="xl" fontWeight="bold">EXHIBITIONS</Text>
+                        <Text fontSize="2xl" letterSpacing={2} fontWeight="bold">EXHIBITIONS</Text>
                         <Dialog.Trigger asChild>
-                            <Button px={6} display="flex" bg="white" variant="outline">Create Exhibition</Button>
+                            <Button px={6} display="flex" bg="white" color="maroon" variant="outline">Create Exhibition</Button>
                         </Dialog.Trigger>
                     </Flex>
                     <Portal>

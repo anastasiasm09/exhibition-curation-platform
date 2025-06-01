@@ -8,7 +8,7 @@ export async function getAICArtworks(page = 1, search = null, classification = n
         : `https://api.artic.edu/api/v1/artworks`;
 
     const params = new URLSearchParams({
-        fields: 'id,title,image_id,artist_display,date_display,classification_title,classification_titles',
+        fields: 'id,title,image_id,artist_display,artist_title,date_display,classification_title,classification_titles',
         limit: '6',
         page: page,
     });
@@ -25,6 +25,7 @@ export async function getAICArtworks(page = 1, search = null, classification = n
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
     const data = await res.json();
+    console.log("AIC data>>>>>>>>>>>>>>>", data)
     const artworks = mapAICArtworks(data.data);
     return {
         artworks,
