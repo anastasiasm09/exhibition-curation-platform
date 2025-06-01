@@ -11,8 +11,6 @@ export default function ExhibitionDetails() {
         return <Text>Exhibition not found</Text>
     }
 
-    console.log(exhibition)
-
 
     return (
         <>

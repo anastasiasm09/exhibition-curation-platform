@@ -32,7 +32,6 @@ export async function getHAMArtworks(page = 1, search = null, classification = n
   }
 
   const data = await response.json();
-  console.log("HAM data>>>>>>>>>>>>>>>", data)
   const artworks = mapHAMArtworks(data.records)
   return {
     artworks,
