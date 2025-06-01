@@ -98,11 +98,8 @@ export function getAllExhibitions() {
 }
 
 
-export function isArtworkInExhibition(allExhibitions, artwork) {
-    const exhibitionData = localStorage.getItem("exhibitionData")
-    const allArtworks = JSON.parse(exhibitionData)
-
-    const exhibition = allExhibitions[exhibitionName]
+export function isArtworkInExhibition(allExhibitions, exhibitionName, artwork) { 
+    const exhibition = allExhibitions.find(e => e.name === exhibitionName)
 
     if (!exhibition || exhibition.artworks.length === 0) {
         return false
