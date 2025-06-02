@@ -63,14 +63,23 @@ export default function Exhibitions() {
                 top={0}
                 zIndex="1000"
             >
-                <Dialog.Root 
-                lazyMount open={open} 
-                onOpenChange={handleErrorName}>
+                <Dialog.Root
+                    lazyMount open={open}
+                    onOpenChange={handleErrorName}>
                     <Flex justify="space-between" align="center" mt={10}>
 
-                        <Text fontSize="2xl" letterSpacing={2} fontWeight="bold">EXHIBITIONS</Text>
+                        <Text fontSize={{ base: "xs", md: "sm", lg: "2xl" }} letterSpacing={2} fontWeight="bold">EXHIBITIONS</Text>
                         <Dialog.Trigger asChild>
-                            <Button px={6} display="flex" bg="white" color="maroon" variant="outline">Create Exhibition</Button>
+                            <Button
+                                px={{ base: 3, md: 6 }}
+                                py={{ base: 2, md: 3 }}
+                                fontSize={{ base: "xs", md: "sm" }}
+                                bg="white"
+                                color="maroon"
+                                variant="outline"
+                            >
+                                Create Exhibition
+                            </Button>
                         </Dialog.Trigger>
                     </Flex>
                     <Portal>
@@ -87,7 +96,8 @@ export default function Exhibitions() {
                                                 px={4}
                                                 placeholder="Exhibition name"
                                                 value={name}
-                                                onChange={(e) => {setName(e.target.value)
+                                                onChange={(e) => {
+                                                    setName(e.target.value)
                                                     if (e.target.value.trim()) {
                                                         setIsNameError(false);
                                                     }

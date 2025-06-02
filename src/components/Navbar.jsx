@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
     Box,
     Flex,
@@ -8,10 +10,9 @@ import {
     CloseButton,
     Image,
 } from '@chakra-ui/react';
-import { useDisclosure } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 import Search from './Search';
-import logo from '../assets/logoArtworks.png'
+import logo from '../assets/logoArtworks.png';
 import { Link as RouterLink } from 'react-router-dom';
 
 const Links = [
@@ -21,18 +22,20 @@ const Links = [
 ];
 
 export default function Navbar({ onSearch }) {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const [open, setOpen] = useState(false);
+
 
     return (
-        <Box 
+        <Box
             as="nav"
-            position="sticky" 
-            bg="white" 
-            px={4} 
-            boxShadow="md" 
-            top={0} 
+            position="sticky"
+            bg="white"
+            px={4}
+            boxShadow="md"
+            top={0}
             zIndex="1000">
-           
+
             <Flex h={16} alignItems="center" justifyContent="space-between">
                 <Image
                     src={logo}
@@ -64,17 +67,17 @@ export default function Navbar({ onSearch }) {
                 </Flex>
 
                 {/* Mobile Menu Button */}
-                <Drawer.Root open={isOpen} onOpen={onOpen} onClose={onClose}>
+                <Drawer.Root open={open} onOpenChange={(e) => setOpen(e.open)}>
                     <Drawer.Trigger asChild>
                         <IconButton
-                            icon={<FiMenu />}
                             bg="white"
                             aria-label="Open menu"
                             display={{ base: "flex", md: "none" }}
-                            onClick={onOpen}
+                            onClick={() => setOpen(true)}
                             variant="ghost"
                             fontSize="24px"
                         >
+                            <FiMenu />
                         </IconButton>
                     </Drawer.Trigger>
 
@@ -94,7 +97,13 @@ export default function Navbar({ onSearch }) {
                                 aria-label='Mobile navigation'
                             >
                                 <Drawer.CloseTrigger asChild>
-                                    <CloseButton aria-label="Close menu" bg="white" size="sm" />
+                                    <CloseButton
+
+                                        aria-label="Close menu"
+                                        bg="white"
+                                        size="sm"
+
+                                    />
                                 </Drawer.CloseTrigger>
 
                                 <Box as="ul" mt={12} display="flex" flexDirection="column" gap={6}>
@@ -103,8 +112,10 @@ export default function Navbar({ onSearch }) {
                                             <Text
                                                 as={RouterLink}
                                                 to={path}
-                                                fontSize="xl"
+                                                onClick={() => setOpen(false)}
+                                                fontSize="lg"
                                                 fontWeight="semibold"
+                                                color="black"
                                                 _hover={{ color: 'maroon' }}
                                             >
                                                 {label}
@@ -113,9 +124,12 @@ export default function Navbar({ onSearch }) {
                                     ))}
                                 </Box>
 
-
-                                <Box>
-                                    <Search onSearch={onSearch} />
+                                {/* Search */}
+                                <Box mt={10}>
+                                    <Search
+                                        onSearch={onSearch}
+                                        onFinish={() => setOpen(false)}
+                                    />
                                 </Box>
                             </Drawer.Content>
                         </Drawer.Positioner>
