@@ -19,6 +19,8 @@ export async function getAICArtworks(page = 1, search = null, classification = n
 
     if (classification) {
         params.append('query[term][classification_title]', classification);
+    } else {
+        params.append('query[term][classification_title]', 'oil');
     }
 
     const url = `${endpoint}?${params.toString()}`;

@@ -5,13 +5,10 @@ import { useState } from "react";
 import { MdAdd } from "react-icons/md";
 
 
-export default function HomepageArtworks({ artworks, onFilter }) {
+export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     const lables = createListCollection({
         items: [
-            { label: "Drawing", value: "drawing" },
-            { label: "Textile", value: "textile" },
             { label: "Lithograph", value: "lithograph" },
-            { label: "Painting", value: "painting" },
             { label: "Print", value: "print" },
             { label: "Photograph", value: "photograph" },
             { label: "Sculpture", value: "sculpture" },
@@ -22,7 +19,7 @@ export default function HomepageArtworks({ artworks, onFilter }) {
 
 
     const handleFilter = (selected) => {
-        const selectedValues = selected.value[0]
+        const selectedValues = selected.value[0] || ""
         setValue([selectedValues]);
         onFilter(selectedValues);
     };
@@ -35,18 +32,14 @@ export default function HomepageArtworks({ artworks, onFilter }) {
 
     const allExhibitions = getAllExhibitions();
 
-
     const exhibitionItems = allExhibitions.map((exb) => ({
         label: exb.name,
         value: exb.name
     }));
 
-
     const exhibitionsCollection = createListCollection({
         items: exhibitionItems
     });
-
-
 
     const ExhibitionTrigger = () => {
         const select = useSelectContext()
@@ -66,40 +59,44 @@ export default function HomepageArtworks({ artworks, onFilter }) {
         )
     }
 
+
     return (
         <>
             {/* Filter */}
-            <Select.Root
-                collection={lables}
-                size="sm"
-                width="320px"
-                value={value}
-                onValueChange={handleFilter}
 
-            >
-                <Select.HiddenSelect />
-                <Select.Label textAlign="left" px={8}>Filter artworks by type</Select.Label>
-                <Select.Control px={4}>
-                    <Select.Trigger borderColor="#fafafa" px={4}>
-                        <Select.ValueText placeholder="Select" />
-                    </Select.Trigger>
-                    <Select.IndicatorGroup>
-                        <Select.Indicator px={4} />
-                    </Select.IndicatorGroup>
-                </Select.Control>
-                <Portal>
-                    <Select.Positioner>
-                        <Select.Content>
-                            {lables.items.map((lables) => (
-                                <Select.Item item={lables} key={lables.value}>
-                                    {lables.label}
-                                    <Select.ItemIndicator />
-                                </Select.Item>
-                            ))}
-                        </Select.Content>
-                    </Select.Positioner>
-                </Portal>
-            </Select.Root>
+            {!isLoading && (
+                <Select.Root
+                    collection={lables}
+                    size="sm"
+                    width="320px"
+                    value={value}
+                    onValueChange={handleFilter}
+                >
+                    <Select.HiddenSelect />
+                    <Select.Label textAlign="left" px={8}>Filter by classification</Select.Label>
+                    <Select.Control px={4}>
+                        <Select.Trigger borderColor="#fafafa" px={4}>
+                            <Select.ValueText placeholder="Select" />
+                        </Select.Trigger>
+                        <Select.IndicatorGroup>
+                            <Select.ClearTrigger />
+                            <Select.Indicator px={4} />
+                        </Select.IndicatorGroup>
+                    </Select.Control>
+                    <Portal>
+                        <Select.Positioner>
+                            <Select.Content>
+                                {lables.items.map((lables) => (
+                                    <Select.Item item={lables} key={lables.value}>
+                                        {lables.label}
+                                        <Select.ItemIndicator />
+                                    </Select.Item>
+                                ))}
+                            </Select.Content>
+                        </Select.Positioner>
+                    </Portal>
+                </Select.Root>
+            )}
 
             {/* List of Artworcs */}
             <SimpleGrid
@@ -120,7 +117,7 @@ export default function HomepageArtworks({ artworks, onFilter }) {
                                     positioning={{ sameWidth: false }}
                                     collection={exhibitionsCollection}
                                     size="sm"
-                                    defaultValue={ allExhibitions.map(e => e.name).filter((exhibitionName) => (
+                                    defaultValue={allExhibitions.map(e => e.name).filter((exhibitionName) => (
                                         isArtworkInExhibition(allExhibitions, exhibitionName, artwork))
                                     )}
                                     onValueChange={(selected) =>
