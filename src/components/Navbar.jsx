@@ -37,11 +37,13 @@ export default function Navbar({ onSearch }) {
             zIndex="1000">
 
             <Flex h={16} alignItems="center" justifyContent="space-between">
-                <Image
-                    src={logo}
-                    alt="Logo"
-                    height="50px"
-                />
+                <RouterLink to="/" aria-label="Go to homepage">
+                    <Image
+                        src={logo}
+                        alt="Logo"
+                        height="50px"
+                    />
+                </RouterLink>
 
                 {/* Desktop Links */}
                 <Flex as="ul" gap={6} align="center" display={{ base: 'none', md: 'flex' }}>
