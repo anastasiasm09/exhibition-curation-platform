@@ -19,9 +19,11 @@ export async function getHAMArtworks(page = 1, search = null, classification = n
     params.append('keyword', search);
   }
 
-  if (classification && classification !== 'All') {
+  if (classification) {
     const classificationFirstLetter = classification[0].toUpperCase() + classification.slice(1)
     params.append('classification', classificationFirstLetter);
+  } else {
+    params.append('classification', 'Paintings');
   }
 
   const url = `${base}?${params.toString()}`;

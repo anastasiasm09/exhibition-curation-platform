@@ -62,7 +62,6 @@ function App() {
     retry: 1
   })
 
-
   const isLoading = isDataAICArtworksLoading || isDataHAMArtworksLoading
 
   const messageHAMError = "Unable to load data from Harvard Art Museums API. Please try again later."
