@@ -24,7 +24,6 @@ export default function Exhibitions() {
             return;
         } else {
             setIsNameError(false);
-
             createExhibition(name, description);
             setOpen(false);
             setName("");
@@ -51,6 +50,7 @@ export default function Exhibitions() {
         setOpen(e.open)
         setIsNameError(false)
     }
+
 
 
     return (

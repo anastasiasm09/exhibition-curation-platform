@@ -2,12 +2,15 @@ import {
     Input,
     InputGroup,
 } from '@chakra-ui/react';
-import { useState } from 'react';
 import { LuSearch } from "react-icons/lu";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 
 export default function Search({ onSearch, onFinish }) {
     const [search, setSearch] = useState('');
+    const navigate = useNavigate();
 
     const handleSearch = () => {
         onSearch(search.trim());
@@ -18,10 +21,14 @@ export default function Search({ onSearch, onFinish }) {
     };
 
     const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' ) {
+            if (window.location.pathname !== "/") {
+                navigate("/")
+            }
             handleSearch();
         }
     };
+
 
     return (
         <>
