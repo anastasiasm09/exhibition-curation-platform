@@ -32,7 +32,8 @@ export default function Navbar({ onSearch }) {
             position="sticky"
             bg="white"
             px={4}
-            boxShadow="md"
+            borderBottom="1px solid"
+            borderColor="gray.200"
             top={0}
             zIndex="1000">
 
@@ -41,12 +42,12 @@ export default function Navbar({ onSearch }) {
                     <Image
                         src={logo}
                         alt="Logo"
-                        height="50px"
+                        height={{ base: "40px", md: "55px" }}
                     />
                 </RouterLink>
 
                 {/* Desktop Links */}
-                <Flex as="ul" gap={6} align="center" display={{ base: 'none', md: 'flex' }}>
+                <Flex as="ul" gap={{ base: 4, md: 5, lg: 6 }} align="center" display={{ base: 'none', md: 'flex' }}>
                     {Links.map(({ label, path }) => (
                         <Box as="li" key={label} listStyleType="none">
                             <Text
@@ -55,7 +56,7 @@ export default function Navbar({ onSearch }) {
                                 color="black"
                                 fontWeight="medium"
                                 letterSpacing={0.5}
-                                fontSize="17px"
+                                fontSize={{ base: "16px", md: "17px", lg: "17px" }}
                                 fontFamily="Inter, sans-serif"
                                 _hover={{ textDecoration: 'underline', color: 'maroon' }}
                             >
@@ -63,7 +64,7 @@ export default function Navbar({ onSearch }) {
                             </Text>
                         </Box>
                     ))}
-                    <Box>
+                    <Box maxW={{ md: "200px", lg: "300px" }}>
                         <Search onSearch={onSearch} />
                     </Box>
                 </Flex>
