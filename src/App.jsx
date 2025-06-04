@@ -130,20 +130,6 @@ function App() {
     }
   }, [inView])
 
-  useEffect(() => {
-    queryClient.removeQueries({
-      queryKey: ['aicData', search, ['artworks', classification]],
-      exact: false
-    });
-
-    queryClient.removeQueries({
-      queryKey: ['hamData', search, classification],
-      exact: false
-    });
-
-    setCombinedArtworks([]);
-  }, [search, classification]);
-
 
   return (
     <>
