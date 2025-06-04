@@ -17,7 +17,10 @@ export function mapAICArtworks(aicDataArtworks) {
       imageUrl,
       item.title,
       item.artist_title || 'Unknown',
-      classification || item.classification_titles[0] || 'Unknown'
+      classification || item.classification_titles[0] || 'Unknown',
+      item.date_display || 'Unknown',
+      item.medium_display || item.medium || 'Unknown',
+      item.dimensions || 'Unknown'
     );
   });
 }

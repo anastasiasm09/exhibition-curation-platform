@@ -25,7 +25,7 @@ export async function getHAMArtworks(page = 1, search = null, classification = n
   } else {
     params.append('classification', 'Paintings');
   }
-
+  
   const url = `${base}?${params.toString()}`;
 
   const response = await fetch(url);

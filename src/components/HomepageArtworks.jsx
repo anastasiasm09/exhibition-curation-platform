@@ -3,6 +3,7 @@ import { Portal, Select, createListCollection, useSelectContext } from "@chakra-
 import { addArtworkToExhibition, getAllExhibitions, isArtworkInExhibition } from "@/utils/Exhibitions";
 import { useState } from "react";
 import { MdAdd } from "react-icons/md";
+import ArtworkDialog from './ArtworkDialog';
 
 
 export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
@@ -16,6 +17,8 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     })
 
     const [value, setValue] = useState("");
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedArtwork, setSelectedArtwork] = useState(null);
 
 
     const handleFilter = (selected) => {
@@ -58,6 +61,13 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
             </IconButton>
         )
     }
+
+
+    function handleOpenDialog(artwork) {
+        setSelectedArtwork(artwork)
+        setOpenDialog(true)
+    }
+
 
 
     return (
@@ -104,11 +114,16 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                 spacing={4}
                 p={4}
             >
-                {artworks.map((artwork, index) => (
-                    <Card.Root borderColor="#fafafa" maxW="sm" overflow="hidden" key={artwork.id}>
+                {artworks.map((artwork) => (
+                    <Card.Root borderColor="#fafafa" maxW="xs" overflow="hidden" key={artwork.id}>
                         <Image
                             src={artwork.image}
-                            alt="artwork"
+                            alt={artwork.title}
+                            cursor="pointer"
+                            onClick={() => {
+                                handleOpenDialog(artwork)
+                            }}
+
                         />
                         <CardBody>
                             <Grid templateColumns="1fr auto" alignItems="start">
@@ -155,10 +170,16 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                                 {artwork.classification}
                             </Text>
                         </CardBody>
-
                     </Card.Root>
                 ))}
             </SimpleGrid>
+
+            {openDialog && (
+                <ArtworkDialog
+                    artwork={selectedArtwork}
+                    onOpen={openDialog}
+                    onClose={() => setOpenDialog(false)} />
+            )}
         </>
     )
 }
