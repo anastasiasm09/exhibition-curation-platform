@@ -13,6 +13,9 @@ export function mapHAMArtworks(hamDataArtworks) {
             item.title,
             artist,
             item.classification || 'Unknown',
+            item.date || 'Unknown',
+            item.technique || item.medium || 'Unknown',
+            item.dimensions || 'Unknown'
         )
     })
 }

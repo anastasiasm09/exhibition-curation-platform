@@ -8,7 +8,7 @@ export async function getAICArtworks(page = 1, search = null, classification = n
         : `https://api.artic.edu/api/v1/artworks`;
 
     const params = new URLSearchParams({
-        fields: 'id,title,image_id,artist_display,artist_title,date_display,classification_title,classification_titles',
+        fields: 'id,title,image_id,artist_display,artist_title,date_display,medium_display,medium,dimensions,classification_title,classification_titles',
         limit: '6',
         page: page,
     });

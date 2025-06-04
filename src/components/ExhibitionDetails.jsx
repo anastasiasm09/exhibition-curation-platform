@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 import { Box, Text, Image, SimpleGrid, Card, CardBody, CardTitle, } from '@chakra-ui/react';
+import ArtworkDialog from "./ArtworkDialog";
 
 
 export default function ExhibitionDetails() {
@@ -7,8 +9,16 @@ export default function ExhibitionDetails() {
     const data = JSON.parse(localStorage.getItem('exhibitionData'));
     const exhibition = data?.[name];
 
+    const [openDialog, setOpenDialog] = useState(false);
+    const [selectedArtwork, setSelectedArtwork] = useState(null);
+
     if (!exhibition) {
         return <Text>Exhibition not found</Text>
+    }
+
+    function handleOpenDialog(artwork) {
+        setSelectedArtwork(artwork)
+        setOpenDialog(true)
     }
 
 
@@ -35,10 +45,16 @@ export default function ExhibitionDetails() {
                         p={4}
                     >
                         {exhibition.artworks.map((artwork) => (
+
                             <Card.Root borderColor="#fafafa" maxW="sm" overflow="hidden" key={artwork.id}>
                                 <Image
+                                    key={artwork.id}
                                     src={artwork.image}
                                     alt={artwork.title}
+                                    cursor="pointer"
+                                    onClick={() => {
+                                        handleOpenDialog(artwork)
+                                    }}
                                 />
                                 <CardBody>
                                     <CardTitle>{artwork.title}</CardTitle>
@@ -48,10 +64,20 @@ export default function ExhibitionDetails() {
                                     </Text>
                                 </CardBody>
                             </Card.Root>
+
                         ))}
+
                     </SimpleGrid>
                 </Box>
-            )}
+            )
+            }
+
+            <ArtworkDialog
+                artwork={selectedArtwork}
+                onOpen={openDialog}
+                onClose={() => setOpenDialog(false)} />
+
+
         </>
     )
 }

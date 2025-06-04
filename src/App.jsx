@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useQueryClient } from '@tanstack/react-query';
 import ExhibitionDetails from './components/ExhibitionDetails';
+import ArtworkDialog from './components/ArtworkDialog';
 
 
 function App() {
