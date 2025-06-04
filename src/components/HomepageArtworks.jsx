@@ -74,7 +74,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
         <>
             {/* Filter */}
 
-            {!isLoading && (
+            {!isLoading && artworks.length > 0 && (
                 <Select.Root
                     collection={lables}
                     size="sm"
@@ -158,7 +158,6 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                                                         </Select.Item>
                                                     ))
                                                 )}
-
                                             </Select.Content>
                                         </Select.Positioner>
                                     </Portal>
