@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link } from 'react-router-dom'
-import { SimpleGrid, Button, CloseButton, Dialog, Portal, Input, Stack, Box, Text, Badge, Card, HStack, Image, Flex, Field } from "@chakra-ui/react"
+import { SimpleGrid, Button, CloseButton, Dialog, Portal, Input, Stack, Box, Text, Badge, Card, HStack, Image, Flex, Field, Heading } from "@chakra-ui/react"
 import { createExhibition, getAllExhibitions, getExhibitionImage, renameExhibition, deleteExhibition } from "@/utils/Exhibitions";
 
 export default function Exhibitions() {
@@ -68,7 +68,7 @@ export default function Exhibitions() {
                     onOpenChange={handleErrorName}>
                     <Flex justify="space-between" align="center" mt={10}>
 
-                        <Text fontSize={{ base: "xs", md: "sm", lg: "2xl" }} letterSpacing={2} fontWeight="bold">EXHIBITIONS</Text>
+                        <Heading fontSize={{ base: "xs", md: "sm", lg: "2xl" }} letterSpacing={2} fontWeight="bold">EXHIBITIONS</Heading>
                         <Dialog.Trigger asChild>
                             <Button
                                 px={{ base: 3, md: 6 }}

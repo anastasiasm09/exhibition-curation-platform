@@ -1,4 +1,4 @@
-import { Box, Heading, Text, Image, Stack, Flex } from "@chakra-ui/react"
+import { Box, Heading, Text, Image, Flex } from "@chakra-ui/react"
 import artInstituteLogo from '../assets/artic.svg';
 import harvardLogo from '../assets/ham.svg';
 import chakraLogo from '../assets/chakra.svg';
