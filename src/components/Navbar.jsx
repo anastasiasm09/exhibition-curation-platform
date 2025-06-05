@@ -1,18 +1,8 @@
 import { useState } from "react";
-
-import {
-    Box,
-    Flex,
-    Text,
-    IconButton,
-    Drawer,
-    Portal,
-    CloseButton,
-    Image,
-} from '@chakra-ui/react';
+import {Box, Flex, Text, IconButton, Drawer, Portal, CloseButton, Image} from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 import Search from './Search';
-import logo from '../assets/logoArtworks.png';
+import logo from '../assets/logo.png';
 import { Link as RouterLink } from 'react-router-dom';
 
 const Links = [
@@ -22,9 +12,7 @@ const Links = [
 ];
 
 export default function Navbar({ onSearch }) {
-
     const [open, setOpen] = useState(false);
-
 
     return (
         <Box
@@ -42,7 +30,8 @@ export default function Navbar({ onSearch }) {
                     <Image
                         src={logo}
                         alt="Logo"
-                        height={{ base: "40px", md: "55px" }}
+                        boxSize={{ base: "70px", md: "90px", lg: "90px" }} 
+                        objectFit="contain" 
                     />
                 </RouterLink>
 
@@ -53,12 +42,13 @@ export default function Navbar({ onSearch }) {
                             <Text
                                 as={RouterLink}
                                 to={path}
-                                color="black"
+                                color={location.pathname === path ? "maroon" : "black"}
                                 fontWeight="medium"
                                 letterSpacing={0.5}
                                 fontSize={{ base: "16px", md: "17px", lg: "17px" }}
                                 fontFamily="Inter, sans-serif"
                                 _hover={{ textDecoration: 'underline', color: 'maroon' }}
+                                
                             >
                                 {label}
                             </Text>
@@ -101,11 +91,9 @@ export default function Navbar({ onSearch }) {
                             >
                                 <Drawer.CloseTrigger asChild>
                                     <CloseButton
-
                                         aria-label="Close menu"
                                         bg="white"
                                         size="sm"
-
                                     />
                                 </Drawer.CloseTrigger>
 
