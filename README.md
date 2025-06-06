@@ -1,12 +1,53 @@
-# React + Vite
+# Exhibition Curation Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web platform for browsing, filtering, and curating artworks into personalised exhibitions.  
+Artworks are retrieved from two public APIs and displayed with features such as infinite scrolling, detailed views, keyword search, and exhibition management.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Retrieves artworks from two APIs simultaneously
+- Infinite scrolling with error handling
+- Artwork detail view with extended information (date, dimensions)
+- Filter by classification (e.g. Prints)
+- Search by artist name, artwork title, or keywords
+- Create, rename, and delete exhibitions
+- Add artworks to exhibitions
+- Responsive design with mobile support
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* **React + Vite**
+* **Chakra UI**
+* **React Router**
+* **React Query**
+
+## Getting Started
+
+Follow the steps below to set up and run the project locally.
+
+```bash
+
+1. Clone the repository:
+
+git clone https://github.com/anastasiasm09/exhibition-curation-platform
+cd exhibition-curation-platform
+
+2. Configure environment variables
+Create a .env file in the root directory and add the following:
+
+VITE_HAM_API_KEY=example-api1
+
+Replace the value with your actual API key or endpoint if required.
+
+3. Install dependencies
+
+npm install
+# or
+yarn install
+
+4. Start the development server
+
+npm run dev
+# or
+yarn dev
+Open http://localhost:5173 in your browser to view the app.
