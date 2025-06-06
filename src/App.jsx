@@ -11,11 +11,20 @@ import Exhibitions from './components/Exhibitions';
 import { Box, VisuallyHidden } from '@chakra-ui/react';
 import Loading from './components/Loading';
 import { Toaster, toaster } from "@/components/ui/toaster"
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useQueryClient } from '@tanstack/react-query';
 import ExhibitionDetails from './components/ExhibitionDetails';
 import About from './components/About';
+
+function Wrapper({ children }) {
+  const location = useLocation();
+
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [location.pathname]);
+  return children;
+}
 
 
 function App() {
@@ -136,33 +145,35 @@ function App() {
       <Navbar onSearch={setSearch} />
 
       {isHomePage && <BannerImage />}
+      
+      <Wrapper>
+        <Routes>
+          {/* Loading */}
+          <Route
+            path="/"
+            element={
+              <Box aria-live="polite" role="status" mt={8}>
+                {isLoading && (
+                  <>
+                    <Loading />
+                    <VisuallyHidden>
+                      Loading artworks, please wait.
+                    </VisuallyHidden>
+                  </>
+                )}
 
-      <Routes>
-        {/* Loading */}
-        <Route
-          path="/"
-          element={
-            <Box aria-live="polite" role="status" mt={8}>
-              {isLoading && (
-                <>
-                  <Loading />
-                  <VisuallyHidden>
-                    Loading artworks, please wait.
-                  </VisuallyHidden>
-                </>
-              )}
+                <HomepageArtworks artworks={combinedArtworks} onFilter={setClassification} />
 
-              <HomepageArtworks artworks={combinedArtworks} onFilter={setClassification} />
-
-              {/* Infinite scroll */}
-              {!isLoading && !!combinedArtworks.length && (<div ref={ref}></div>)}
-            </Box>
-          }
-        />
-        <Route path="/exhibitions" element={<Exhibitions />} />
-        <Route path="/exhibitions/:name" element={<ExhibitionDetails />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
+                {/* Infinite scroll */}
+                {!isLoading && !!combinedArtworks.length && (<div ref={ref}></div>)}
+              </Box>
+            }
+          />
+          <Route path="/exhibitions" element={<Exhibitions />} />
+          <Route path="/exhibitions/:name" element={<ExhibitionDetails />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </Wrapper>
 
       {/* Error Messages */}
       <Toaster />
