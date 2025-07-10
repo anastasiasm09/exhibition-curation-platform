@@ -10,12 +10,13 @@ import HomepageArtworks from './components/HomepageArtworks';
 import Exhibitions from './components/Exhibitions';
 import { Box, VisuallyHidden } from '@chakra-ui/react';
 import Loading from './components/Loading';
-import { Toaster, toaster } from "@/components/ui/toaster"
+import { Toaster, toaster } from "@/components/ui/toaster";
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useQueryClient } from '@tanstack/react-query';
 import ExhibitionDetails from './components/ExhibitionDetails';
 import About from './components/About';
+
 
 function Wrapper({ children }) {
   const location = useLocation();
@@ -172,6 +173,7 @@ function App() {
           <Route path="/exhibitions" element={<Exhibitions />} />
           <Route path="/exhibitions/:name" element={<ExhibitionDetails />} />
           <Route path="/about" element={<About />} />
+          
         </Routes>
       </Wrapper>
 

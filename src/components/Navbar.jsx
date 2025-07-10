@@ -4,6 +4,7 @@ import { FiMenu } from 'react-icons/fi';
 import Search from './Search';
 import logo from '../assets/logo.png';
 import { Link as RouterLink } from 'react-router-dom';
+import UserProfileButton from "./UserProfileButton";
 
 const Links = [
     { label: 'Home', path: '/' },
@@ -54,9 +55,13 @@ export default function Navbar({ onSearch }) {
                             </Text>
                         </Box>
                     ))}
-                    <Box maxW={{ md: "200px", lg: "300px" }}>
+                    
+                    <Box maxW={{ md: "200px", lg: "350px" }}>
                         <Search onSearch={onSearch} />
                     </Box>
+
+                    {/* login */}
+                    <UserProfileButton />
                 </Flex>
 
                 {/* Mobile Menu Button */}
