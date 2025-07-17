@@ -45,7 +45,6 @@ export default function ExhibitionDetails() {
                         p={4}
                     >
                         {exhibition.artworks.map((artwork) => (
-
                             <Card.Root borderColor="#fafafa" maxW="sm" overflow="hidden" key={artwork.id}>
                                 <Image
                                     key={artwork.id}
@@ -64,9 +63,7 @@ export default function ExhibitionDetails() {
                                     </Text>
                                 </CardBody>
                             </Card.Root>
-
                         ))}
-
                     </SimpleGrid>
                 </Box>
             )
@@ -76,8 +73,6 @@ export default function ExhibitionDetails() {
                 artwork={selectedArtwork}
                 onOpen={openDialog}
                 onClose={() => setOpenDialog(false)} />
-
-
         </>
     )
 }

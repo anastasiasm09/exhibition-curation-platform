@@ -9,6 +9,7 @@ import {
 import { RiAccountCircleLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import { Toaster, toaster } from "@/components/ui/toaster";
+import { setGoogleToken } from "@/utils/Auth";
 
 
 export default function UserProfileButton() {
@@ -19,7 +20,7 @@ export default function UserProfileButton() {
 
     const handleSuccess = (response: CredentialResponse) => {
         if (response.credential) {
-            localStorage.setItem("google_token", response.credential);
+            setGoogleToken(response.credential)
             setOpen(false)
             toaster.create({
                 title: messageSuccess,

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { SimpleGrid, Button, CloseButton, Dialog, Portal, Input, Stack, Box, Text, Badge, Card, HStack, Image, Flex, Field, Heading } from "@chakra-ui/react"
 import { createExhibition, getAllExhibitions, getExhibitionImage, renameExhibition, deleteExhibition } from "@/utils/Exhibitions";
 
+
 export default function Exhibitions() {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
@@ -13,10 +14,8 @@ export default function Exhibitions() {
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [exhibitionToDelete, setExhibitionToDelete] = useState(null);
     const [isNameError, setIsNameError] = useState(false);
-
-
     const exhibitions = getAllExhibitions().sort((a, b) => a.date - b.date);
-
+    
 
     function handleCreate() {
         if (!name.trim()) {
@@ -31,13 +30,13 @@ export default function Exhibitions() {
         }
     }
 
-    function handleRename() {
-        if (!newName.trim()) return;
-        renameExhibition(exhibitionToRename, newName);
-        setRenameOpen(false);
-        setNewName("");
-        setExhibitionToRename(null);
-    }
+         function handleRename() {
+            if (!newName.trim()) return;
+            renameExhibition(exhibitionToRename, newName);
+            setRenameOpen(false);
+            setNewName("");
+            setExhibitionToRename(null);
+        }
 
     function handleDelete() {
         if (!exhibitionToDelete.trim()) return;
