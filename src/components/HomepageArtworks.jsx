@@ -73,7 +73,6 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     return (
         <>
             {/* Filter */}
-
             {!isLoading && artworks.length > 0 && (
                 <Select.Root
                     collection={lables}

@@ -94,7 +94,7 @@ export function getAllExhibitions(): Promise<Exhibition[]> {
         {
             method: "GET",
             headers: {
-                "Authorization": `Barer ${getGoogleToken() ?? ""}`,
+                "Authorization": `Bearer ${getGoogleToken() ?? ""}`,
                 'Content-Type': 'application/json'
             },
         }
