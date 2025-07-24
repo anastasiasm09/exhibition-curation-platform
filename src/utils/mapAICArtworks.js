@@ -13,7 +13,7 @@ export function mapAICArtworks(aicDataArtworks) {
     }
 
     return new Artwork(
-      item.id,
+      `aic-${item.id}`,
       imageUrl,
       item.title,
       item.artist_title || 'Unknown',

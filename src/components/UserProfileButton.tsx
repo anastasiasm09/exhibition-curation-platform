@@ -7,7 +7,7 @@ import {
     CloseButton,
 } from "@chakra-ui/react"
 import { RiAccountCircleLine } from "react-icons/ri";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { setGoogleToken } from "@/utils/Auth";
 

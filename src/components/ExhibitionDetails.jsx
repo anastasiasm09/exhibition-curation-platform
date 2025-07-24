@@ -1,42 +1,66 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Text, Image, SimpleGrid, Card, CardBody, CardTitle, } from '@chakra-ui/react';
 import ArtworkDialog from "./ArtworkDialog";
+import { getEhibitionDetails } from "@/utils/Exhibitions";
 
 
 export default function ExhibitionDetails() {
-    const { name } = useParams();
-    const data = JSON.parse(localStorage.getItem('exhibitionData'));
-    const exhibition = data?.[name];
+    const { id } = useParams();
 
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedArtwork, setSelectedArtwork] = useState(null);
-
-    if (!exhibition) {
-        return <Text>Exhibition not found</Text>
-    }
+    const [exhibitionDetails, setExhibitionDetails] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+    const [isNotFound, setIsNotFound] = useState(false)
 
     function handleOpenDialog(artwork) {
         setSelectedArtwork(artwork)
         setOpenDialog(true)
     }
 
+    useEffect(() => {
+        getEhibitionDetails(id).then((exhibitionDetails) => {
+            setExhibitionDetails(exhibitionDetails)
+            setIsLoading(false)
+        }).catch(isNotFound => {
+            setIsNotFound(isNotFound)
+            setIsLoading(false)
+        })
+    }, [id]);
+
+    function errorMessage(message) {
+        return (
+            <Box px={4} py={6} display="flex" justifyContent="center" alignItems="center" minH="40vh">
+                <Text
+                    fontSize="lg"
+                    color="gray.500"
+                    fontStyle="italic"
+                    fontWeight="bold"
+                    textAlign="center"
+                    wordBreak="break-word"
+                >
+                    {message}
+                </Text>
+            </Box>
+        )
+    }
+
+
+
+
+
+    if (isLoading) {
+        return;
+    } else if (isNotFound) {
+        return errorMessage("Exhibition not found");
+    }
+
 
     return (
         <>
-            {exhibition.artworks.length === 0 ? (
-                <Box px={4} py={6} display="flex" justifyContent="center" alignItems="center" minH="40vh">
-                    <Text
-                        fontSize="lg"
-                        color="gray.500"
-                        fontStyle="italic"
-                        fontWeight="bold"
-                        textAlign="center"
-                        wordBreak="break-word"
-                    >
-                        You have not added any artworks yet.
-                    </Text>
-                </Box>
+            {exhibitionDetails.artworks.length === 0 ? (
+                errorMessage("You have not added any artworks yet.")
             ) : (
                 <Box p={6}>
                     <SimpleGrid
@@ -44,7 +68,7 @@ export default function ExhibitionDetails() {
                         spacing={4}
                         p={4}
                     >
-                        {exhibition.artworks.map((artwork) => (
+                        {exhibitionDetails.artworks.map((artwork) => (
                             <Card.Root borderColor="#fafafa" maxW="sm" overflow="hidden" key={artwork.id}>
                                 <Image
                                     key={artwork.id}

@@ -171,7 +171,7 @@ function App() {
             }
           />
           <Route path="/exhibitions" element={<Exhibitions />} />
-          <Route path="/exhibitions/:name" element={<ExhibitionDetails />} />
+          <Route path="/exhibitions/:id" element={<ExhibitionDetails />} />
           <Route path="/about" element={<About />} />
           
         </Routes>

@@ -1,9 +1,10 @@
 import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, HStack, Box, Grid } from '@chakra-ui/react';
 import { Portal, Select, createListCollection, useSelectContext } from "@chakra-ui/react"
 import { addArtworkToExhibition, getAllExhibitions, isArtworkInExhibition } from "@/utils/Exhibitions";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdAdd } from "react-icons/md";
 import ArtworkDialog from './ArtworkDialog';
+
 
 
 export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
@@ -19,7 +20,12 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     const [value, setValue] = useState("");
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedArtwork, setSelectedArtwork] = useState(null);
+    const [exhibitions, setExhibitions] = useState([]);
 
+    useEffect(() => {
+        getAllExhibitions().then((exhibitions) =>
+            setExhibitions(exhibitions))
+    }, []);
 
     const handleFilter = (selected) => {
         const selectedValues = selected.value[0] || ""
@@ -27,17 +33,15 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
         onFilter(selectedValues);
     };
 
-    const handleExhibitionSelect = (artwork, exhibitionName) => {
-        if (!exhibitionName) return;
+    const handleExhibitionSelect = (artwork, exhibitionId) => {
+        if (!exhibitionId) return;
 
-        addArtworkToExhibition(exhibitionName, artwork);
+        addArtworkToExhibition(exhibitionId, artwork);
     };
 
-    const allExhibitions = getAllExhibitions();
-
-    const exhibitionItems = allExhibitions.map((exb) => ({
+    const exhibitionItems = exhibitions.map((exb) => ({
         label: exb.name,
-        value: exb.name
+        value: exb.id
     }));
 
     const exhibitionsCollection = createListCollection({
@@ -67,6 +71,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
         setSelectedArtwork(artwork)
         setOpenDialog(true)
     }
+
 
 
 
@@ -131,9 +136,10 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                                     positioning={{ sameWidth: false }}
                                     collection={exhibitionsCollection}
                                     size="sm"
-                                    defaultValue={allExhibitions.map(e => e.name).filter((exhibitionName) => (
-                                        isArtworkInExhibition(allExhibitions, exhibitionName, artwork))
-                                    )}
+                                    defaultValue={exhibitions.map((exhibition) => (
+                                        isArtworkInExhibition(exhibition, artwork.id)
+                                    ))}
+
                                     onValueChange={(selected) =>
                                         handleExhibitionSelect(artwork, selected?.value?.[0] || "")
                                     }
@@ -170,14 +176,15 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                         </CardBody>
                     </Card.Root>
                 ))}
-            </SimpleGrid>
+            </SimpleGrid >
 
             {openDialog && (
                 <ArtworkDialog
                     artwork={selectedArtwork}
                     onOpen={openDialog}
                     onClose={() => setOpenDialog(false)} />
-            )}
+            )
+            }
         </>
     )
 }

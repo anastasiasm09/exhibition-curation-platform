@@ -1,3 +1,5 @@
+import { Artwork } from "@/models/Artwork"
+
 export type Exhibition = {
     name: string;
     id: string;
@@ -7,3 +9,10 @@ export type Exhibition = {
     thumbnail: string | null;
   };
   
+  export type ExhibitionDetails = {
+    name: string;
+    id: string;
+    isShared: boolean;
+    author: string;
+    artworks: Artwork[];
+  }
