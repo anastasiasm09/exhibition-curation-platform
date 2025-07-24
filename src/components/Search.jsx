@@ -32,13 +32,14 @@ export default function Search({ onSearch, onFinish }) {
 
     return (
         <>
-            <InputGroup endElement={<LuSearch />}>
+            <InputGroup startElement={<LuSearch />}>
                 <Input flex="1" w="400px"
                     type="text"
                     placeholder='Search by artwork, artist or keywords'
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    bg="gray.100"
                 />
             </InputGroup>
         </>

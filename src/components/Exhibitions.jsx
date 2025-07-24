@@ -1,7 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from 'react-router-dom'
 import { SimpleGrid, Button, CloseButton, Dialog, Portal, Input, Stack, Box, Text, Badge, Card, HStack, Image, Flex, Field, Heading } from "@chakra-ui/react"
-import { createExhibition, getAllExhibitions, getExhibitionImage, renameExhibition, deleteExhibition } from "@/utils/Exhibitions";
+import { createExhibition as createExhibitionRequest, getAllExhibitions, renameExhibition as renameExhibitionRequest, deleteExhibition as deleteExhibitionRequest } from "@/utils/Exhibitions";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
+
 
 export default function Exhibitions() {
     const [open, setOpen] = useState(false);
@@ -11,11 +13,43 @@ export default function Exhibitions() {
     const [newName, setNewName] = useState("");
     const [exhibitionToRename, setExhibitionToRename] = useState(null);
     const [deleteOpen, setDeleteOpen] = useState(false)
-    const [exhibitionToDelete, setExhibitionToDelete] = useState(null);
+    const [exhibitionToDelete, setExhibitionToDelete] = useState("");
     const [isNameError, setIsNameError] = useState(false);
+    const [exhibitions, setExhibitions] = useState([]);
+
+    const queryClient = useQueryClient();
+
+    const { data: allExhibitions, isLoading } = useQuery({
+        queryKey: ['exbData'],
+        queryFn: getAllExhibitions,
+    });
+
+    const { mutateAsync: renameExhibition } = useMutation({
+        mutationFn: data => renameExhibitionRequest(data.id, data.name),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['exbData']})
+        }
+    });
+
+    const { mutateAsync: deleteExhibition } = useMutation({
+        mutationFn: data => deleteExhibitionRequest(data.id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['exbData']})
+        }
+    });
+
+    const { mutateAsync: createExhibition } = useMutation({
+        mutationFn: data => createExhibitionRequest(data.name, data.description),
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['exbData']})
+        }
+    });
 
 
-    const exhibitions = getAllExhibitions().sort((a, b) => a.date - b.date);
+    useEffect(() => {
+        getAllExhibitions().then((exhibitions) =>
+            setExhibitions(exhibitions))
+    }, []);
 
 
     function handleCreate() {
@@ -24,7 +58,7 @@ export default function Exhibitions() {
             return;
         } else {
             setIsNameError(false);
-            createExhibition(name, description);
+            createExhibition({name: name, description: description});
             setOpen(false);
             setName("");
             setDescription("");
@@ -33,7 +67,7 @@ export default function Exhibitions() {
 
     function handleRename() {
         if (!newName.trim()) return;
-        renameExhibition(exhibitionToRename, newName);
+        renameExhibition({ id: exhibitionToRename, name: newName });
         setRenameOpen(false);
         setNewName("");
         setExhibitionToRename(null);
@@ -41,7 +75,7 @@ export default function Exhibitions() {
 
     function handleDelete() {
         if (!exhibitionToDelete.trim()) return;
-        deleteExhibition(exhibitionToDelete);
+        deleteExhibition({id: exhibitionToDelete});
         setDeleteOpen(false)
         setExhibitionToDelete(null);
     }
@@ -51,6 +85,8 @@ export default function Exhibitions() {
         setIsNameError(false)
     }
 
+    if (isLoading) 
+        return;
 
 
     return (
@@ -130,7 +166,8 @@ export default function Exhibitions() {
                 </Dialog.Root>
             </Box>
 
-            {exhibitions.length === 0 ? (
+
+            {allExhibitions.length === 0 ? (
                 <Box px={4} py={6} display="flex" justifyContent="center" alignItems="center" minH="40vh">
                     <Text
                         fontSize="lg"
@@ -151,9 +188,7 @@ export default function Exhibitions() {
                     px={4}
                     py={6}
                 >
-                    {getAllExhibitions().sort((a, b) => (a.date - b.date)).map((exb) => {
-                        const imageUrl = getExhibitionImage(exb.name)
-
+                    {allExhibitions.sort((a, b) => (a.date - b.date)).map((exb) => {
                         return (
                             <Stack>
                                 <Card.Root
@@ -166,13 +201,13 @@ export default function Exhibitions() {
                                     w="100%"
                                     marginBottom={4}
                                 >
-                                    {imageUrl && (
-                                        <Link to={`/exhibitions/${exb.name}`}>
+                                    {exb.thumbnail && (
+                                        <Link to={`/exhibitions/${exb.id}`}>
                                             <Image
                                                 objectFit="cover"
                                                 w="100%"
                                                 h="250px"
-                                                src={imageUrl}
+                                                src={exb.thumbnail}
                                                 alt={`${exb.name} cover`}
                                             />
                                         </Link>
@@ -181,12 +216,12 @@ export default function Exhibitions() {
 
                                     <Box flex="1" display="flex" flexDirection="column" p={4}>
                                         <Card.Body flex="1">
-                                            <Link to={`/exhibitions/${exb.name}`}>
+                                            <Link to={`/exhibitions/${exb.id}`}>
                                                 <Card.Title color="maroon" mt={2} fontWeight="bold" mb={2}>{exb.name}</Card.Title>
                                             </Link>
                                             <Card.Description>{exb.description}</Card.Description>
                                             <HStack mt={4}>
-                                                <Badge fontSize="sm">{exb.artworks.length}</Badge>
+                                                <Badge fontSize="sm">{exb.artwork_ids.length}</Badge>
                                             </HStack>
                                         </Card.Body>
 
@@ -198,7 +233,7 @@ export default function Exhibitions() {
                                                 color="white"
                                                 onClick={() => {
                                                     setDeleteOpen(true);
-                                                    setExhibitionToDelete(exb.name)
+                                                    setExhibitionToDelete(exb.id)
                                                 }}
                                             >
                                                 DELETE
@@ -210,7 +245,7 @@ export default function Exhibitions() {
                                                 bg="gray.100"
                                                 onClick={() => {
                                                     setRenameOpen(true);
-                                                    setExhibitionToRename(exb.name);
+                                                    setExhibitionToRename(exb.id);
                                                 }}
                                             >
                                                 RENAME
@@ -284,7 +319,6 @@ export default function Exhibitions() {
                     </Dialog.Positioner>
                 </Portal>
             </Dialog.Root>
-
         </>
     )
 }

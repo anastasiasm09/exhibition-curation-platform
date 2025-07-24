@@ -5,7 +5,6 @@ import { mapHAMArtworks } from "@/utils/mapHAMArtworks";
 export const apiKey = () => import.meta.env.VITE_HAM_API_KEY;
 
 export async function getHAMArtworks(page = 1, search = null, classification = null) {
-  //const url = `https://api.harvardartmuseums.org/object?classification=Paintings&apikey=${apiKey()}&size=6&page=${page}`;
 
   const base = 'https://api.harvardartmuseums.org/object';
 

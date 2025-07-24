@@ -8,7 +8,7 @@ export function mapHAMArtworks(hamDataArtworks) {
         const artist = item.people?.[0]?.name || 'Unknown'
 
         return new Artwork(
-            item.id,
+            `ham-${item.id}`,
             imageUrl,
             item.title,
             artist,

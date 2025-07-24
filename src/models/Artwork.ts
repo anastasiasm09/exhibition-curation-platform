@@ -1,5 +1,14 @@
 export class Artwork {
-    constructor(id, image, title, artist, classification, date, technique, dimensions) {
+    _id: string;
+    _image: string;
+    _title: string;
+    _artist: string;
+    _classification: string;
+    _date: string;
+    _technique: string;
+    _dimensions: string
+
+    constructor(id: string, image: string, title: string, artist: string, classification: string, date: string, technique: string, dimensions: string) {
       this._id = id;
       this._image = image;
       this._title = title;
