@@ -104,7 +104,6 @@ export function getAllExhibitions(): Promise<Exhibition[]> {
     ).then(res => res.json())
 }
 
-export function isArtworkInExhibition(exhibition: Exhibition, artwork: Artwork) { 
-
-    return exhibition.artwork_ids.includes(artwork.id)
+export function isArtworkInExhibition(exhibition: Exhibition, artwork: Artwork) {
+    return exhibition.artwork_ids.includes(artwork.id);
 }
