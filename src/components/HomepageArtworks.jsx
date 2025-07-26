@@ -41,7 +41,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
 
     const exhibitionItems = exhibitions.map((exb) => ({
         label: exb.name,
-        value: exb.id
+        value: exb.id,
     }));
 
     const exhibitionsCollection = createListCollection({
@@ -72,8 +72,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
         setOpenDialog(true)
     }
 
-
-
+    
 
     return (
         <>
@@ -136,9 +135,11 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                                     positioning={{ sameWidth: false }}
                                     collection={exhibitionsCollection}
                                     size="sm"
-                                    defaultValue={exhibitions.map((exhibition) => (
-                                        isArtworkInExhibition(exhibition, artwork.id)
-                                    ))}
+                                    defaultValue={exhibitions
+                                        .filter(exhibition => isArtworkInExhibition(exhibition, artwork)) 
+                                        .map(exhibition => exhibition.id)
+                                    }
+
 
                                     onValueChange={(selected) =>
                                         handleExhibitionSelect(artwork, selected?.value?.[0] || "")
