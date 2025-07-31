@@ -13,9 +13,11 @@ import Loading from './components/Loading';
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useQueryClient } from '@tanstack/react-query';
 import ExhibitionDetails from './components/ExhibitionDetails';
 import About from './components/About';
+import { createContext } from 'react';
+import { AuthContext } from './context/AuthContext';
+import { getGoogleToken } from './utils/Auth';
 
 
 function Wrapper({ children }) {
@@ -28,14 +30,14 @@ function Wrapper({ children }) {
 }
 
 
+
 function App() {
   const [search, setSearch] = useState(null);
   const [classification, setClassification] = useState(null);
-  const queryClient = useQueryClient();
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(!!getGoogleToken());
 
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-
 
   const {
     data: aicDataArtworks,
@@ -143,6 +145,7 @@ function App() {
 
   return (
     <>
+    <AuthContext.Provider value={{ isUserAuthenticated, setIsUserAuthenticated }}>
       <Navbar onSearch={setSearch} />
 
       {isHomePage && <BannerImage />}
@@ -179,6 +182,7 @@ function App() {
 
       {/* Error Messages */}
       <Toaster />
+      </AuthContext.Provider>
     </>
 
   );

@@ -1,10 +1,12 @@
-import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, HStack, Box, Grid } from '@chakra-ui/react';
-import { Portal, Select, createListCollection, useSelectContext } from "@chakra-ui/react"
-import { addArtworkToExhibition, getAllExhibitions, isArtworkInExhibition } from "@/utils/Exhibitions";
-import { useState, useEffect } from "react";
+import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, Grid } from '@chakra-ui/react';
+import { Portal, Select, createListCollection } from "@chakra-ui/react"
+import { getAllExhibitions } from "@/utils/Exhibitions";
+import { useState, useEffect, useContext } from "react";
 import { MdAdd } from "react-icons/md";
 import ArtworkDialog from './ArtworkDialog';
-
+import { Tooltip } from "@/components/ui/tooltip";
+import { AuthContext } from "@/context/AuthContext";
+import AddArtworkToExhibitionButton from './AddArtworkToExhibitionButton';
 
 
 export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
@@ -20,12 +22,15 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     const [value, setValue] = useState("");
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedArtwork, setSelectedArtwork] = useState(null);
-    const [exhibitions, setExhibitions] = useState([]);
+    const [exhibitions, setExhibitions] = useState();
+
+    const { isUserAuthenticated } = useContext(AuthContext);
 
     useEffect(() => {
-        getAllExhibitions().then((exhibitions) =>
-            setExhibitions(exhibitions))
-    }, []);
+        if (isUserAuthenticated) {
+            getAllExhibitions().then((exhibitions) => setExhibitions(exhibitions))
+        }
+    }, [isUserAuthenticated]);
 
     const handleFilter = (selected) => {
         const selectedValues = selected.value[0] || ""
@@ -33,46 +38,10 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
         onFilter(selectedValues);
     };
 
-    const handleExhibitionSelect = (artwork, exhibitionId) => {
-        if (!exhibitionId) return;
-
-        addArtworkToExhibition(exhibitionId, artwork);
-    };
-
-    const exhibitionItems = exhibitions.map((exb) => ({
-        label: exb.name,
-        value: exb.id,
-    }));
-
-    const exhibitionsCollection = createListCollection({
-        items: exhibitionItems
-    });
-
-    const ExhibitionTrigger = () => {
-        const select = useSelectContext()
-        return (
-
-            <IconButton
-                aria-label="Add to exhibition"
-                size="sm"
-                color="maroon"
-                bg="white"
-                variant="ghost"
-
-                {...select.getTriggerProps()}
-            >
-                <MdAdd />
-            </IconButton>
-        )
-    }
-
-
     function handleOpenDialog(artwork) {
         setSelectedArtwork(artwork)
         setOpenDialog(true)
     }
-
-    
 
     return (
         <>
@@ -131,43 +100,31 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                         <CardBody>
                             <Grid templateColumns="1fr auto" alignItems="start">
                                 <CardTitle>{artwork.title}</CardTitle>
-                                <Select.Root
-                                    positioning={{ sameWidth: false }}
-                                    collection={exhibitionsCollection}
-                                    size="sm"
-                                    defaultValue={exhibitions
-                                        .filter(exhibition => isArtworkInExhibition(exhibition, artwork)) 
-                                        .map(exhibition => exhibition.id)
-                                    }
 
-
-                                    onValueChange={(selected) =>
-                                        handleExhibitionSelect(artwork, selected?.value?.[0] || "")
-                                    }
-                                >
-                                    <Select.HiddenSelect />
-                                    <Select.Control>
-                                        <ExhibitionTrigger />
-                                    </Select.Control>
-                                    <Portal>
-                                        <Select.Positioner>
-                                            <Select.Content minW="32">
-                                                {exhibitionsCollection.items.length === 0 ? (
-                                                    <Box px={4} py={2} color="gray.500">
-                                                        You have no exhibitions at the moment
-                                                    </Box>
-                                                ) : (
-                                                    exhibitionsCollection.items.map((exb) => (
-                                                        <Select.Item item={exb} key={exb.value}>
-                                                            <HStack>{exb.label}</HStack>
-                                                            <Select.ItemIndicator />
-                                                        </Select.Item>
-                                                    ))
-                                                )}
-                                            </Select.Content>
-                                        </Select.Positioner>
-                                    </Portal>
-                                </Select.Root>
+                                {exhibitions ? (
+                                    <AddArtworkToExhibitionButton
+                                        artwork={artwork}
+                                        exhibitions={exhibitions}
+                                    />
+                                ) : (
+                                    <Tooltip
+                                        showArrow
+                                        content="Please log in to add the artwork to exhibitions."
+                                        openDelay={200}
+                                    >
+                                        <IconButton
+                                            aria-label="Add to exhibition"
+                                            size="sm"
+                                            color="gray"
+                                            bg="white"
+                                            variant="ghost"
+                                            isDisabled
+                                            cursor="default"
+                                        >
+                                            <MdAdd />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
                             </Grid>
 
                             <Card.Description>{artwork.artist}</Card.Description>

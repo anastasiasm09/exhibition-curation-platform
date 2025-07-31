@@ -3,6 +3,7 @@ import { getGoogleToken } from "./Auth"
 import { Exhibition, ExhibitionDetails } from "@/models/Exhibition"
 export const exbApi = () => (import.meta as any).env.VITE_EXHIBITIONS_API_KEY;
 
+
 export function createExhibition(name: string, description: string) {
     return fetch(
         `${exbApi()}/api/exhibitions`,

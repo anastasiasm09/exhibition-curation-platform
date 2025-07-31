@@ -7,9 +7,10 @@ import {
     CloseButton,
 } from "@chakra-ui/react"
 import { RiAccountCircleLine } from "react-icons/ri";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { setGoogleToken } from "@/utils/Auth";
+import { AuthContext } from "@/context/AuthContext";
 
 
 export default function UserProfileButton() {
@@ -18,10 +19,13 @@ export default function UserProfileButton() {
     const messageNoCrRes = "No credential received.";
     const messageError = "Login failed";
 
+    const { setIsUserAuthenticated } = useContext(AuthContext)
+
     const handleSuccess = (response: CredentialResponse) => {
         if (response.credential) {
             setGoogleToken(response.credential)
             setOpen(false)
+            setIsUserAuthenticated(true)
             toaster.create({
                 title: messageSuccess,
                 type: "success",
