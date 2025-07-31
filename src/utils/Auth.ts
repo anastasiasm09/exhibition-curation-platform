@@ -6,6 +6,6 @@ export function getGoogleToken() : string | null {
     return localStorage.getItem("google_token")
 }
 
-export function isUserAuthenticated() : boolean {
-    return !!getGoogleToken()
-}
+/*  export function isUserAuthenticated() : boolean {
+     return !!getGoogleToken()
+} */
