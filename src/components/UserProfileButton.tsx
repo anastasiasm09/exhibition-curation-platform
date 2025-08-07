@@ -4,28 +4,33 @@ import {
     Portal,
     Dialog,
     Button,
-    CloseButton, HStack, Status,
+    CloseButton, Text,
 } from "@chakra-ui/react"
 import { RiAccountCircleLine } from "react-icons/ri";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { setGoogleToken } from "@/utils/Auth";
 import { AuthContext } from "@/context/AuthContext";
 
+type UserProfileButtonProps = {
+    setMobileNavbarOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-export default function UserProfileButton() {
+
+export default function UserProfileButton({setMobileNavbarOpen}: UserProfileButtonProps) {
     const [open, setOpen] = useState<boolean>(false);
     const [loginStatus, setLoginStatus] = useState<"success" | "error" | null>(null);
     const messageSuccess = "You have successfully logged in.";
     const messageNoCrRes = "No credential received.";
     const messageError = "Login failed";
 
-    const { setIsUserAuthenticated } = useContext(AuthContext)
+    const { isUserAuthenticated, setIsUserAuthenticated } = useContext(AuthContext)
 
     const handleSuccess = (response: CredentialResponse) => {
         if (response.credential) {
             setGoogleToken(response.credential)
             setOpen(false)
+            setMobileNavbarOpen?.(false)
             setIsUserAuthenticated(true)
             setLoginStatus("success")
             toaster.create({
@@ -58,18 +63,35 @@ export default function UserProfileButton() {
 
     return (
         <>
-            <Dialog.Root open={open} onOpenChange={(e) => setOpen(e.open)}>
+            <Dialog.Root open={open} onOpenChange={(e) => setOpen(e.open)} >
                 <Dialog.Trigger asChild>
+
                     <IconButton
                         aria-label="Login"
                         size="sm"
+                        display={{ base: 'none', md: 'flex' }}
                         color={loginStatus === "success" ? "maroon" : "black"}
                         bg="gray.100"
                     >
                         <RiAccountCircleLine />
-                        
                     </IconButton>
                 </Dialog.Trigger>
+
+                <Dialog.Trigger asChild>
+                <Text
+                    as="button"
+                    fontSize="sm"
+                    display={{ base: "flex", md: "none" }}
+                    fontWeight="semibold"
+                    color="black"
+                    flexDirection="column"
+                    _hover={{ color: "maroon" }}
+                    cursor="pointer"
+                >
+                    Login
+                </Text>
+                </Dialog.Trigger>
+
                 <Portal>
                     <Dialog.Backdrop />
                     <Dialog.Positioner>
@@ -92,7 +114,6 @@ export default function UserProfileButton() {
                     </Dialog.Positioner>
                 </Portal>
             </Dialog.Root>
-
             <Toaster />
         </>
     )

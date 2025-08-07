@@ -5,6 +5,7 @@ import Search from './Search';
 import logo from '../assets/logo.png';
 import { Link as RouterLink } from 'react-router-dom';
 import UserProfileButton from "./UserProfileButton";
+import { RiAccountCircleLine } from "react-icons/ri";
 
 const Links = [
     { label: 'Home', path: '/' },
@@ -49,7 +50,6 @@ export default function Navbar({ onSearch }) {
                                 fontSize={{ base: "16px", md: "17px", lg: "17px" }}
                                 fontFamily="Inter, sans-serif"
                                 _hover={{ textDecoration: 'underline', color: 'maroon' }}
-                                
                             >
                                 {label}
                             </Text>
@@ -109,15 +109,17 @@ export default function Navbar({ onSearch }) {
                                                 as={RouterLink}
                                                 to={path}
                                                 onClick={() => setOpen(false)}
-                                                fontSize="lg"
+                                                fontSize="sm"
                                                 fontWeight="semibold"
                                                 color="black"
                                                 _hover={{ color: 'maroon' }}
+                                                
                                             >
                                                 {label}
                                             </Text>
                                         </Box>
                                     ))}
+                                        <UserProfileButton setMobileNavbarOpen={setOpen}/>
                                 </Box>
 
                                 {/* Search */}
