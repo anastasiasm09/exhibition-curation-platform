@@ -15,7 +15,6 @@ import { useEffect, useLayoutEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import ExhibitionDetails from './components/ExhibitionDetails';
 import About from './components/About';
-import { createContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 import { getGoogleToken } from './utils/Auth';
 
@@ -176,7 +175,6 @@ function App() {
           <Route path="/exhibitions" element={<Exhibitions />} />
           <Route path="/exhibitions/:id" element={<ExhibitionDetails />} />
           <Route path="/about" element={<About />} />
-          
         </Routes>
       </Wrapper>
 
