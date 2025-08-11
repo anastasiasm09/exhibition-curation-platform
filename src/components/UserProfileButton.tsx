@@ -17,7 +17,6 @@ export default function UserProfileButton({ setMobileNavbarOpen }: UserProfileBu
     const [open, setOpen] = useState<boolean>(false);
     const { isUserAuthenticated } = useContext(AuthContext);
 
-
     return (
         <>
             <IconButton
@@ -46,7 +45,7 @@ export default function UserProfileButton({ setMobileNavbarOpen }: UserProfileBu
             </Text>
 
             {isUserAuthenticated ? (
-                <LogOutDialog open={open} setOpen={setOpen} setMobileNavbarOpen={setMobileNavbarOpen} />
+                <LogOutDialog open={open} setOpen={setOpen} />
             ) : (
                 <LogInDialog open={open} setOpen={setOpen} setMobileNavbarOpen={setMobileNavbarOpen} />
             )}

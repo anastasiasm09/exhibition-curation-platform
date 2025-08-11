@@ -3,7 +3,6 @@ import { useContext, useState } from "react";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { setGoogleToken } from "@/utils/Auth";
 import { AuthContext } from "@/context/AuthContext";
-import { getUserDetails } from "@/utils/Exhibitions";
 import {
     Portal,
     Dialog,
@@ -25,7 +24,6 @@ export default function LogInDialog({ open, setOpen, setMobileNavbarOpen }: LogI
     const messageSuccess = "You have successfully logged in.";
     const messageNoCrRes = "No credential received.";
     const messageError = "Login failed";
-    const [name, setName] = useState<string>("");
 
     const { setIsUserAuthenticated } = useContext(AuthContext);
 
@@ -35,10 +33,6 @@ export default function LogInDialog({ open, setOpen, setMobileNavbarOpen }: LogI
             setOpen(false)
             setMobileNavbarOpen?.(false)
             setIsUserAuthenticated(true)
-
-            getUserDetails()
-                .then((data) => setName(data.first_name))
-                .catch((err) => console.error(err));
 
             setLoginStatus("success")
             toaster.create({
@@ -68,7 +62,6 @@ export default function LogInDialog({ open, setOpen, setMobileNavbarOpen }: LogI
         });
     };
 
-
     return (
         <>
             <Dialog.Root open={open} onOpenChange={(e) => setOpen(e.open)}>
@@ -79,9 +72,17 @@ export default function LogInDialog({ open, setOpen, setMobileNavbarOpen }: LogI
                             <Dialog.Header>
                                 <Dialog.Title>Login</Dialog.Title>
                             </Dialog.Header >
-                            <Tag.Root m="6" mb="4" mt="-1" fontWeight="normal" fontSize={12}>
-                                <Tag.Label>Exhibition Platform does not use your email address, it only stores your first name.</Tag.Label>
+                            <Box >
+                            <Tag.Root
+                                m="6"
+                                mb="4" 
+                                mt="-1" 
+                                fontWeight="normal" 
+                                fontSize={12}
+                                >
+                                <Tag.Label lineClamp="2">Exhibition Platform stores only your first name, not your email.</Tag.Label>
                             </Tag.Root>
+                            </Box>
                             <Dialog.Body position="relative">
                                 <AbsoluteCenter w="100%">
                                     <Box w="90%">
