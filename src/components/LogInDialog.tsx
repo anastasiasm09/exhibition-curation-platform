@@ -21,7 +21,7 @@ type LogInDialogProps = {
 
 export default function LogInDialog({ open, setOpen, setMobileNavbarOpen }: LogInDialogProps) {
     const messageSuccess = "You have successfully logged in.";
-    const messageNoCrRes = "No credential received.";
+    const messageNoCredentialResponse = "No credential received.";
     const messageError = "Login failed";
 
     const { setIsUserAuthenticated } = useContext(AuthContext);
@@ -45,7 +45,7 @@ export default function LogInDialog({ open, setOpen, setMobileNavbarOpen }: LogI
 
         } else {
             toaster.create({
-                title: messageNoCrRes,
+                title: messageNoCredentialResponse,
                 type: "error",
             });
         }
