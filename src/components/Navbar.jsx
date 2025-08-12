@@ -113,7 +113,6 @@ export default function Navbar({ onSearch }) {
                                                 fontWeight="semibold"
                                                 color="black"
                                                 _hover={{ color: 'maroon' }}
-                                                
                                             >
                                                 {label}
                                             </Text>

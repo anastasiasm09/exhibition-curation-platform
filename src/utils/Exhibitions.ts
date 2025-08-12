@@ -108,3 +108,20 @@ export function getAllExhibitions(): Promise<Exhibition[]> {
 export function isArtworkInExhibition(exhibition: Exhibition, artwork: Artwork) {
     return exhibition.artwork_ids.includes(artwork.id);
 }
+
+export function getUserDetails() {
+    return fetch(
+        `${exbApi()}/api/me`,
+        {
+            headers: {
+                "Authorization": `Bearer ${getGoogleToken() ?? ""}`,
+                'Content-Type': 'application/json'
+            },
+        })
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error("Failed to fetch user data");
+            }
+            return res.json();
+        })
+}
