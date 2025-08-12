@@ -48,7 +48,7 @@ export default function LogOutDialog({ open, setOpen, setMobileNavbarOpen }: Log
                     <Dialog.Positioner>
                         <Dialog.Content>
                             <Dialog.Header>
-                                < Dialog.Title > Hi {`${name}!`}</Dialog.Title >
+                                < Dialog.Title > Hi {name}!</Dialog.Title >
                             </Dialog.Header >
                             <Dialog.Body position="relative">
                                 <AbsoluteCenter w="100%">
