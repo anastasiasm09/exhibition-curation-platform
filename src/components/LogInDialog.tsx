@@ -1,5 +1,5 @@
 import { CredentialResponse, GoogleLogin } from "@react-oauth/google"
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Toaster, toaster } from "@/components/ui/toaster";
 import { setGoogleToken } from "@/utils/Auth";
 import { AuthContext } from "@/context/AuthContext";
@@ -20,7 +20,6 @@ type LogInDialogProps = {
 }
 
 export default function LogInDialog({ open, setOpen, setMobileNavbarOpen }: LogInDialogProps) {
-    const [loginStatus, setLoginStatus] = useState<"success" | "error" | null>(null);
     const messageSuccess = "You have successfully logged in.";
     const messageNoCrRes = "No credential received.";
     const messageError = "Login failed";
@@ -33,15 +32,12 @@ export default function LogInDialog({ open, setOpen, setMobileNavbarOpen }: LogI
             setOpen(false)
             setMobileNavbarOpen?.(false)
             setIsUserAuthenticated(true)
-
-            setLoginStatus("success")
             toaster.create({
                 title: messageSuccess,
                 type: "success",
             });
 
         } else if (!response.credential) {
-            setLoginStatus("error")
             toaster.create({
                 title: messageError,
                 type: "error",

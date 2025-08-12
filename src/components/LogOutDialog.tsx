@@ -15,9 +15,10 @@ import {
 type LogOutDialogProps = {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setMobileNavbarOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function LogOutDialog({ open, setOpen }: LogOutDialogProps) {
+export default function LogOutDialog({ open, setOpen, setMobileNavbarOpen }: LogOutDialogProps) {
     const [name, setName] = useState<string>("");
     const { isUserAuthenticated, setIsUserAuthenticated } = useContext(AuthContext);
 
@@ -37,6 +38,7 @@ export default function LogOutDialog({ open, setOpen }: LogOutDialogProps) {
                 console.error(err);
             });
     }, [isUserAuthenticated]);
+
 
     return (
         <>
