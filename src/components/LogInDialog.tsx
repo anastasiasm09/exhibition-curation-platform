@@ -69,15 +69,18 @@ export default function LogInDialog({ open, setOpen, setMobileNavbarOpen }: LogI
                                 <Dialog.Title>Login</Dialog.Title>
                             </Dialog.Header >
                             <Box >
-                            <Tag.Root
-                                m="6"
-                                mb="4" 
-                                mt="-1" 
-                                fontWeight="normal" 
-                                fontSize={12}
+                                <Tag.Root
+                                    m="6"
+                                    mb="4"
+                                    mt="-1"
+                                    w="90%"
+                                    fontWeight="normal"
+                                    fontSize={12}
                                 >
-                                <Tag.Label lineClamp="2">Exhibition Platform stores only your first name, not your email.</Tag.Label>
-                            </Tag.Root>
+                                    <Tag.Label lineClamp="2">
+                                        Exhibition Platform never uses your email or any other personal data — only your first name.
+                                    </Tag.Label>
+                                </Tag.Root>
                             </Box>
                             <Dialog.Body position="relative">
                                 <AbsoluteCenter w="100%">

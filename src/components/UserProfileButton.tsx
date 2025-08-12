@@ -5,7 +5,6 @@ import {
 import { RiAccountCircleLine } from "react-icons/ri";
 import { useState, useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
-
 import LogInDialog from "./LogInDialog";
 import LogOutDialog from "./LogOutDialog";
 
@@ -41,7 +40,7 @@ export default function UserProfileButton({ setMobileNavbarOpen }: UserProfileBu
                 cursor="pointer"
                 onClick={() => setOpen(true)}
             >
-                Login
+                {isUserAuthenticated ? "Account" : "Login" }
             </Text>
 
             {isUserAuthenticated ? (
