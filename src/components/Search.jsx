@@ -7,11 +7,10 @@ import { LuSearch } from "react-icons/lu";
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 export default function Search({ onSearch, onFinish }) {
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
-    const inputRef = useRef < HTMLInputElement | null > (null)
+    const inputRef = useRef(null);
 
     const handleSearch = () => {
         onSearch(search.trim());
@@ -48,7 +47,10 @@ export default function Search({ onSearch, onFinish }) {
                 startElement={<LuSearch />}
                 endElement={endElement}
             >
-                <Input flex="1" w="400px"
+                <Input
+                    ref={inputRef}
+                    flex="1"
+                    w="400px"
                     type="text"
                     placeholder='Search by artwork, artist or keywords'
                     value={search}
@@ -58,6 +60,5 @@ export default function Search({ onSearch, onFinish }) {
                 />
             </InputGroup>
         </>
-
     )
 }
