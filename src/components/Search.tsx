@@ -10,10 +10,11 @@ import { useNavigate } from 'react-router-dom';
 type SearchProps = {
     onSearch: (query: string) => void;
     onFinish?: () => void;
+    initialSearch: string;
 }
 
-export default function Search({ onSearch, onFinish }: SearchProps) {
-    const [search, setSearch] = useState<string>("");
+export default function Search({ onSearch, onFinish, initialSearch }: SearchProps) {
+    const [search, setSearch] = useState<string>(initialSearch);
     const navigate = useNavigate();
     const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -25,7 +26,7 @@ export default function Search({ onSearch, onFinish }: SearchProps) {
         }
     };
 
-    function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
         if (e.key === 'Enter') {
             if (window.location.pathname !== "/") {
                 navigate("/")

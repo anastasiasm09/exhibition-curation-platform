@@ -5,7 +5,6 @@ import Search from './Search';
 import logo from '../assets/logo.png';
 import { Link as RouterLink } from 'react-router-dom';
 import UserProfileButton from "./UserProfileButton";
-import { RiAccountCircleLine } from "react-icons/ri";
 
 const Links = [
     { label: 'Home', path: '/' },
@@ -13,7 +12,7 @@ const Links = [
     { label: 'About', path: '/about' },
 ];
 
-export default function Navbar({ onSearch }) {
+export default function Navbar({ onSearch, initialSearch }) {
     const [open, setOpen] = useState(false);
 
     return (
@@ -126,6 +125,7 @@ export default function Navbar({ onSearch }) {
                                     <Search
                                         onSearch={onSearch}
                                         onFinish={() => setOpen(false)}
+                                        initialSearch={initialSearch}
                                     />
                                 </Box>
                             </Drawer.Content>
