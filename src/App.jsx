@@ -145,7 +145,7 @@ function App() {
   return (
     <>
     <AuthContext.Provider value={{ isUserAuthenticated, setIsUserAuthenticated }}>
-      <Navbar onSearch={setSearch} />
+      <Navbar onSearch={setSearch} initialSearch={search} />
 
       {isHomePage && <BannerImage />}
       
