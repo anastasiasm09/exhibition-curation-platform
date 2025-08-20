@@ -60,7 +60,7 @@ export default function Search({ onSearch, onFinish, initialSearch }: SearchProp
                     type="text"
                     placeholder='Search by artwork, artist or keywords'
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.currentTarget.value)}
                     onKeyDown={handleKeyDown}
                     bg="gray.100"
                 />
