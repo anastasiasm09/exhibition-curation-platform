@@ -102,7 +102,7 @@ function App() {
     if (!isLoading) {
       setCombinedArtworks((aicDataArtworks?.pages ?? []).concat(hamDataArtworks?.pages ?? []).flatMap(page => page.artworks))
     }
-  }, [isLoading, aicDataArtworks, hamDataArtworks])
+  }, [ isLoading, search ])
 
   const { ref, inView, entry } = useInView({
   });
