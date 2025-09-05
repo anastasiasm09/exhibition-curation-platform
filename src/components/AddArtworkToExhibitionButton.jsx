@@ -1,13 +1,8 @@
-import { addArtworkToExhibition, isArtworkInExhibition } from "@/utils/Exhibitions";
-import { Box, createListCollection, HStack, IconButton, Portal, Select, useSelectContext } from "@chakra-ui/react";
+import { isArtworkInExhibition } from "@/utils/Exhibitions";
+import { Box, createListCollection, HStack, IconButton, Select, useSelectContext } from "@chakra-ui/react";
 import { MdAdd } from "react-icons/md";
 
-export default function AddArtworkToExhibitionButton({ artwork, exhibitions }) {
-    const handleExhibitionSelect = (artwork, exhibitionId) => {
-        if (!exhibitionId) return;
-
-        addArtworkToExhibition(exhibitionId, artwork);
-    };
+export default function AddArtworkToExhibitionButton({ artwork, exhibitions, handleExhibitionSelect }) {
 
     const ExhibitionTrigger = () => {
         const select = useSelectContext();
@@ -19,6 +14,9 @@ export default function AddArtworkToExhibitionButton({ artwork, exhibitions }) {
                 color="maroon"
                 bg="white"
                 variant="ghost"
+                mt={-1} 
+                pl={7}
+                
 
                 {...select.getTriggerProps()}
             >
@@ -39,39 +37,40 @@ export default function AddArtworkToExhibitionButton({ artwork, exhibitions }) {
     return (
         <Select.Root
             positioning={{ sameWidth: false }}
-            collection={exhibitionsCollection}
+            portalProps={{ appendToParentPortal: false }}
+            multiple collection={exhibitionsCollection}
             size="sm"
-            defaultValue={
-                exhibitions
-                    .filter(exhibition => isArtworkInExhibition(exhibition, artwork))
-                    .map(exhibition => exhibition.id)
+            defaultValue={exhibitions
+                .filter(exhibition => isArtworkInExhibition(exhibition, artwork))
+                .map(exhibition => exhibition.id)
             }
-            onValueChange={(selected) =>
-                handleExhibitionSelect(artwork, selected?.value?.[0] || "")
-            }
+            onValueChange={(selected) => {
+                const selectedElement = selected?.value
+                selectedElement.forEach((id) => {
+                    handleExhibitionSelect(artwork, id || "")
+                })
+            }}
         >
             <Select.HiddenSelect />
             <Select.Control>
-                <ExhibitionTrigger />
+                    <ExhibitionTrigger/>
             </Select.Control>
-            <Portal>
-                <Select.Positioner>
-                    <Select.Content minW="32">
-                        {exhibitionsCollection.items.length === 0 ? (
-                            <Box px={4} py={2} color="gray.500">
-                                You have no exhibitions at the moment
-                            </Box>
-                        ) : (
-                            exhibitionsCollection.items.map((exb) => (
-                                <Select.Item item={exb} key={exb.value}>
-                                    <HStack>{exb.label}</HStack>
-                                    <Select.ItemIndicator />
-                                </Select.Item>
-                            ))
-                        )}
-                    </Select.Content>
-                </Select.Positioner>
-            </Portal>
+            <Select.Positioner>
+                <Select.Content minW="32">
+                    {exhibitionsCollection.items.length === 0 ? (
+                        <Box px={4} py={2} color="gray.500">
+                            You have no exhibitions at the moment
+                        </Box>
+                    ) : (
+                        exhibitionsCollection.items.map((exb) => (
+                            <Select.Item item={exb} key={exb.value}>
+                                <HStack>{exb.label}</HStack>
+                                <Select.ItemIndicator />
+                            </Select.Item>
+                        ))
+                    )}
+                </Select.Content>
+            </Select.Positioner>
         </Select.Root>
     )
 }

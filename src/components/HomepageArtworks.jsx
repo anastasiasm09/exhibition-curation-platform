@@ -1,6 +1,6 @@
 import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, Grid } from '@chakra-ui/react';
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
-import { getAllExhibitions } from "@/utils/Exhibitions";
+import { addArtworkToExhibition, getAllExhibitions } from "@/utils/Exhibitions";
 import { useState, useEffect, useContext } from "react";
 import { MdAdd } from "react-icons/md";
 import ArtworkDialog from './ArtworkDialog';
@@ -22,18 +22,24 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     const [value, setValue] = useState("");
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedArtwork, setSelectedArtwork] = useState(null);
-    const [exhibitions, setExhibitions] = useState();
+    const [exhibitions, setExhibitions] = useState(null);
+    const [shouldRefreshExhibitions, setShouldRefreshExhibitions] = useState(false);
 
     const { isUserAuthenticated } = useContext(AuthContext);
 
     useEffect(() => {
         if (isUserAuthenticated) {
-            getAllExhibitions().then((exhibitions) => setExhibitions(exhibitions))
+            setExhibitions(null)
+
+            getAllExhibitions().then((exhibitions) => {
+                setExhibitions(exhibitions)
+                setShouldRefreshExhibitions(false)
+            })
         }
-    }, [isUserAuthenticated]);
+    }, [isUserAuthenticated, shouldRefreshExhibitions]);
 
     const handleFilter = (selected) => {
-        const selectedValues = selected.value[0] || ""
+        const selectedValues = selected.value || ""
         setValue([selectedValues]);
         onFilter(selectedValues);
     };
@@ -41,7 +47,13 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     function handleOpenDialog(artwork) {
         setSelectedArtwork(artwork)
         setOpenDialog(true)
-    }
+    };
+
+    const handleExhibitionSelect = (artwork, exhibitionId) => {
+        if (!exhibitionId) return;
+        addArtworkToExhibition(exhibitionId, artwork);
+        setShouldRefreshExhibitions(true);
+    };
 
     return (
         <>
@@ -95,16 +107,15 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                             onClick={() => {
                                 handleOpenDialog(artwork)
                             }}
-
                         />
                         <CardBody>
                             <Grid templateColumns="1fr auto" alignItems="start">
                                 <CardTitle>{artwork.title}</CardTitle>
-
                                 {exhibitions ? (
                                     <AddArtworkToExhibitionButton
                                         artwork={artwork}
                                         exhibitions={exhibitions}
+                                        handleExhibitionSelect={handleExhibitionSelect}
                                     />
                                 ) : (
                                     <Tooltip
@@ -120,13 +131,14 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                                             variant="ghost"
                                             isDisabled
                                             cursor="default"
+                                            mt={-1}
+                                            pl={7}
                                         >
                                             <MdAdd />
                                         </IconButton>
                                     </Tooltip>
                                 )}
                             </Grid>
-
                             <Card.Description>{artwork.artist}</Card.Description>
                             <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">
                                 {artwork.classification}
@@ -138,11 +150,17 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
 
             {openDialog && (
                 <ArtworkDialog
+                    artworkButton={<AddArtworkToExhibitionButton
+                        artwork={selectedArtwork}
+                        exhibitions={exhibitions ?? []}
+                        handleExhibitionSelect={handleExhibitionSelect}
+                    />}
                     artwork={selectedArtwork}
+                    exhibitions={exhibitions}
                     onOpen={openDialog}
-                    onClose={() => setOpenDialog(false)} />
-            )
-            }
+                    onClose={() => { setOpenDialog(false) }}
+                />
+            )}
         </>
     )
 }
