@@ -128,7 +128,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                                             size="sm"
                                             color="gray"
                                             bg="white"
-                                            variant="ghost"
+                                            variant="plain"
                                             isDisabled
                                             cursor="default"
                                             mt={-1}

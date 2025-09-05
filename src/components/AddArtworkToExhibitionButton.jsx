@@ -12,7 +12,7 @@ export default function AddArtworkToExhibitionButton({ artwork, exhibitions, han
                 aria-label="Add to exhibition"
                 size="sm"
                 color="maroon"
-                variant="ghost"
+                variant="plain"
                 colorScheme="none"
                 mt={-1} 
                 pl={9}
