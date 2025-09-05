@@ -1,9 +1,8 @@
 import { Dialog, Portal } from "@chakra-ui/react"
-import { Box, Card, Image, CloseButton, Text } from "@chakra-ui/react"
+import { Box, Card, Image, CloseButton, Text, Flex } from "@chakra-ui/react"
 
 
-export default function ArtworkDialog({ artwork, onOpen, onClose }) {
-
+export default function ArtworkDialog({ artwork, onOpen, onClose, artworkButton }) {
     if (!artwork) return null;
 
     return (
@@ -11,7 +10,6 @@ export default function ArtworkDialog({ artwork, onOpen, onClose }) {
             open={onOpen}
             onOpenChange={(isOpen) => {
                 if (!isOpen) onClose()
-                    
             }}
             size="full"
             motionPreset="slide-in-bottom"
@@ -21,18 +19,16 @@ export default function ArtworkDialog({ artwork, onOpen, onClose }) {
                 <Dialog.Positioner>
                     <Dialog.Content>
                         <Dialog.Header>
-
                             <Dialog.CloseTrigger asChild>
                                 <CloseButton onClick={onClose} size="sm" />
                             </Dialog.CloseTrigger>
                         </Dialog.Header>
-
                         <Dialog.Body >
-                            <Card.Root 
-                            variant="ghost" 
-                            flexDirection={{ base: "column", md: "row" }} 
-                            overflow="hidden" 
-                            height="100%" >
+                            <Card.Root
+                                variant="ghost"
+                                flexDirection={{ base: "column", md: "row" }}
+                                overflow="hidden"
+                                height="100%" >
                                 <Image
                                     objectFit="contain"
                                     maxH="520px"
@@ -54,6 +50,11 @@ export default function ArtworkDialog({ artwork, onOpen, onClose }) {
                                         <Card.Description>{artwork.dimensions}</Card.Description>
                                         <Text mt={3} fontWeight="bold" >Classification: </Text>
                                         <Card.Description>{artwork.classification}</Card.Description>
+
+                                        <Flex mt={4} ml={-9} justify="flex-start">
+                                            {artworkButton}
+                                        </Flex>
+
                                     </Card.Body>
                                 </Box>
                             </Card.Root>
