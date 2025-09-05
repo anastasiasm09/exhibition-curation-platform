@@ -1,12 +1,13 @@
 import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, Grid } from '@chakra-ui/react';
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
-import { addArtworkToExhibition, getAllExhibitions } from "@/utils/Exhibitions";
+import { addArtworkToExhibition, getAllExhibitions, isArtworkInExhibition } from "@/utils/Exhibitions";
 import { useState, useEffect, useContext } from "react";
 import { MdAdd } from "react-icons/md";
 import ArtworkDialog from './ArtworkDialog';
 import { Tooltip } from "@/components/ui/tooltip";
 import { AuthContext } from "@/context/AuthContext";
 import AddArtworkToExhibitionButton from './AddArtworkToExhibitionButton';
+import { toaster } from "@/components/ui/toaster"
 
 
 export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
@@ -52,6 +53,11 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     const handleExhibitionSelect = (artwork, exhibitionId) => {
         if (!exhibitionId) return;
         addArtworkToExhibition(exhibitionId, artwork);
+        toaster.create({
+            description: "Artwork added successfully",
+            type: "info",
+        })
+
         setShouldRefreshExhibitions(true);
     };
 
