@@ -12,12 +12,11 @@ export default function AddArtworkToExhibitionButton({ artwork, exhibitions, han
                 aria-label="Add to exhibition"
                 size="sm"
                 color="maroon"
-                bg="white"
                 variant="ghost"
+                colorScheme="none"
                 mt={-1} 
-                pl={7}
+                pl={9}
                 
-
                 {...select.getTriggerProps()}
             >
                 <MdAdd />

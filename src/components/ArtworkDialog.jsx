@@ -63,6 +63,5 @@ export default function ArtworkDialog({ artwork, onOpen, onClose, artworkButton 
                 </Dialog.Positioner>
             </Portal>
         </Dialog.Root>
-
     )
 }
