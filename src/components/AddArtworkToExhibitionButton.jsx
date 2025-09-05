@@ -1,7 +1,6 @@
 import { isArtworkInExhibition } from "@/utils/Exhibitions";
 import { Box, createListCollection, HStack, IconButton, Select, useSelectContext } from "@chakra-ui/react";
 import { MdAdd } from "react-icons/md";
-import { toaster } from "@/components/ui/toaster"
 
 
 export default function AddArtworkToExhibitionButton({ artwork, exhibitions, handleExhibitionSelect }) {
@@ -18,14 +17,6 @@ export default function AddArtworkToExhibitionButton({ artwork, exhibitions, han
                 colorScheme="none"
                 mt={-1} 
                 pl={9}
-
-                
-                onClick={() =>
-                    toaster.create({
-                        description: "Artwork added successfully",
-                        type: "info",
-                    })
-                }
                 
                 {...select.getTriggerProps()}
             >
