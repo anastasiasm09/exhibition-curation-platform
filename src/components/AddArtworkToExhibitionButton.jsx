@@ -2,6 +2,7 @@ import { isArtworkInExhibition } from "@/utils/Exhibitions";
 import { Box, createListCollection, HStack, IconButton, Select, useSelectContext } from "@chakra-ui/react";
 import { MdAdd } from "react-icons/md";
 
+
 export default function AddArtworkToExhibitionButton({ artwork, exhibitions, handleExhibitionSelect }) {
 
     const ExhibitionTrigger = () => {
