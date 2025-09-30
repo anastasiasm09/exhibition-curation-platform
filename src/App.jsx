@@ -17,6 +17,7 @@ import ExhibitionDetails from './components/ExhibitionDetails';
 import About from './components/About';
 import { AuthContext } from './context/AuthContext';
 import { getGoogleToken } from './utils/Auth';
+import { getUserDetails } from './utils/Exhibitions';
 
 
 function Wrapper({ children }) {
@@ -33,7 +34,7 @@ function Wrapper({ children }) {
 function App() {
   const [search, setSearch] = useState(null);
   const [classification, setClassification] = useState(null);
-  const [isUserAuthenticated, setIsUserAuthenticated] = useState(!!getGoogleToken());
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   const location = useLocation();
   const isHomePage = location.pathname === '/';
@@ -74,7 +75,7 @@ function App() {
     retry: 1
   })
 
-  const isLoading = isDataAICArtworksLoading || isDataHAMArtworksLoading
+  const isLoading = isDataAICArtworksLoading || isDataHAMArtworksLoading;
 
   const messageHAMError = "Unable to load data from Harvard Art Museums API. Please try again later."
 
@@ -96,13 +97,13 @@ function App() {
     }
   }, [isDataHAMArtworksError])
 
-  const [combinedArtworks, setCombinedArtworks] = useState([])
+  const [combinedArtworks, setCombinedArtworks] = useState([]);
 
   useEffect(() => {
     if (!isLoading) {
       setCombinedArtworks((aicDataArtworks?.pages ?? []).concat(hamDataArtworks?.pages ?? []).flatMap(page => page.artworks))
     }
-  }, [ isLoading, search ])
+  }, [isLoading, search])
 
   const { ref, inView, entry } = useInView({
   });
@@ -139,50 +140,64 @@ function App() {
         setCombinedArtworks(artworks)
       })
     }
-  }, [inView])
+  }, [inView]);
+
+  useEffect(() => {
+    const token = getGoogleToken();
+    
+      if (token) {
+      getUserDetails()
+        .then(() => {
+            setIsUserAuthenticated(true)
+        })
+        .catch((err) => {
+          console.error(err)
+          setIsUserAuthenticated(false)
+        })
+      }
+  }, []);
 
 
   return (
     <>
-    <AuthContext.Provider value={{ isUserAuthenticated, setIsUserAuthenticated }}>
-      <Navbar onSearch={setSearch} initialSearch={search} />
+      <AuthContext.Provider value={{ isUserAuthenticated, setIsUserAuthenticated }}>
+        <Navbar onSearch={setSearch} initialSearch={search} />
 
-      {isHomePage && <BannerImage />}
-      
-      <Wrapper>
-        <Routes>
-          {/* Loading */}
-          <Route
-            path="/"
-            element={
-              <Box aria-live="polite" role="status" mt={8}>
-                {isLoading && (
-                  <>
-                    <Loading />
-                    <VisuallyHidden>
-                      Loading artworks, please wait.
-                    </VisuallyHidden>
-                  </>
-                )}
+        {isHomePage && <BannerImage />}
 
-                <HomepageArtworks artworks={combinedArtworks} onFilter={setClassification} />
+        <Wrapper>
+          <Routes>
+            {/* Loading */}
+            <Route
+              path="/"
+              element={
+                <Box aria-live="polite" role="status" mt={8}>
+                  {isLoading && (
+                    <>
+                      <Loading />
+                      <VisuallyHidden>
+                        Loading artworks, please wait.
+                      </VisuallyHidden>
+                    </>
+                  )}
 
-                {/* Infinite scroll */}
-                {!isLoading && !!combinedArtworks.length && (<div ref={ref}></div>)}
-              </Box>
-            }
-          />
-          <Route path="/exhibitions" element={<Exhibitions />} />
-          <Route path="/exhibitions/:id" element={<ExhibitionDetails />} />
-          <Route path="/about" element={<About />} />
-        </Routes>
-      </Wrapper>
+                  <HomepageArtworks artworks={combinedArtworks} onFilter={setClassification} />
 
-      {/* Error Messages */}
-      <Toaster />
+                  {/* Infinite scroll */}
+                  {!isLoading && !!combinedArtworks.length && (<div ref={ref}></div>)}
+                </Box>
+              }
+            />
+            <Route path="/exhibitions" element={<Exhibitions />} />
+            <Route path="/exhibitions/:id" element={<ExhibitionDetails />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+        </Wrapper>
+
+        {/* Error Messages */}
+        <Toaster />
       </AuthContext.Provider>
     </>
-
   );
 }
 
