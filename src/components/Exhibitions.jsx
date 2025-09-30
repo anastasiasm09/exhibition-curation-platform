@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react"
+import { useState, useContext } from "react"
 import { Link } from 'react-router-dom'
 import { SimpleGrid, Button, CloseButton, Dialog, Portal, Input, Stack, Box, Text, Badge, Card, HStack, Image, Flex, Field, Heading } from "@chakra-ui/react"
 import { createExhibition as createExhibitionRequest, getAllExhibitions, renameExhibition as renameExhibitionRequest, deleteExhibition as deleteExhibitionRequest } from "@/utils/Exhibitions";
@@ -79,10 +79,7 @@ export default function Exhibitions() {
         setIsNameError(false)
     }
 
-
-    if (isLoading)
-        return;
-
+    if (isLoading) return;
 
 
     return (
