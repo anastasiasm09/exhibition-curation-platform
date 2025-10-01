@@ -200,9 +200,8 @@ export default function Exhibitions() {
                 >
                     {allExhibitions?.sort((a, b) => (a.date - b.date)).map((exb) => {
                         return (
-                            <Stack>
+                            <Stack key={exb.id}>
                                 <Card.Root
-                                    key={exb.name}
                                     display="flex"
                                     flexDirection="column"
                                     overflow="hidden"

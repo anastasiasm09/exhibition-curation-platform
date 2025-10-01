@@ -37,7 +37,6 @@ export default function AddArtworkToExhibitionButton({ artwork, exhibitions, han
     return (
         <Select.Root
             positioning={{ sameWidth: false }}
-            portalProps={{ appendToParentPortal: false }}
             multiple collection={exhibitionsCollection}
             size="sm"
             defaultValue={exhibitions
