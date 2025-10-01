@@ -10,7 +10,7 @@ import {
     CloseButton,
     AbsoluteCenter,
     Box,
-    Tag
+    Text
 } from "@chakra-ui/react"
 
 type LogInDialogProps = {
@@ -68,20 +68,6 @@ export default function LogInDialog({ open, setOpen, setMobileNavbarOpen }: LogI
                             <Dialog.Header>
                                 <Dialog.Title>Login</Dialog.Title>
                             </Dialog.Header >
-                            <Box >
-                                <Tag.Root
-                                    m="6"
-                                    mb="4"
-                                    mt="-1"
-                                    w="90%"
-                                    fontWeight="normal"
-                                    fontSize={12}
-                                >
-                                    <Tag.Label lineClamp="2">
-                                        Exhibition Platform never uses your email or any other personal data — only your first name.
-                                    </Tag.Label>
-                                </Tag.Root>
-                            </Box>
                             <Dialog.Body position="relative">
                                 <AbsoluteCenter w="100%">
                                     <Box w="90%">
@@ -89,6 +75,13 @@ export default function LogInDialog({ open, setOpen, setMobileNavbarOpen }: LogI
                                     </Box>
                                 </AbsoluteCenter>
                             </Dialog.Body>
+                            <Text
+                                m="6"
+                                mb="4"
+                                fontSize={{ base: "9px", md: "10.5px", lg: "10.5px" }}
+                            >
+                                Exhibition Platform never uses your email or any other personal data — only your first name.
+                            </Text>
                             <Dialog.Footer>
                                 <Dialog.ActionTrigger asChild>
                                     <Button mt="2" variant="outline">Cancel</Button>
