@@ -1,4 +1,5 @@
 import { googleLogout } from "@react-oauth/google"
+import { useNavigate } from 'react-router-dom';
 import { useContext, useState, useEffect } from "react";
 import { removeGoogleToken } from "@/utils/Auth";
 import { AuthContext } from "@/context/AuthContext";
@@ -20,10 +21,12 @@ type LogOutDialogProps = {
 export default function LogOutDialog({ open, setOpen }: LogOutDialogProps) {
     const [name, setName] = useState<string>("");
     const { isUserAuthenticated, setIsUserAuthenticated } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     function handleLogout() {
         removeGoogleToken();
         googleLogout();
+        navigate("/")
         setIsUserAuthenticated(false);
         window.location.reload()
     };
