@@ -1,6 +1,6 @@
 import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, Grid } from '@chakra-ui/react';
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
-import { addArtworkToExhibition, getAllExhibitions, isArtworkInExhibition } from "@/utils/Exhibitions";
+import { addArtworkToExhibition, getAllExhibitions } from "@/utils/Exhibitions";
 import { useState, useEffect, useContext } from "react";
 import { MdAdd } from "react-icons/md";
 import ArtworkDialog from './ArtworkDialog';
@@ -24,20 +24,16 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedArtwork, setSelectedArtwork] = useState(null);
     const [exhibitions, setExhibitions] = useState(null);
-    const [shouldRefreshExhibitions, setShouldRefreshExhibitions] = useState(false);
 
     const { isUserAuthenticated } = useContext(AuthContext);
 
     useEffect(() => {
         if (isUserAuthenticated) {
-            setExhibitions(null)
-
             getAllExhibitions().then((exhibitions) => {
                 setExhibitions(exhibitions)
-                setShouldRefreshExhibitions(false)
             })
         }
-    }, [isUserAuthenticated, shouldRefreshExhibitions]);
+    }, [isUserAuthenticated]);
 
     const handleFilter = (selected) => {
         const selectedValues = selected.value || ""
@@ -53,12 +49,21 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     const handleExhibitionSelect = (artwork, exhibitionId) => {
         if (!exhibitionId) return;
         addArtworkToExhibition(exhibitionId, artwork);
+
+        const updatedExhibitions = exhibitions.map(exhibition => {
+            if (exhibition.id === exhibitionId) {
+                return { ...exhibition, artwork_ids: [...exhibition.artwork_ids, artwork.id] }
+            } else {
+                return exhibition
+            }
+        })
+
+        setExhibitions(updatedExhibitions)
+
         toaster.create({
             description: "Artwork added successfully",
             type: "info",
         })
-
-        setShouldRefreshExhibitions(true);
     };
 
     return (
@@ -156,13 +161,9 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
 
             {openDialog && (
                 <ArtworkDialog
-                    artworkButton={<AddArtworkToExhibitionButton
-                        artwork={selectedArtwork}
-                        exhibitions={exhibitions ?? []}
-                        handleExhibitionSelect={handleExhibitionSelect}
-                    />}
                     artwork={selectedArtwork}
-                    exhibitions={exhibitions}
+                    exhibitions={exhibitions ?? []}
+                    handleExhibitionSelect={handleExhibitionSelect}
                     onOpen={openDialog}
                     onClose={() => { setOpenDialog(false) }}
                 />
