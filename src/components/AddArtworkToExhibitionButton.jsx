@@ -1,5 +1,6 @@
 import { isArtworkInExhibition } from "@/utils/Exhibitions";
 import { Box, createListCollection, HStack, IconButton, Select, useSelectContext } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { MdAdd } from "react-icons/md";
 
 
@@ -34,20 +35,27 @@ export default function AddArtworkToExhibitionButton({ artwork, exhibitions, han
         items: exhibitionItems
     });
 
+    const [value, setValue] = useState([]);
+
+    useEffect(() => {
+        const selectedExhibitions = exhibitions
+            .filter(exhibition => isArtworkInExhibition(exhibition, artwork))
+            .map(exhibition => exhibition.id)
+
+        setValue(selectedExhibitions)
+    }, [artwork, exhibitions]);
+
     return (
         <Select.Root
             positioning={{ sameWidth: false }}
-            multiple collection={exhibitionsCollection}
+            collection={exhibitionsCollection}
+            closeOnSelect={true}
             size="sm"
-            defaultValue={exhibitions
-                .filter(exhibition => isArtworkInExhibition(exhibition, artwork))
-                .map(exhibition => exhibition.id)
-            }
-            onValueChange={(selected) => {
-                const selectedElement = selected?.value
-                selectedElement.forEach((id) => {
-                    handleExhibitionSelect(artwork, id || "")
-                })
+            value={value}
+            onValueChange={(e) => {
+                const selectedExhibitionId = e.value[0]
+                setValue(prevValue => prevValue.concat(selectedExhibitionId))
+                handleExhibitionSelect(artwork, selectedExhibitionId)
             }}
         >
             <Select.HiddenSelect />
