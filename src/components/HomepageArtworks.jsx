@@ -1,10 +1,8 @@
-import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, Grid, Box } from '@chakra-ui/react';
+import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, Grid, Box } from '@chakra-ui/react';
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
 import { addArtworkToExhibition, getAllExhibitions } from "@/utils/Exhibitions";
 import { useState, useEffect, useContext } from "react";
-import { MdAdd } from "react-icons/md";
 import ArtworkDialog from './ArtworkDialog';
-import { Tooltip } from "@/components/ui/tooltip";
 import { AuthContext } from "@/context/AuthContext";
 import AddArtworkToExhibitionButton from './AddArtworkToExhibitionButton';
 import { toaster } from "@/components/ui/toaster"
@@ -125,31 +123,13 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                                 <Box
                                     mt="-2px"
                                     ml={6}>
-                                    {exhibitions ? (
-                                        <AddArtworkToExhibitionButton
+                                            <AddArtworkToExhibitionButton
                                             artwork={artwork}
-                                            exhibitions={exhibitions}
+                                            exhibitions={exhibitions ?? []}
                                             handleExhibitionSelect={handleExhibitionSelect}
-                                        />
-                                    ) : (
-                                        <Tooltip
-                                            content="Please log in to add the artwork to exhibitions."
-                                            openDelay={200}
-                                        >
-                                            <IconButton
-                                                aria-label="Add to exhibition"
-                                                size="sm"
-                                                color="gray"
-                                                bg="white"
-                                                variant="plain"
-                                                isDisabled
-                                                cursor="default"
-                                            >
-                                                <MdAdd />
-                                            </IconButton>
-                                        </Tooltip>
-                                    )}
+                                        />                                       
                                 </Box>
+
                             </Grid>
                             <Card.Description>{artwork.artist}</Card.Description>
                             <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">
