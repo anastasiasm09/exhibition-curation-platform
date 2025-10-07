@@ -52,7 +52,7 @@ export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSe
                                         <Text mt={3} fontWeight="bold" >Classification: </Text>
                                         <Card.Description>{artwork.classification}</Card.Description>
 
-                                        <Flex mt={4} ml={-9} justify="flex-start">
+                                        <Flex mt={3} justify="flex-start">
                                             <AddArtworkToExhibitionButton
                                                 artwork={artwork}
                                                 exhibitions={exhibitions}

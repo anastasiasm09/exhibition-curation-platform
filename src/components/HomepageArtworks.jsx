@@ -1,4 +1,4 @@
-import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, Grid } from '@chakra-ui/react';
+import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, Grid, Box } from '@chakra-ui/react';
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
 import { addArtworkToExhibition, getAllExhibitions } from "@/utils/Exhibitions";
 import { useState, useEffect, useContext } from "react";
@@ -122,33 +122,34 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                         <CardBody>
                             <Grid templateColumns="1fr auto" alignItems="start">
                                 <CardTitle>{artwork.title}</CardTitle>
-                                {exhibitions ? (
-                                    <AddArtworkToExhibitionButton
-                                        artwork={artwork}
-                                        exhibitions={exhibitions}
-                                        handleExhibitionSelect={handleExhibitionSelect}
-                                    />
-                                ) : (
-                                    <Tooltip
-                                        showArrow
-                                        content="Please log in to add the artwork to exhibitions."
-                                        openDelay={200}
-                                    >
-                                        <IconButton
-                                            aria-label="Add to exhibition"
-                                            size="sm"
-                                            color="gray"
-                                            bg="white"
-                                            variant="plain"
-                                            isDisabled
-                                            cursor="default"
-                                            mt={-1}
-                                            pl={7}
+                                <Box
+                                    mt="-2px"
+                                    ml={6}>
+                                    {exhibitions ? (
+                                        <AddArtworkToExhibitionButton
+                                            artwork={artwork}
+                                            exhibitions={exhibitions}
+                                            handleExhibitionSelect={handleExhibitionSelect}
+                                        />
+                                    ) : (
+                                        <Tooltip
+                                            content="Please log in to add the artwork to exhibitions."
+                                            openDelay={200}
                                         >
-                                            <MdAdd />
-                                        </IconButton>
-                                    </Tooltip>
-                                )}
+                                            <IconButton
+                                                aria-label="Add to exhibition"
+                                                size="sm"
+                                                color="gray"
+                                                bg="white"
+                                                variant="plain"
+                                                isDisabled
+                                                cursor="default"
+                                            >
+                                                <MdAdd />
+                                            </IconButton>
+                                        </Tooltip>
+                                    )}
+                                </Box>
                             </Grid>
                             <Card.Description>{artwork.artist}</Card.Description>
                             <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">

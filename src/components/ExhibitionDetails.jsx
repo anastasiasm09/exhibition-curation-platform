@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Box, Text, Image, SimpleGrid, Card, CardBody, CardTitle, } from '@chakra-ui/react';
 import ArtworkDialog from "./ArtworkDialog";
 import { getEhibitionDetails } from "@/utils/Exhibitions";
-import { AuthContext } from "@/context/AuthContext";
 
 export default function ExhibitionDetails() {
     const { id } = useParams();
@@ -45,10 +44,6 @@ export default function ExhibitionDetails() {
             </Box>
         )
     }
-
-
-
-
 
     if (isLoading) {
         return;
