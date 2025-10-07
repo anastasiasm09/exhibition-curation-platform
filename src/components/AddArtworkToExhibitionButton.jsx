@@ -20,7 +20,7 @@ export default function AddArtworkToExhibitionButton({ artwork, exhibitions, han
                     w="28px"
                     h="28px"
                     mt={0.5}
-                    pr={1}
+                    pr={3}
                 >
                     {!isUserAuthenticated ? (
                         <Tooltip
