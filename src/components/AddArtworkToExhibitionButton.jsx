@@ -67,7 +67,7 @@ export default function AddArtworkToExhibitionButton({ artwork, exhibitions, han
 
             setValue(selectedExhibitions)
         }
-    }, [artwork, exhibitions]);
+    }, [artwork, exhibitions, isUserAuthenticated]);
 
     return (
         <Select.Root
