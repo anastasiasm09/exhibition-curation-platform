@@ -1,10 +1,8 @@
-import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, IconButton, Grid } from '@chakra-ui/react';
+import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, Grid, Box } from '@chakra-ui/react';
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
-import { addArtworkToExhibition, getAllExhibitions, isArtworkInExhibition } from "@/utils/Exhibitions";
+import { addArtworkToExhibition, getAllExhibitions } from "@/utils/Exhibitions";
 import { useState, useEffect, useContext } from "react";
-import { MdAdd } from "react-icons/md";
 import ArtworkDialog from './ArtworkDialog';
-import { Tooltip } from "@/components/ui/tooltip";
 import { AuthContext } from "@/context/AuthContext";
 import AddArtworkToExhibitionButton from './AddArtworkToExhibitionButton';
 import { toaster } from "@/components/ui/toaster"
@@ -24,20 +22,16 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedArtwork, setSelectedArtwork] = useState(null);
     const [exhibitions, setExhibitions] = useState(null);
-    const [shouldRefreshExhibitions, setShouldRefreshExhibitions] = useState(false);
 
     const { isUserAuthenticated } = useContext(AuthContext);
 
     useEffect(() => {
         if (isUserAuthenticated) {
-            setExhibitions(null)
-
             getAllExhibitions().then((exhibitions) => {
                 setExhibitions(exhibitions)
-                setShouldRefreshExhibitions(false)
             })
         }
-    }, [isUserAuthenticated, shouldRefreshExhibitions]);
+    }, [isUserAuthenticated]);
 
     const handleFilter = (selected) => {
         const selectedValues = selected.value || ""
@@ -53,12 +47,21 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
     const handleExhibitionSelect = (artwork, exhibitionId) => {
         if (!exhibitionId) return;
         addArtworkToExhibition(exhibitionId, artwork);
+
+        const updatedExhibitions = exhibitions.map(exhibition => {
+            if (exhibition.id === exhibitionId) {
+                return { ...exhibition, artwork_ids: [...exhibition.artwork_ids, artwork.id] }
+            } else {
+                return exhibition
+            }
+        })
+
+        setExhibitions(updatedExhibitions)
+
         toaster.create({
             description: "Artwork added successfully",
             type: "info",
         })
-
-        setShouldRefreshExhibitions(true);
     };
 
     return (
@@ -117,33 +120,16 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                         <CardBody>
                             <Grid templateColumns="1fr auto" alignItems="start">
                                 <CardTitle>{artwork.title}</CardTitle>
-                                {exhibitions ? (
-                                    <AddArtworkToExhibitionButton
-                                        artwork={artwork}
-                                        exhibitions={exhibitions}
-                                        handleExhibitionSelect={handleExhibitionSelect}
-                                    />
-                                ) : (
-                                    <Tooltip
-                                        showArrow
-                                        content="Please log in to add the artwork to exhibitions."
-                                        openDelay={200}
-                                    >
-                                        <IconButton
-                                            aria-label="Add to exhibition"
-                                            size="sm"
-                                            color="gray"
-                                            bg="white"
-                                            variant="plain"
-                                            isDisabled
-                                            cursor="default"
-                                            mt={-1}
-                                            pl={7}
-                                        >
-                                            <MdAdd />
-                                        </IconButton>
-                                    </Tooltip>
-                                )}
+                                <Box
+                                    mt="-2px"
+                                    ml={6}>
+                                            <AddArtworkToExhibitionButton
+                                            artwork={artwork}
+                                            exhibitions={exhibitions ?? []}
+                                            handleExhibitionSelect={handleExhibitionSelect}
+                                        />                                       
+                                </Box>
+
                             </Grid>
                             <Card.Description>{artwork.artist}</Card.Description>
                             <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">
@@ -156,13 +142,9 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
 
             {openDialog && (
                 <ArtworkDialog
-                    artworkButton={<AddArtworkToExhibitionButton
-                        artwork={selectedArtwork}
-                        exhibitions={exhibitions ?? []}
-                        handleExhibitionSelect={handleExhibitionSelect}
-                    />}
                     artwork={selectedArtwork}
-                    exhibitions={exhibitions}
+                    exhibitions={exhibitions ?? []}
+                    handleExhibitionSelect={handleExhibitionSelect}
                     onOpen={openDialog}
                     onClose={() => { setOpenDialog(false) }}
                 />

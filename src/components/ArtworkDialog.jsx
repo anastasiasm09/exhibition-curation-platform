@@ -1,8 +1,9 @@
 import { Dialog, Portal } from "@chakra-ui/react"
 import { Box, Card, Image, CloseButton, Text, Flex } from "@chakra-ui/react"
+import AddArtworkToExhibitionButton from "./AddArtworkToExhibitionButton";
 
 
-export default function ArtworkDialog({ artwork, onOpen, onClose, artworkButton }) {
+export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSelect, onOpen, onClose, hideAddButton }) {
     if (!artwork) return null;
 
     return (
@@ -51,9 +52,15 @@ export default function ArtworkDialog({ artwork, onOpen, onClose, artworkButton 
                                         <Text mt={3} fontWeight="bold" >Classification: </Text>
                                         <Card.Description>{artwork.classification}</Card.Description>
 
-                                        <Flex mt={4} ml={-9} justify="flex-start">
-                                            {artworkButton}
+                                        {!hideAddButton && (
+                                            <Flex mt={3} justify="flex-start">
+                                            <AddArtworkToExhibitionButton
+                                                artwork={artwork}
+                                                exhibitions={exhibitions ?? []}
+                                                handleExhibitionSelect={handleExhibitionSelect}
+                                            />
                                         </Flex>
+                                        )}
 
                                     </Card.Body>
                                 </Box>
