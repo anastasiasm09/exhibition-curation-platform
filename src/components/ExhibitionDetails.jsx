@@ -85,13 +85,14 @@ export default function ExhibitionDetails() {
                         ))}
                     </SimpleGrid>
                 </Box>
-            )
-            }
+            )}
 
             <ArtworkDialog
                 artwork={selectedArtwork}
                 onOpen={openDialog}
-                onClose={() => setOpenDialog(false)} />
+                onClose={() => setOpenDialog(false)}
+                hideAddButton={true}
+            />
         </>
     )
 }
