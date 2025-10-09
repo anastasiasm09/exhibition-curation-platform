@@ -6,9 +6,20 @@ import ArtworkDialog from './ArtworkDialog';
 import { AuthContext } from "@/context/AuthContext";
 import AddArtworkToExhibitionButton from './AddArtworkToExhibitionButton';
 import { toaster } from "@/components/ui/toaster"
+import { Artwork } from '@/models/Artwork';
+import { Exhibition } from '@/models/Exhibition';
 
+type HomepageArtworksProps = {
+    artworks: Artwork[];
+    onFilter: (value: string[] | null) => void;
+    isLoading: boolean;
+}
 
-export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
+type SelectedValue = {
+    value: string[]
+}
+
+export default function HomepageArtworks({ artworks, onFilter, isLoading }: HomepageArtworksProps) {
     const lables = createListCollection({
         items: [
             { label: "Lithograph", value: "lithograph" },
@@ -18,10 +29,10 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
         ],
     })
 
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState<string[]>([]);
     const [openDialog, setOpenDialog] = useState(false);
-    const [selectedArtwork, setSelectedArtwork] = useState(null);
-    const [exhibitions, setExhibitions] = useState(null);
+    const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
+    const [exhibitions, setExhibitions] = useState<Exhibition[]>([]);
 
     const { isUserAuthenticated } = useContext(AuthContext);
 
@@ -33,18 +44,18 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
         }
     }, [isUserAuthenticated]);
 
-    const handleFilter = (selected) => {
+    const handleFilter = (selected: SelectedValue) => {
         const selectedValues = selected.value || ""
-        setValue([selectedValues]);
+        setValue(selectedValues);
         onFilter(selectedValues);
     };
 
-    function handleOpenDialog(artwork) {
+    function handleOpenDialog(artwork: Artwork) {
         setSelectedArtwork(artwork)
         setOpenDialog(true)
     };
 
-    const handleExhibitionSelect = (artwork, exhibitionId) => {
+    const handleExhibitionSelect = (artwork: Artwork, exhibitionId: string) => {
         if (!exhibitionId) return;
         addArtworkToExhibition(exhibitionId, artwork);
 
@@ -104,7 +115,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
             {/* List of Artworcs */}
             <SimpleGrid
                 columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
-                spacing={4}
+                gap={4}
                 p={4}
             >
                 {artworks.map((artwork) => (
@@ -140,13 +151,14 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }) {
                 ))}
             </SimpleGrid >
 
-            {openDialog && (
+            {openDialog && selectedArtwork && (
                 <ArtworkDialog
                     artwork={selectedArtwork}
                     exhibitions={exhibitions ?? []}
                     handleExhibitionSelect={handleExhibitionSelect}
                     onOpen={openDialog}
                     onClose={() => { setOpenDialog(false) }}
+                    hideAddButton
                 />
             )}
         </>
