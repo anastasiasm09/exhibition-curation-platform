@@ -1,14 +1,24 @@
 import { Dialog, Portal } from "@chakra-ui/react"
 import { Box, Card, Image, CloseButton, Text, Flex } from "@chakra-ui/react"
 import AddArtworkToExhibitionButton from "./AddArtworkToExhibitionButton";
+import { Exhibition } from "@/models/Exhibition";
+import { Artwork } from "@/models/Artwork";
 
+type ArtworkDialogProps = {
+    artwork: Artwork | null;
+    exhibitions: Exhibition[];
+    handleExhibitionSelect: (artwork: Artwork, exhibitionId: string) => void;
+    isOpen: boolean;
+    onClose: () => void;
+    hideAddButton: boolean;
+}
 
-export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSelect, onOpen, onClose, hideAddButton }) {
+export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSelect, isOpen, onClose, hideAddButton }: ArtworkDialogProps) {
     if (!artwork) return null;
 
     return (
         <Dialog.Root
-            open={onOpen}
+            open={isOpen}
             onOpenChange={(isOpen) => {
                 if (!isOpen) onClose()
             }}
@@ -26,14 +36,16 @@ export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSe
                         </Dialog.Header>
                         <Dialog.Body >
                             <Card.Root
-                                variant="ghost"
+                                variant="outline"
+                                boxShadow="none" 
+                                border="none"
                                 flexDirection={{ base: "column", md: "row" }}
                                 overflow="hidden"
                                 height="100%" >
                                 <Image
                                     objectFit="contain"
                                     maxH="520px"
-                                    naxW="100%"
+                                    maxW="100%"
                                     src={artwork.image}
                                     alt={artwork.title}
                                     borderRadius="md"

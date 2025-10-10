@@ -4,9 +4,17 @@ import { useEffect, useState, useContext } from "react";
 import { MdAdd } from "react-icons/md";
 import { AuthContext } from "@/context/AuthContext";
 import { Tooltip } from "@/components/ui/tooltip";
+import { Artwork } from "@/models/Artwork";
+import { Exhibition } from "@/models/Exhibition";
+
+type AddArtworkToExhibitionButtonProps = {
+    artwork: Artwork;
+    exhibitions: Exhibition[];
+    handleExhibitionSelect: (artwork: Artwork, exhibitionId: string) => void;
+}
 
 
-export default function AddArtworkToExhibitionButton({ artwork, exhibitions, handleExhibitionSelect }) {
+export default function AddArtworkToExhibitionButton({ artwork, exhibitions, handleExhibitionSelect }: AddArtworkToExhibitionButtonProps) {
 
     const ExhibitionTrigger = () => {
         const select = useSelectContext();
@@ -56,7 +64,7 @@ export default function AddArtworkToExhibitionButton({ artwork, exhibitions, han
         items: exhibitionItems
     });
 
-    const [value, setValue] = useState([]);
+    const [value, setValue] = useState<string[]>([]);
     const { isUserAuthenticated } = useContext(AuthContext);
 
     useEffect(() => {
