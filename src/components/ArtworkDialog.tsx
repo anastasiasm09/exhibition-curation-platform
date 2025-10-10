@@ -5,20 +5,20 @@ import { Exhibition } from "@/models/Exhibition";
 import { Artwork } from "@/models/Artwork";
 
 type ArtworkDialogProps = {
-    artwork: Artwork;
+    artwork: Artwork | null;
     exhibitions: Exhibition[];
     handleExhibitionSelect: (artwork: Artwork, exhibitionId: string) => void;
-    onOpen: boolean;
+    isOpen: boolean;
     onClose: () => void;
     hideAddButton: boolean;
 }
 
-export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSelect, onOpen, onClose, hideAddButton }: ArtworkDialogProps) {
+export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSelect, isOpen, onClose, hideAddButton }: ArtworkDialogProps) {
     if (!artwork) return null;
 
     return (
         <Dialog.Root
-            open={onOpen}
+            open={isOpen}
             onOpenChange={(isOpen) => {
                 if (!isOpen) onClose()
             }}

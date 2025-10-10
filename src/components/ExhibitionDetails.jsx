@@ -89,7 +89,7 @@ export default function ExhibitionDetails() {
 
             <ArtworkDialog
                 artwork={selectedArtwork}
-                onOpen={openDialog}
+                isOpen={openDialog}
                 onClose={() => setOpenDialog(false)}
                 hideAddButton={true}
             />

@@ -30,7 +30,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
     })
 
     const [value, setValue] = useState<string[]>([]);
-    const [openDialog, setOpenDialog] = useState(false);
+    const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
     const [exhibitions, setExhibitions] = useState<Exhibition[]>([]);
 
@@ -151,12 +151,12 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
                 ))}
             </SimpleGrid >
 
-            {openDialog && selectedArtwork && (
+            {selectedArtwork && (
                 <ArtworkDialog
                     artwork={selectedArtwork}
                     exhibitions={exhibitions ?? []}
                     handleExhibitionSelect={handleExhibitionSelect}
-                    onOpen={openDialog}
+                    isOpen={openDialog}
                     onClose={() => { setOpenDialog(false) }}
                     hideAddButton={false}
                 />
