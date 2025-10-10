@@ -37,6 +37,8 @@ export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSe
                         <Dialog.Body >
                             <Card.Root
                                 variant="outline"
+                                boxShadow="none" 
+                                border="none"
                                 flexDirection={{ base: "column", md: "row" }}
                                 overflow="hidden"
                                 height="100%" >

@@ -115,7 +115,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
             {/* List of Artworcs */}
             <SimpleGrid
                 columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
-                gap={4}
+                rowGap={4}
                 p={4}
             >
                 {artworks.map((artwork) => (
@@ -158,7 +158,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
                     handleExhibitionSelect={handleExhibitionSelect}
                     onOpen={openDialog}
                     onClose={() => { setOpenDialog(false) }}
-                    hideAddButton
+                    hideAddButton={false}
                 />
             )}
         </>
