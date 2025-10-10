@@ -7,7 +7,7 @@ import { Artwork } from "@/models/Artwork";
 type ArtworkDialogProps = {
     artwork: Artwork;
     exhibitions: Exhibition[];
-    handleExhibitionSelect: Function;
+    handleExhibitionSelect: (artwork: Artwork, exhibitionId: string) => void;
     onOpen: boolean;
     onClose: () => void;
     hideAddButton: boolean;

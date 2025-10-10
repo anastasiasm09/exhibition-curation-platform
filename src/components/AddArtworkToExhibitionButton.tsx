@@ -10,7 +10,7 @@ import { Exhibition } from "@/models/Exhibition";
 type AddArtworkToExhibitionButtonProps = {
     artwork: Artwork;
     exhibitions: Exhibition[];
-    handleExhibitionSelect: Function;
+    handleExhibitionSelect: (artwork: Artwork, exhibitionId: string) => void;
 }
 
 
