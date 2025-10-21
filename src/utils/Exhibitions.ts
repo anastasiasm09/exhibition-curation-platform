@@ -125,3 +125,29 @@ export function getUserDetails() {
             return res.json();
         })
 }
+
+export function markAnExhibitionAsShared(exhibitionId: string): void {
+    fetch(
+        `${exbApi()}/api/exhibitions/${exhibitionId}/share`,
+        {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${getGoogleToken() ?? ""}`,
+                'Content-Type': 'application/json'
+            },
+        }
+    )
+}
+
+export function stopSharingAnExhibition(exhibitionId: string): void {
+    fetch(
+        `${exbApi()}/api/exhibitions/${exhibitionId}/share`,
+        {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${getGoogleToken() ?? ""}`,
+                'Content-Type': 'application/json'
+            },
+        }
+    )
+}
