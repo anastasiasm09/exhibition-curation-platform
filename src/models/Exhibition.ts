@@ -15,4 +15,5 @@ export type Exhibition = {
     isShared: boolean;
     author: string;
     artworks: Artwork[];
+    description: string;
   }

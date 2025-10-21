@@ -6,8 +6,8 @@ import { Artwork } from "@/models/Artwork";
 
 type ArtworkDialogProps = {
     artwork: Artwork | null;
-    exhibitions: Exhibition[];
-    handleExhibitionSelect: (artwork: Artwork, exhibitionId: string) => void;
+    exhibitions?: Exhibition[];
+    handleExhibitionSelect?: (artwork: Artwork, exhibitionId: string) => void;
     isOpen: boolean;
     onClose: () => void;
     hideAddButton: boolean;
@@ -37,7 +37,7 @@ export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSe
                         <Dialog.Body >
                             <Card.Root
                                 variant="outline"
-                                boxShadow="none" 
+                                boxShadow="none"
                                 border="none"
                                 flexDirection={{ base: "column", md: "row" }}
                                 overflow="hidden"
@@ -64,16 +64,15 @@ export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSe
                                         <Text mt={3} fontWeight="bold" >Classification: </Text>
                                         <Card.Description>{artwork.classification}</Card.Description>
 
-                                        {!hideAddButton && (
+                                        {!hideAddButton && handleExhibitionSelect && (
                                             <Flex mt={3} justify="flex-start">
-                                            <AddArtworkToExhibitionButton
-                                                artwork={artwork}
-                                                exhibitions={exhibitions ?? []}
-                                                handleExhibitionSelect={handleExhibitionSelect}
-                                            />
-                                        </Flex>
+                                                <AddArtworkToExhibitionButton
+                                                    artwork={artwork}
+                                                    exhibitions={exhibitions ?? []}
+                                                    handleExhibitionSelect={handleExhibitionSelect}
+                                                />
+                                            </Flex>
                                         )}
-
                                     </Card.Body>
                                 </Box>
                             </Card.Root>
