@@ -5,6 +5,7 @@ import { createExhibition as createExhibitionRequest, getAllExhibitions, renameE
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { AuthContext } from "@/context/AuthContext";
 
+
 export default function Exhibitions() {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
@@ -96,8 +97,14 @@ export default function Exhibitions() {
             <Dialog.Root
                 lazyMount open={open}
                 onOpenChange={handleErrorName}>
-                <Flex justify="space-between" align="center" mt={10}>
-                    <Heading fontSize={{ base: "xs", md: "sm", lg: "2xl" }} letterSpacing={2} fontWeight="bold">EXHIBITIONS</Heading>
+                <Flex justify="space-between" align="center" mt={10} px={4} py={6}>
+                    <Heading
+                        fontSize={{ base: "xs", md: "sm", lg: "2xl" }}
+                        letterSpacing={2}
+                        fontWeight="bold"
+                    >
+                        EXHIBITIONS
+                    </Heading>
 
                     <Dialog.Trigger asChild>
                         <Button
@@ -112,7 +119,6 @@ export default function Exhibitions() {
                             Create Exhibition
                         </Button>
                     </Dialog.Trigger>
-
                 </Flex>
 
                 {isUserAuthenticated ? (
@@ -178,22 +184,21 @@ export default function Exhibitions() {
             </Dialog.Root>
 
             {(allExhibitions?.length === 0) ? (
-                <Box px={4} py={6} display="flex" justifyContent="center" alignItems="center" minH="40vh">
-                    <Text
-                        fontSize="lg"
-                        color="gray.500"
-                        fontStyle="italic"
-                        fontWeight="bold"
-                        textAlign="center"
-                        wordBreak="break-word"
-                    >
-                        You have not created any exhibitions yet.
-                    </Text>
-                </Box>
+                <Text
+                    fontSize="lg"
+                    color="gray.500"
+                    fontStyle="italic"
+                    fontWeight="bold"
+                    textAlign="center"
+                    wordBreak="break-word"
+                >
+                    You have not created any exhibitions yet.
+                </Text>
+
             ) : (
                 <SimpleGrid
                     columns={{ base: 1, md: 2 }}
-                    spacing={6}
+                    gap={8}
                     mb={10}
                     px={4}
                     py={6}
@@ -225,16 +230,17 @@ export default function Exhibitions() {
 
                                     <Box flex="1" display="flex" flexDirection="column" p={4}>
                                         <Card.Body flex="1">
-                                            <Link to={`/exhibitions/${exb.id}`}>
-                                                <Card.Title color="maroon" mt={2} fontWeight="bold" mb={2}>{exb.name}</Card.Title>
-                                            </Link>
+                                            <Flex mt="auto" display="flex" justifyContent="space-between">
+                                                <Link to={`/exhibitions/${exb.id}`}>
+                                                    <Card.Title color="maroon" mt={2} fontWeight="bold" mb={2}>{exb.name}</Card.Title>
+                                                </Link>
+                                            </Flex>
                                             <Card.Description>{exb.description}</Card.Description>
                                             <HStack mt={4}>
                                                 <Badge fontSize="sm">{exb.artwork_ids.length}</Badge>
                                             </HStack>
                                         </Card.Body>
-
-                                        <Card.Footer mt="auto" display="flex" justifyContent="space-between">
+                                        <Card.Footer mt="auto" display="flex" gap={3}>
                                             <Button
                                                 bg="maroon"
                                                 fontSize="xs"
@@ -266,8 +272,7 @@ export default function Exhibitions() {
                         )
                     })}
                 </SimpleGrid>
-            )
-            }
+            )}
 
             {/* Dialog for rename */}
             {isUserAuthenticated && (
