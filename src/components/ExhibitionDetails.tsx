@@ -172,7 +172,7 @@ export default function ExhibitionDetails() {
                                         <IconButton
                                             aria-label="Delete artwork from an exhibition"
                                             size="md"
-                                            display={{ base: 'none', md: 'flex' }}
+                                            display={{ base: "md", md: 'flex' }}
                                             color="maroon"
                                             variant="plain"
                                             colorScheme="none"
