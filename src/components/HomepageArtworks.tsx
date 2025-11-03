@@ -1,6 +1,6 @@
 import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, Grid, Box } from '@chakra-ui/react';
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
-import { addArtworkToExhibition, getAllExhibitions } from "@/utils/Exhibitions";
+import { addArtworkToExhibition, deleteArtworkFromExhibition, getAllExhibitions, isArtworkInExhibition } from "@/utils/Exhibitions";
 import { useState, useEffect, useContext } from "react";
 import ArtworkDialog from './ArtworkDialog';
 import { AuthContext } from "@/context/AuthContext";
@@ -8,6 +8,9 @@ import AddArtworkToExhibitionButton from './AddArtworkToExhibitionButton';
 import { toaster } from "@/components/ui/toaster"
 import { Artwork } from '@/models/Artwork';
 import { Exhibition } from '@/models/Exhibition';
+import type { ExhibitionDetails } from "@/models/Exhibition.ts";
+import Exhibitions from './Exhibitions';
+
 
 type HomepageArtworksProps = {
     artworks: Artwork[];
@@ -34,6 +37,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
     const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
     const [exhibitions, setExhibitions] = useState<Exhibition[]>([]);
 
+
     const { isUserAuthenticated } = useContext(AuthContext);
 
     useEffect(() => {
@@ -56,24 +60,48 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
     };
 
     const handleExhibitionSelect = (artwork: Artwork, exhibitionId: string) => {
-        if (!exhibitionId) return;
-        addArtworkToExhibition(exhibitionId, artwork);
+        const exhibition = exhibitions.find(e => e.id === exhibitionId)
 
-        const updatedExhibitions = exhibitions.map(exhibition => {
-            if (exhibition.id === exhibitionId) {
-                return { ...exhibition, artwork_ids: [...exhibition.artwork_ids, artwork.id] }
-            } else {
-                return exhibition
-            }
-        })
+        if (!exhibition) return;
 
-        setExhibitions(updatedExhibitions)
+        if (!isArtworkInExhibition(exhibition, artwork)) {
+            addArtworkToExhibition(exhibitionId, artwork)
+            const updatedExhibitions = exhibitions.map(exhibition => {
+                if (exhibition.id === exhibitionId) {
+                    return { ...exhibition, artwork_ids: [...exhibition.artwork_ids, artwork.id] }
+                } else {
+                    return exhibition
+                }
+            })
+            setExhibitions(updatedExhibitions)
 
-        toaster.create({
-            description: "Artwork added successfully",
-            type: "info",
-        })
-    };
+            toaster.create({
+                description: "Artwork added successfully",
+                type: "info",
+            })
+
+        } else if (isArtworkInExhibition(exhibition, artwork)) {
+            deleteArtworkFromExhibition(exhibitionId, artwork.id)
+                .then(() => {
+                    setExhibitions(prev => {
+                        return prev.map(exhibition => {
+                            if (exhibition.id === exhibitionId) {
+                                return {
+                                    ...exhibition, artwork_ids: exhibition.artwork_ids.filter(id => id !== artwork.id)
+                                };
+                            }
+                            return exhibition;
+                        })
+                    })
+                })
+
+            toaster.create({
+                description: "Artwork deleted successfully",
+                type: "info",
+            })
+        }
+    }
+
 
     return (
         <>
@@ -134,11 +162,11 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
                                 <Box
                                     mt="-2px"
                                     ml={6}>
-                                            <AddArtworkToExhibitionButton
-                                            artwork={artwork}
-                                            exhibitions={exhibitions ?? []}
-                                            handleExhibitionSelect={handleExhibitionSelect}
-                                        />                                       
+                                    <AddArtworkToExhibitionButton
+                                        artwork={artwork}
+                                        exhibitions={exhibitions ?? []}
+                                        handleExhibitionSelect={handleExhibitionSelect}
+                                    />
                                 </Box>
 
                             </Grid>

@@ -55,7 +55,7 @@ export function deleteArtworkFromExhibition(exhibitionId: string, artworkId: str
         {
             method: "DELETE",
             headers: {
-                "Authorization": getGoogleToken() ?? "",
+                "Authorization": `Bearer ${getGoogleToken() ?? ""}`,
                 'Content-Type': 'application/json'
             },
         }
