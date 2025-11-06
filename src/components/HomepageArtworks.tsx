@@ -146,7 +146,9 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
                 rowGap={4}
                 p={4}
             >
-                {artworks.map((artwork) => (
+                {artworks
+                .filter((artwork) => artwork.image !== null)
+                .map((artwork) => (
                     <Card.Root borderColor="#fafafa" maxW="xs" overflow="hidden" key={artwork.id}>
                         <Image
                             src={artwork.image}
