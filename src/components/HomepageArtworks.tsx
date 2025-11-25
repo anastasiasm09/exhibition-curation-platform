@@ -46,7 +46,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
     const handleFilter = (selected: SelectedValue) => {
         const selectedClassification = selected.value?.[0];
 
-        if (selectedClassification === undefined) {
+        if (!selectedClassification) {
             setValue([]);
             onFilter(undefined);
         } else {
