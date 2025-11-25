@@ -33,7 +33,7 @@ function Wrapper({ children }) {
 
 function App() {
   const [search, setSearch] = useState(null);
-  const [classification, setClassification] = useState(null);
+  const [classification, setClassification] = useState(undefined);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   const location = useLocation();
@@ -103,7 +103,7 @@ function App() {
     if (!isLoading) {
       setCombinedArtworks((aicDataArtworks?.pages ?? []).concat(hamDataArtworks?.pages ?? []).flatMap(page => page.artworks))
     }
-  }, [isLoading, search])
+  }, [isLoading, search, classification])
 
   const { ref, inView, entry } = useInView({
   });

@@ -8,18 +8,15 @@ import AddArtworkToExhibitionButton from './AddArtworkToExhibitionButton';
 import { toaster } from "@/components/ui/toaster"
 import { Artwork } from '@/models/Artwork';
 import { Exhibition } from '@/models/Exhibition';
-import type { ExhibitionDetails } from "@/models/Exhibition.ts";
-import Exhibitions from './Exhibitions';
-
 
 type HomepageArtworksProps = {
     artworks: Artwork[];
-    onFilter: (value: string[] | null) => void;
+    onFilter: (value: string | undefined) => void;
     isLoading: boolean;
 }
 
 type SelectedValue = {
-    value: string[]
+    value: string[] | undefined;
 }
 
 export default function HomepageArtworks({ artworks, onFilter, isLoading }: HomepageArtworksProps) {
@@ -32,12 +29,10 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
         ],
     })
 
-    const [value, setValue] = useState<string[]>([]);
+    const [value, setValue] = useState<string[] | []>([]);
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
     const [exhibitions, setExhibitions] = useState<Exhibition[]>([]);
-
-
     const { isUserAuthenticated } = useContext(AuthContext);
 
     useEffect(() => {
@@ -49,9 +44,15 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
     }, [isUserAuthenticated]);
 
     const handleFilter = (selected: SelectedValue) => {
-        const selectedValues = selected.value || ""
-        setValue(selectedValues);
-        onFilter(selectedValues);
+        const selectedClassification = selected.value?.[0];
+
+        if (selectedClassification === undefined) {
+            setValue([]);
+            onFilter(undefined);
+        } else {
+            setValue([selectedClassification]);
+            onFilter(selectedClassification);
+        }
     };
 
     function handleOpenDialog(artwork: Artwork) {
@@ -147,38 +148,38 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
                 p={4}
             >
                 {artworks
-                .filter((artwork) => artwork.image !== null)
-                .map((artwork) => (
-                    <Card.Root borderColor="#fafafa" maxW="xs" overflow="hidden" key={artwork.id}>
-                        <Image
-                            src={artwork.image}
-                            alt={artwork.title}
-                            cursor="pointer"
-                            onClick={() => {
-                                handleOpenDialog(artwork)
-                            }}
-                        />
-                        <CardBody>
-                            <Grid templateColumns="1fr auto" alignItems="start">
-                                <CardTitle>{artwork.title}</CardTitle>
-                                <Box
-                                    mt="-2px"
-                                    ml={6}>
-                                    <AddArtworkToExhibitionButton
-                                        artwork={artwork}
-                                        exhibitions={exhibitions ?? []}
-                                        handleExhibitionSelect={handleExhibitionSelect}
-                                    />
-                                </Box>
+                    .filter((artwork) => artwork.image !== null)
+                    .map((artwork) => (
+                        <Card.Root borderColor="#fafafa" maxW="xs" overflow="hidden" key={artwork.id}>
+                            <Image
+                                src={artwork.image}
+                                alt={artwork.title}
+                                cursor="pointer"
+                                onClick={() => {
+                                    handleOpenDialog(artwork)
+                                }}
+                            />
+                            <CardBody>
+                                <Grid templateColumns="1fr auto" alignItems="start">
+                                    <CardTitle>{artwork.title}</CardTitle>
+                                    <Box
+                                        mt="-2px"
+                                        ml={6}>
+                                        <AddArtworkToExhibitionButton
+                                            artwork={artwork}
+                                            exhibitions={exhibitions ?? []}
+                                            handleExhibitionSelect={handleExhibitionSelect}
+                                        />
+                                    </Box>
 
-                            </Grid>
-                            <Card.Description>{artwork.artist}</Card.Description>
-                            <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">
-                                {artwork.classification}
-                            </Text>
-                        </CardBody>
-                    </Card.Root>
-                ))}
+                                </Grid>
+                                <Card.Description>{artwork.artist}</Card.Description>
+                                <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">
+                                    {artwork.classification}
+                                </Text>
+                            </CardBody>
+                        </Card.Root>
+                    ))}
             </SimpleGrid >
 
             {selectedArtwork && (
