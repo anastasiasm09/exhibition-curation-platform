@@ -26,6 +26,10 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
             { label: "Print", value: "print" },
             { label: "Photograph", value: "photograph" },
             { label: "Sculpture", value: "sculpture" },
+            { label: "Drawings", value: "drawings" },
+            { label: "Paper", value: "paper" },
+            { label: "Glass", value: "glass" },
+            { label: "Vessels", value: "vessels" },
         ],
     })
 
