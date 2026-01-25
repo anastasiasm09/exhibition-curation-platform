@@ -116,6 +116,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
                     collection={lables}
                     size="sm"
                     width="320px"
+                    px="2rem"
                     value={value}
                     onValueChange={handleFilter}
                 >
@@ -150,6 +151,8 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
                 columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
                 rowGap={4}
                 p={4}
+                px="3rem"
+                
             >
                 {artworks
                     .filter((artwork) => artwork.image !== null)
