@@ -20,10 +20,11 @@ export default function Navbar({ onSearch, initialSearch }) {
             as="nav"
             position="sticky"
             bg="white"
-            px={4}
+            
             borderBottom="1px solid"
             borderColor="gray.200"
             top={0}
+            px="3rem"
             zIndex="1000">
 
             <Flex h={16} alignItems="center" justifyContent="space-between">
