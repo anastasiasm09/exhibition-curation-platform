@@ -1,22 +1,10 @@
-import bannerImage from '../assets/bannerImage.webp'
-import { Box, Image, Text } from '@chakra-ui/react';
+import { Box, Text } from '@chakra-ui/react';
 
 
 export default function BannerImage() {
 
   return (
-    <Box position="relative" 
-      //height={{ base: "250px", md: "400px" }} 
-      //width="100%"
-    >
-      {/* <Image
-        src={bannerImage}
-        alt="Art gallery banner"
-        height={{ base: "250", md: "400px" }}
-        width="100%"
-        objectFit="cover"
-      /> */}
-
+    <Box position="relative">
         {/* VIDEO */}
         <video className="video" autoPlay muted loop>
           <source src="12538533_1920_1080_30fps.mp4" type="video/mp4" />
@@ -42,7 +30,6 @@ export default function BannerImage() {
         width="100%"
         px={{ base: 3, md: 6 }}
         py={{ base: 2, md: 3 }}
-
         textAlign="center"
       >
         <Text
@@ -50,7 +37,6 @@ export default function BannerImage() {
           fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
           fontWeight={{ base: "semibold", md: "bold" }}
           lineHeight={{ base: "1.2", md: "1.3", lg: "1.4" }}
-
           textAlign="center">
           Welcome to museum collections
         </Text>
@@ -58,7 +44,6 @@ export default function BannerImage() {
           letterSpacing={{ base: "0.4px", lg: "3px" }}
           fontSize={{ base: "13px", md: "17px", lg: "18px" }}
           fontWeight={{ base: "medium", md: "semibold" }}
-
           textAlign="center"
         >
           Explore Art. Curate Your Exhibition
