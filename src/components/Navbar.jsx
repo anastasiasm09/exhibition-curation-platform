@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {Box, Flex, Text, IconButton, Drawer, Portal, CloseButton, Image} from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
 import Search from './Search';
@@ -14,18 +14,43 @@ const Links = [
 
 export default function Navbar({ onSearch, initialSearch }) {
     const [open, setOpen] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
+
+    useEffect(() => {
+        let lastScrollY = window.scrollY;
+
+        const controlNavbar = () => {
+            let currentScrollY = window.scrollY;
+
+            if(currentScrollY > lastScrollY && currentScrollY > 250) {
+                setIsVisible(false)
+            } else {
+                setIsVisible(true)
+            }
+
+            lastScrollY = currentScrollY;
+        }
+        window.addEventListener("scroll", controlNavbar)
+
+        return () => window.removeEventListener("scroll", controlNavbar)
+    }, [])
+
 
     return (
+        <>
         <Box
             as="nav"
             position="sticky"
             bg="white"
-            
             borderBottom="1px solid"
             borderColor="gray.200"
             top={0}
             px="3rem"
-            zIndex="1000">
+            zIndex="1000"
+            transition="transform 0.3s ease"
+            transform={isVisible ? "translateY(0)" : "translateY(-100%)"}
+            opacity={isVisible ? 1 : 0}
+        >
 
             <Flex h={16} alignItems="center" justifyContent="space-between">
                 <RouterLink to="/" aria-label="Go to homepage">
@@ -135,5 +160,6 @@ export default function Navbar({ onSearch, initialSearch }) {
                 </Drawer.Root>
             </Flex>
         </Box>
+        </>
     );
 }
