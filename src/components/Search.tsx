@@ -2,6 +2,7 @@ import {
     Input,
     InputGroup,
     CloseButton,
+    IconButton,
 } from '@chakra-ui/react';
 import { LuSearch } from "react-icons/lu";
 import { useState, useRef } from 'react';
@@ -49,7 +50,17 @@ export default function Search({ onSearch, onFinish, initialSearch }: SearchProp
 
     return (
         <>
-            <InputGroup
+            <IconButton
+                aria-label="Search"
+                size="sm"
+                display={{ base: 'none', md: 'flex' }}
+                color="black"
+                bg="white"
+                //onClick={() => setOpen(true)}
+            >
+                <LuSearch />
+            </IconButton>
+            {/* <InputGroup
                 startElement={<LuSearch />}
                 endElement={endElement}
             >
@@ -64,7 +75,7 @@ export default function Search({ onSearch, onFinish, initialSearch }: SearchProp
                     onKeyDown={handleKeyDown}
                     bg="gray.100"
                 />
-            </InputGroup>
+            </InputGroup> */}
         </>
     )
 }
