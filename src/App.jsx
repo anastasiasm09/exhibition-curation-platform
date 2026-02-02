@@ -11,14 +11,13 @@ import Exhibitions from './components/Exhibitions';
 import { Box, VisuallyHidden } from '@chakra-ui/react';
 import Loading from './components/Loading';
 import { Toaster, toaster } from "@/components/ui/toaster";
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 import ExhibitionDetails from './components/ExhibitionDetails';
 import About from './components/About';
 import { AuthContext } from './context/AuthContext';
 import { getGoogleToken } from './utils/Auth';
 import { getUserDetails } from './utils/Exhibitions';
-
 
 function Wrapper({ children }) {
   const location = useLocation();
@@ -28,8 +27,6 @@ function Wrapper({ children }) {
   }, [location.pathname]);
   return children;
 }
-
-
 
 function App() {
   const [search, setSearch] = useState(null);
@@ -105,8 +102,9 @@ function App() {
     }
   }, [isLoading, search, classification])
 
-  const { ref, inView, entry } = useInView({
+  const { ref: scrollRef, inView, entry } = useInView({
   });
+  const artworksRef = useRef(null);
 
   useEffect(() => {
     if (inView === true) {
@@ -157,11 +155,15 @@ function App() {
       }
   }, []);
 
+  function onSearch(search) {
+    setSearch(search)
+    artworksRef.current?.scrollIntoView({ behavior: "smooth" })
+  }
 
   return (
     <>
       <AuthContext.Provider value={{ isUserAuthenticated, setIsUserAuthenticated }}>
-        <Navbar onSearch={setSearch} initialSearch={search} />
+        <Navbar onSearch={onSearch} initialSearch={search} />
 
         {isHomePage && <BannerImage />}
 
@@ -181,10 +183,12 @@ function App() {
                     </>
                   )}
 
-                  <HomepageArtworks artworks={combinedArtworks} onFilter={setClassification} />
+                  <div ref={artworksRef}>
+                    <HomepageArtworks artworks={combinedArtworks} onFilter={setClassification} />
+                  </div>
 
                   {/* Infinite scroll */}
-                  {!isLoading && !!combinedArtworks.length && (<div ref={ref}></div>)}
+                  {!isLoading && !!combinedArtworks.length && (<div ref={scrollRef}></div>)}
                 </Box>
               }
             />

@@ -1,7 +1,7 @@
 import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, Grid, Box } from '@chakra-ui/react';
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
 import { addArtworkToExhibition, deleteArtworkFromExhibition, getAllExhibitions, isArtworkInExhibition } from "@/utils/Exhibitions";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import ArtworkDialog from './ArtworkDialog';
 import { AuthContext } from "@/context/AuthContext";
 import AddArtworkToExhibitionButton from './AddArtworkToExhibitionButton';
@@ -38,6 +38,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
     const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
     const [exhibitions, setExhibitions] = useState<Exhibition[]>([]);
     const { isUserAuthenticated } = useContext(AuthContext);
+    const myRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         if (isUserAuthenticated) {
@@ -157,7 +158,7 @@ export default function HomepageArtworks({ artworks, onFilter, isLoading }: Home
                 {artworks
                     .filter((artwork) => artwork.image !== null)
                     .map((artwork) => (
-                        <Card.Root borderColor="#fafafa" maxW="xs" overflow="hidden" key={artwork.id}>
+                        <Card.Root ref={myRef} borderColor="#fafafa" maxW="xs" overflow="hidden" key={artwork.id}>
                             <Image
                                 src={artwork.image}
                                 alt={artwork.title}

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Box, Flex, Text, IconButton, Icon, Drawer, Portal, CloseButton, Image } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
-import Search from './Search';
 import logo from '../assets/logo.png';
 import { Link as RouterLink } from 'react-router-dom';
 import UserProfileButton from "./UserProfileButton";
 import { LuSearch } from "react-icons/lu";
+import SearchDrawer from "./SearchDrawer";
 
 
 const Links = [
@@ -16,6 +16,8 @@ const Links = [
 
 export default function Navbar({ onSearch, initialSearch }) {
     const [open, setOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [searchOpen, setSearchOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
@@ -47,8 +49,7 @@ export default function Navbar({ onSearch, initialSearch }) {
                 borderBottom="1px solid"
                 borderColor="gray.200"
                 top={0}
-                px="1rem"
-                zIndex="1000"
+                px={{ base: "1rem", md: "2rem" }}
                 transition="transform 0.3s ease"
                 transform={isVisible ? "translateY(0)" : "translateY(-100%)"}
                 opacity={isVisible ? 1 : 0}
@@ -67,7 +68,7 @@ export default function Navbar({ onSearch, initialSearch }) {
                                     bg="white"
                                     aria-label="Open menu"
                                     display={{ base: "flex", md: "none" }}
-                                    onClick={() => setOpen(true)}
+                                    onClick={() => setMenuOpen(true)}
                                     variant="ghost"
                                 >
                                     <Icon as={FiMenu} boxSize={7} />
@@ -141,6 +142,7 @@ export default function Navbar({ onSearch, initialSearch }) {
                         bg="white"
                         size="sm"
                         display={{ base: "flex", md: "none" }}
+                        onClick={() => setSearchOpen(true)}
                     >
                         <Icon as={LuSearch} boxSize={6} />
                     </IconButton>
@@ -148,32 +150,50 @@ export default function Navbar({ onSearch, initialSearch }) {
                     {/* Desktop Links */}
                     <Flex
                         as="ul"
-                        gap={{ base: 4, md: 5, lg: 6 }}
+                        gap={8}
                         align="center"
                         display={{ base: 'none', md: 'flex' }}
                     >
                         {Links.map(({ label, path }) => (
-                            <Box as="li" key={label} listStyleType="none">
+                            <Box as="li" key={label} listStyleType="none" >
                                 <Text
                                     as={RouterLink}
                                     to={path}
                                     color={location.pathname === path ? "maroon" : "black"}
-                                    fontWeight="medium"
+                                    fontWeight="normal"
                                     letterSpacing={0.5}
                                     fontSize={{ base: "16px", md: "17px", lg: "17px" }}
-                                    fontFamily="Inter, sans-serif"
                                     _hover={{ textDecoration: 'underline', color: 'maroon' }}
                                 >
                                     {label}
                                 </Text>
                             </Box>
                         ))}
-                        <Box maxW={{ md: "200px", lg: "350px" }}>
-                            <Search onSearch={onSearch} />
+
+                        {/* Desktop search */}
+                        <Box as="li" listStyleType="none" >
+                            <IconButton
+                                aria-label="Search"
+                                size="sm"
+                                color="black"
+                                bg="white"
+                                onClick={() => setSearchOpen(true)}
+                            >
+                                <LuSearch />
+                            </IconButton>
                         </Box>
 
+                        <SearchDrawer
+                            open={searchOpen}
+                            setOpen={setSearchOpen}
+                            onSearch={onSearch}
+                            initialSearch={initialSearch}
+                        />
+
                         {/* login */}
-                        <UserProfileButton />
+                        <Box as="li" listStyleType="none" >
+                            <UserProfileButton />
+                        </Box>
                     </Flex>
                 </Flex>
             </Box>
