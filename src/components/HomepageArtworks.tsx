@@ -1,7 +1,7 @@
 import { Card, CardBody, CardTitle, Image, SimpleGrid, Text, Grid, Box } from '@chakra-ui/react';
 import { Portal, Select, createListCollection } from "@chakra-ui/react"
 import { addArtworkToExhibition, deleteArtworkFromExhibition, getAllExhibitions, isArtworkInExhibition } from "@/utils/Exhibitions";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import ArtworkDialog from './ArtworkDialog';
 import { AuthContext } from "@/context/AuthContext";
 import AddArtworkToExhibitionButton from './AddArtworkToExhibitionButton';

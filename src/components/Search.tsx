@@ -2,6 +2,7 @@ import {
     Input,
     InputGroup,
     CloseButton,
+    Box,
 } from '@chakra-ui/react';
 import { LuSearch } from "react-icons/lu";
 import { useState, useRef } from 'react';
@@ -43,28 +44,33 @@ export default function Search({ onSearch, onFinish, initialSearch }: SearchProp
                 onSearch("");
                 inputRef.current?.focus()
             }}
-            me="-2"
         />
     ) : undefined
 
     return (
         <>
-            <InputGroup
-                startElement={<LuSearch />}
-                endElement={endElement}
+            <Box
+                maxW="800px"
+                w="100%"
+                mx="auto"
             >
-                <Input
-                    ref={inputRef}
-                    flex="1"
-                    w="400px"
-                    type="text"
-                    placeholder='Search by artwork, artist or keywords'
-                    value={search}
-                    onChange={(e) => setSearch(e.currentTarget.value)}
-                    onKeyDown={handleKeyDown}
-                    bg="gray.100"
-                />
-            </InputGroup>
+                <InputGroup
+                    startElement={<LuSearch />}
+                    endElement={endElement}
+                >
+                    <Input
+                        ref={inputRef}
+                        alignItems="center"
+                        size="lg"
+                        w="800px"
+                        type="text"
+                        placeholder='Search by artwork, artist or keywords'
+                        value={search}
+                        onChange={(e) => setSearch(e.currentTarget.value)}
+                        onKeyDown={handleKeyDown}
+                    />
+                </InputGroup>
+            </Box>
         </>
     )
 }

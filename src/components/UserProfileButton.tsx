@@ -23,7 +23,7 @@ export default function UserProfileButton({ setMobileNavbarOpen }: UserProfileBu
                 size="sm"
                 display={{ base: 'none', md: 'flex' }}
                 color={isUserAuthenticated ? "maroon" : "black"}
-                bg="gray.100"
+                bg="white"
                 onClick={() => setOpen(true)}
             >
                 <RiAccountCircleLine />
