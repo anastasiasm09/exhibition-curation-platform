@@ -17,6 +17,7 @@ export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSe
     if (!artwork) return null;
 
     return (
+        <Box px={{ base: "1rem", md: "2rem" }}>
         <Dialog.Root
             open={isOpen}
             onOpenChange={(isOpen) => {
@@ -81,5 +82,6 @@ export default function ArtworkDialog({ artwork, exhibitions, handleExhibitionSe
                 </Dialog.Positioner>
             </Portal>
         </Dialog.Root>
+        </Box>
     )
 }

@@ -85,218 +85,247 @@ export default function Exhibitions() {
 
     return (
         <>
-            <Box
-                as="nav"
-                position="sticky"
-                bg="white"
-                px={4}
-                top={0}
-                zIndex="1000"
-            >
-            </Box>
-            <Dialog.Root
-                lazyMount open={open}
-                onOpenChange={handleErrorName}>
-                <Flex justify="space-between" align="center" mt={10} px={4} py={6}>
-                    <Heading
-                        fontSize={{ base: "xs", md: "sm", lg: "2xl" }}
-                        letterSpacing={2}
-                        fontWeight="bold"
-                    >
-                        EXHIBITIONS
-                    </Heading>
-
-                    <Dialog.Trigger asChild>
-                        <Button
-                            px={{ base: 3, md: 6 }}
-                            py={{ base: 2, md: 3 }}
-                            fontSize={{ base: "xs", md: "sm" }}
-                            bg="white"
-                            color="maroon"
-                            variant="outline"
-                            disabled={!isUserAuthenticated}
-                        >
-                            Create Exhibition
-                        </Button>
-                    </Dialog.Trigger>
-                </Flex>
-
-                {isUserAuthenticated ? (
-                    <Portal>
-                        <Dialog.Backdrop />
-                        <Dialog.Positioner>
-                            <Dialog.Content >
-                                <Dialog.Header>
-                                    <Dialog.Title color="maroon">Create Exhibition</Dialog.Title>
-                                </Dialog.Header>
-                                <Dialog.Body>
-                                    <Stack gap="4">
-                                        <Field.Root invalid={isNameError}>
-                                            <Input
-                                                px={4}
-                                                placeholder="Exhibition name"
-                                                value={name}
-                                                onChange={(e) => {
-                                                    setName(e.target.value)
-                                                    if (e.target.value.trim()) {
-                                                        setIsNameError(false);
-                                                    }
-                                                }}
-                                            />
-                                            <Field.ErrorText>This field is required</Field.ErrorText>
-                                        </Field.Root>
-                                        <Input
-                                            p={12}
-                                            px={4}
-                                            textAlign="start"
-                                            placeholder="Description"
-                                            value={description}
-                                            onChange={(e) => setDescription(e.target.value)}
-                                        />
-                                    </Stack>
-                                </Dialog.Body>
-                                <Dialog.Footer>
-                                    <Dialog.ActionTrigger asChild>
-                                        <Button variant="outline">Cancel</Button>
-                                    </Dialog.ActionTrigger>
-                                    <Button bg="maroon" onClick={handleCreate}>Create</Button>
-                                </Dialog.Footer>
-                                <Dialog.CloseTrigger asChild>
-                                    <CloseButton size="sm" />
-                                </Dialog.CloseTrigger>
-                            </Dialog.Content>
-                        </Dialog.Positioner>
-                    </Portal>
-                ) : (
-                    <Box px={4} py={6} display="flex" justifyContent="center" alignItems="center" minH="40vh">
-                        <Text
-                            fontSize="lg"
-                            color="gray.500"
-                            fontStyle="italic"
+            <Box px={{ base: "1rem", md: "2rem" }}>
+                <Box
+                    as="nav"
+                    position="sticky"
+                    bg="white"
+                    top={0}
+                    zIndex="1000"
+                >
+                </Box>
+                <Dialog.Root
+                    lazyMount open={open}
+                    onOpenChange={handleErrorName}>
+                    <Flex justify="space-between" align="center" mt={10} px={4} py={6}>
+                        <Heading
+                            fontSize={{ base: "xs", md: "sm", lg: "2xl" }}
+                            letterSpacing={2}
                             fontWeight="bold"
-                            textAlign="center"
-                            wordBreak="break-word"
                         >
-                            Please log in to create exhibitions.
-                        </Text>
-                    </Box>
-                )}
-            </Dialog.Root>
+                            EXHIBITIONS
+                        </Heading>
 
-            {(allExhibitions?.length === 0) ? (
-                <Text
-                    fontSize="lg"
-                    color="gray.500"
-                    fontStyle="italic"
-                    fontWeight="bold"
-                    textAlign="center"
-                    wordBreak="break-word"
-                >
-                    You have not created any exhibitions yet.
-                </Text>
+                        <Dialog.Trigger asChild>
+                            <Button
+                                px={{ base: 3, md: 6 }}
+                                py={{ base: 2, md: 3 }}
+                                fontSize={{ base: "xs", md: "sm" }}
+                                bg="white"
+                                color="maroon"
+                                variant="outline"
+                                disabled={!isUserAuthenticated}
+                            >
+                                Create Exhibition
+                            </Button>
+                        </Dialog.Trigger>
+                    </Flex>
 
-            ) : (
-                <SimpleGrid
-                    columns={{ base: 1, md: 2 }}
-                    gap={8}
-                    mb={10}
-                    px={4}
-                    py={6}
-                >
-                    {allExhibitions?.sort((a, b) => (a.date - b.date)).map((exb) => {
-                        return (
-                            <Stack key={exb.id}>
-                                <Card.Root
-                                    display="flex"
-                                    flexDirection="column"
-                                    overflow="hidden"
-                                    height="100%"
-                                    maxW="xl"
-                                    w="100%"
-                                    marginBottom={4}
-                                >
-                                    {exb.thumbnail && (
-                                        <Link to={`/exhibitions/${exb.id}`}>
-                                            <Image
-                                                objectFit="cover"
-                                                w="100%"
-                                                h="250px"
-                                                src={exb.thumbnail}
-                                                alt={`${exb.name} cover`}
+                    {isUserAuthenticated ? (
+                        <Portal>
+                            <Dialog.Backdrop />
+                            <Dialog.Positioner>
+                                <Dialog.Content >
+                                    <Dialog.Header>
+                                        <Dialog.Title color="maroon">Create Exhibition</Dialog.Title>
+                                    </Dialog.Header>
+                                    <Dialog.Body>
+                                        <Stack gap="4">
+                                            <Field.Root invalid={isNameError}>
+                                                <Input
+                                                    px={4}
+                                                    placeholder="Exhibition name"
+                                                    value={name}
+                                                    onChange={(e) => {
+                                                        setName(e.target.value)
+                                                        if (e.target.value.trim()) {
+                                                            setIsNameError(false);
+                                                        }
+                                                    }}
+                                                />
+                                                <Field.ErrorText>This field is required</Field.ErrorText>
+                                            </Field.Root>
+                                            <Input
+                                                p={12}
+                                                px={4}
+                                                textAlign="start"
+                                                placeholder="Description"
+                                                value={description}
+                                                onChange={(e) => setDescription(e.target.value)}
                                             />
-                                        </Link>
+                                        </Stack>
+                                    </Dialog.Body>
+                                    <Dialog.Footer>
+                                        <Dialog.ActionTrigger asChild>
+                                            <Button variant="outline">Cancel</Button>
+                                        </Dialog.ActionTrigger>
+                                        <Button bg="maroon" onClick={handleCreate}>Create</Button>
+                                    </Dialog.Footer>
+                                    <Dialog.CloseTrigger asChild>
+                                        <CloseButton size="sm" />
+                                    </Dialog.CloseTrigger>
+                                </Dialog.Content>
+                            </Dialog.Positioner>
+                        </Portal>
+                    ) : (
+                        <Box px={4} py={6} display="flex" justifyContent="center" alignItems="center" minH="40vh">
+                            <Text
+                                fontSize="lg"
+                                color="gray.500"
+                                fontStyle="italic"
+                                fontWeight="bold"
+                                textAlign="center"
+                                wordBreak="break-word"
+                            >
+                                Please log in to create exhibitions.
+                            </Text>
+                        </Box>
+                    )}
+                </Dialog.Root>
 
-                                    )}
+                {(allExhibitions?.length === 0) ? (
+                    <Text
+                        fontSize="lg"
+                        color="gray.500"
+                        fontStyle="italic"
+                        fontWeight="bold"
+                        textAlign="center"
+                        wordBreak="break-word"
+                    >
+                        You have not created any exhibitions yet.
+                    </Text>
 
-                                    <Box flex="1" display="flex" flexDirection="column" p={4}>
-                                        <Card.Body flex="1">
-                                            <Flex mt="auto" display="flex" justifyContent="space-between">
-                                                <Link to={`/exhibitions/${exb.id}`}>
-                                                    <Card.Title color="maroon" mt={2} fontWeight="bold" mb={2}>{exb.name}</Card.Title>
-                                                </Link>
-                                            </Flex>
-                                            <Card.Description>{exb.description}</Card.Description>
-                                            <HStack mt={4}>
-                                                <Badge fontSize="sm">{exb.artwork_ids.length}</Badge>
-                                            </HStack>
-                                        </Card.Body>
-                                        <Card.Footer mt="auto" display="flex" gap={3}>
-                                            <Button
-                                                bg="maroon"
-                                                fontSize="xs"
-                                                letterSpacing={0.5}
-                                                color="white"
-                                                onClick={() => {
-                                                    setDeleteOpen(true);
-                                                    setExhibitionToDelete(exb.id)
-                                                }}
-                                            >
-                                                DELETE
-                                            </Button>
-                                            <Button
-                                                fontSize="xs"
-                                                letterSpacing={0.5}
-                                                color="black"
-                                                bg="gray.100"
-                                                onClick={() => {
-                                                    setRenameOpen(true);
-                                                    setExhibitionToRename(exb.id);
-                                                }}
-                                            >
-                                                RENAME
-                                            </Button>
-                                        </Card.Footer>
-                                    </Box>
-                                </Card.Root>
-                            </Stack>
-                        )
-                    })}
-                </SimpleGrid>
-            )}
+                ) : (
+                    <SimpleGrid
+                        columns={{ base: 1, md: 2 }}
+                        gap={8}
+                        mb={10}
+                        px={4}
+                        py={6}
+                    >
+                        {allExhibitions?.sort((a, b) => (a.date - b.date)).map((exb) => {
+                            return (
+                                <Stack key={exb.id}>
+                                    <Card.Root
+                                        display="flex"
+                                        flexDirection="column"
+                                        overflow="hidden"
+                                        height="100%"
+                                        maxW="xl"
+                                        w="100%"
+                                        marginBottom={4}
+                                    >
+                                        {exb.thumbnail && (
+                                            <Link to={`/exhibitions/${exb.id}`}>
+                                                <Image
+                                                    objectFit="cover"
+                                                    w="100%"
+                                                    h="250px"
+                                                    src={exb.thumbnail}
+                                                    alt={`${exb.name} cover`}
+                                                />
+                                            </Link>
 
-            {/* Dialog for rename */}
-            {isUserAuthenticated && (
-                <Dialog.Root open={renameOpen} onOpenChange={(e) => setRenameOpen(e.open)}>
+                                        )}
+
+                                        <Box flex="1" display="flex" flexDirection="column" p={4}>
+                                            <Card.Body flex="1">
+                                                <Flex mt="auto" display="flex" justifyContent="space-between">
+                                                    <Link to={`/exhibitions/${exb.id}`}>
+                                                        <Card.Title color="maroon" mt={2} fontWeight="bold" mb={2}>{exb.name}</Card.Title>
+                                                    </Link>
+                                                </Flex>
+                                                <Card.Description>{exb.description}</Card.Description>
+                                                <HStack mt={4}>
+                                                    <Badge fontSize="sm">{exb.artwork_ids.length}</Badge>
+                                                </HStack>
+                                            </Card.Body>
+                                            <Card.Footer mt="auto" display="flex" gap={3}>
+                                                <Button
+                                                    bg="maroon"
+                                                    fontSize="xs"
+                                                    letterSpacing={0.5}
+                                                    color="white"
+                                                    onClick={() => {
+                                                        setDeleteOpen(true);
+                                                        setExhibitionToDelete(exb.id)
+                                                    }}
+                                                >
+                                                    DELETE
+                                                </Button>
+                                                <Button
+                                                    fontSize="xs"
+                                                    letterSpacing={0.5}
+                                                    color="black"
+                                                    bg="gray.100"
+                                                    onClick={() => {
+                                                        setRenameOpen(true);
+                                                        setExhibitionToRename(exb.id);
+                                                    }}
+                                                >
+                                                    RENAME
+                                                </Button>
+                                            </Card.Footer>
+                                        </Box>
+                                    </Card.Root>
+                                </Stack>
+                            )
+                        })}
+                    </SimpleGrid>
+                )}
+
+                {/* Dialog for rename */}
+                {isUserAuthenticated && (
+                    <Dialog.Root open={renameOpen} onOpenChange={(e) => setRenameOpen(e.open)}>
+                        <Portal>
+                            <Dialog.Backdrop />
+                            <Dialog.Positioner>
+                                <Dialog.Content>
+                                    <Dialog.Header>
+                                        <Dialog.Title color="maroon">Rename Exhibition</Dialog.Title>
+                                    </Dialog.Header>
+                                    <Dialog.Body>
+                                        <Input
+                                            placeholder="New name"
+                                            value={newName}
+                                            onChange={(e) => setNewName(e.target.value)}
+                                        />
+                                    </Dialog.Body>
+                                    <Dialog.Footer>
+                                        <Dialog.ActionTrigger asChild>
+                                            <Button variant="outline">Cancel</Button>
+                                        </Dialog.ActionTrigger>
+                                        <Button bg="maroon" onClick={handleRename}>
+                                            Save
+                                        </Button>
+                                    </Dialog.Footer>
+                                    <Dialog.CloseTrigger asChild>
+                                        <CloseButton size="sm" />
+                                    </Dialog.CloseTrigger>
+                                </Dialog.Content>
+                            </Dialog.Positioner>
+                        </Portal>
+                    </Dialog.Root>
+                )}
+
+                {/* Dialog for delete */}
+                <Dialog.Root open={deleteOpen} onOpenChange={(e) => setDeleteOpen(e.open)}>
                     <Portal>
                         <Dialog.Backdrop />
                         <Dialog.Positioner>
                             <Dialog.Content>
                                 <Dialog.Header>
-                                    <Dialog.Title color="maroon">Rename Exhibition</Dialog.Title>
+                                    <Dialog.Title color="maroon">Are you sure you want to delete the exhibition?</Dialog.Title>
                                 </Dialog.Header>
-                                <Dialog.Body>
-                                    <Input
-                                        placeholder="New name"
-                                        value={newName}
-                                        onChange={(e) => setNewName(e.target.value)}
-                                    />
-                                </Dialog.Body>
                                 <Dialog.Footer>
                                     <Dialog.ActionTrigger asChild>
                                         <Button variant="outline">Cancel</Button>
                                     </Dialog.ActionTrigger>
-                                    <Button bg="maroon" onClick={handleRename}>
-                                        Save
+                                    <Button
+                                        bg="maroon"
+                                        onClick={handleDelete}
+                                    >
+                                        Yes
                                     </Button>
                                 </Dialog.Footer>
                                 <Dialog.CloseTrigger asChild>
@@ -306,35 +335,7 @@ export default function Exhibitions() {
                         </Dialog.Positioner>
                     </Portal>
                 </Dialog.Root>
-            )}
-
-            {/* Dialog for delete */}
-            <Dialog.Root open={deleteOpen} onOpenChange={(e) => setDeleteOpen(e.open)}>
-                <Portal>
-                    <Dialog.Backdrop />
-                    <Dialog.Positioner>
-                        <Dialog.Content>
-                            <Dialog.Header>
-                                <Dialog.Title color="maroon">Are you sure you want to delete the exhibition?</Dialog.Title>
-                            </Dialog.Header>
-                            <Dialog.Footer>
-                                <Dialog.ActionTrigger asChild>
-                                    <Button variant="outline">Cancel</Button>
-                                </Dialog.ActionTrigger>
-                                <Button
-                                    bg="maroon"
-                                    onClick={handleDelete}
-                                >
-                                    Yes
-                                </Button>
-                            </Dialog.Footer>
-                            <Dialog.CloseTrigger asChild>
-                                <CloseButton size="sm" />
-                            </Dialog.CloseTrigger>
-                        </Dialog.Content>
-                    </Dialog.Positioner>
-                </Portal>
-            </Dialog.Root>
+            </Box>
         </>
     )
 }
