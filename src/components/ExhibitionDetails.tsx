@@ -124,51 +124,52 @@ export default function ExhibitionDetails() {
 
     return (
         <>
-            <Flex justify="space-between" align="center" mt={10} px={4} py={6}>
-                <Heading fontSize={{ base: "md", md: "sm", lg: "2xl" }} letterSpacing={1} fontWeight="bold">
-                    {exhibitionDetails.name}
-                </Heading>
-                {handleSwitch()}
-            </Flex>
-            <Flex mt={2} mb={8} px={4}>
-                <Text>
-                    {exhibitionDetails.description}
-                </Text>
-            </Flex>
+            <Box px={{ base: "1rem", md: "2rem" }}>
+                <Flex justify="space-between" align="center" mt={10} px={4} py={6}>
+                    <Heading fontSize={{ base: "md", md: "sm", lg: "2xl" }} letterSpacing={1} fontWeight="bold">
+                        {exhibitionDetails.name}
+                    </Heading>
+                    {handleSwitch()}
+                </Flex>
+                <Flex mt={2} mb={8} px={4}>
+                    <Text>
+                        {exhibitionDetails.description}
+                    </Text>
+                </Flex>
 
-            {exhibitionDetails.artworks.length === 0 ? (
-                errorMessage("You have not added any artworks yet.")
-            ) : (
-                <SimpleGrid
-                    columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
-                    rowGap={4}
-                    p={4}
-                >
+                {exhibitionDetails.artworks.length === 0 ? (
+                    errorMessage("You have not added any artworks yet.")
+                ) : (
+                    <SimpleGrid
+                        columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
+                        rowGap={4}
+                        p={4}
+                    >
 
-                    {exhibitionDetails.artworks.map((artwork: Artwork) => (
-                        <Card.Root borderColor="#fafafa" maxW="sm" overflow="hidden" key={artwork.id}>
-                            <Image
-                                key={artwork.id}
-                                src={artwork.image}
-                                alt={artwork.title}
-                                cursor="pointer"
-                                onClick={() => {
-                                    handleOpenDialog(artwork)
-                                }}
-                            />
-                            <CardBody>
-                                <Grid templateColumns="1fr auto" alignItems="start">
+                        {exhibitionDetails.artworks.map((artwork: Artwork) => (
+                            <Card.Root borderColor="#fafafa" maxW="sm" overflow="hidden" key={artwork.id}>
+                                <Image
+                                    key={artwork.id}
+                                    src={artwork.image}
+                                    alt={artwork.title}
+                                    cursor="pointer"
+                                    onClick={() => {
+                                        handleOpenDialog(artwork)
+                                    }}
+                                />
+                                <CardBody>
+                                    <Grid templateColumns="1fr auto" alignItems="start">
 
-                                    <CardTitle>{artwork.title}</CardTitle>
-                                   
-                                </Grid>
-                                <Card.Description>{artwork.artist}</Card.Description>
-                                <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">
-                                    {artwork.classification}
-                                </Text>
-                            </CardBody>
-                            <CardFooter>
-                                     <Box>
+                                        <CardTitle>{artwork.title}</CardTitle>
+
+                                    </Grid>
+                                    <Card.Description>{artwork.artist}</Card.Description>
+                                    <Text textStyle="sm" fontWeight="normal" letterSpacing="tight" mt="2">
+                                        {artwork.classification}
+                                    </Text>
+                                </CardBody>
+                                <CardFooter>
+                                    <Box>
                                         <IconButton
                                             aria-label="Delete artwork from an exhibition"
                                             size="md"
@@ -186,45 +187,46 @@ export default function ExhibitionDetails() {
                                         </IconButton>
                                     </Box>
                                 </CardFooter>
-                        </Card.Root>
-                    ))}
-                </SimpleGrid>
-            )}
+                            </Card.Root>
+                        ))}
+                    </SimpleGrid>
+                )}
 
-            {/* Dialog for delete artwork */}
-            <Dialog.Root open={deleteOpenDialog} onOpenChange={(e) => setDeleteOpenDialog(e.open)}>
-                <Portal>
-                    <Dialog.Backdrop />
-                    <Dialog.Positioner>
-                        <Dialog.Content>
-                            <Dialog.Header>
-                                <Dialog.Title color="maroon">Are you sure you want to delete this artwork from the exhibition?</Dialog.Title>
-                            </Dialog.Header>
-                            <Dialog.Footer>
-                                <Dialog.ActionTrigger asChild>
-                                    <Button variant="outline">Cancel</Button>
-                                </Dialog.ActionTrigger>
-                                <Button
-                                    bg="maroon"
-                                    onClick={handleArtworkDelete}
-                                >
-                                    Yes
-                                </Button>
-                            </Dialog.Footer>
-                            <Dialog.CloseTrigger asChild>
-                                <CloseButton variant="plain" size="sm" />
-                            </Dialog.CloseTrigger>
-                        </Dialog.Content>
-                    </Dialog.Positioner>
-                </Portal>
-            </Dialog.Root>
+                {/* Dialog for delete artwork */}
+                <Dialog.Root open={deleteOpenDialog} onOpenChange={(e) => setDeleteOpenDialog(e.open)}>
+                    <Portal>
+                        <Dialog.Backdrop />
+                        <Dialog.Positioner>
+                            <Dialog.Content>
+                                <Dialog.Header>
+                                    <Dialog.Title color="maroon">Are you sure you want to delete this artwork from the exhibition?</Dialog.Title>
+                                </Dialog.Header>
+                                <Dialog.Footer>
+                                    <Dialog.ActionTrigger asChild>
+                                        <Button variant="outline">Cancel</Button>
+                                    </Dialog.ActionTrigger>
+                                    <Button
+                                        bg="maroon"
+                                        onClick={handleArtworkDelete}
+                                    >
+                                        Yes
+                                    </Button>
+                                </Dialog.Footer>
+                                <Dialog.CloseTrigger asChild>
+                                    <CloseButton variant="plain" size="sm" />
+                                </Dialog.CloseTrigger>
+                            </Dialog.Content>
+                        </Dialog.Positioner>
+                    </Portal>
+                </Dialog.Root>
 
-            <ArtworkDialog
-                artwork={selectedArtwork}
-                isOpen={openDialog}
-                onClose={() => setOpenDialog(false)}
-                hideAddButton={true}
-            />
+                <ArtworkDialog
+                    artwork={selectedArtwork}
+                    isOpen={openDialog}
+                    onClose={() => setOpenDialog(false)}
+                    hideAddButton={true}
+                />
+            </Box>
         </>
     )
 }
